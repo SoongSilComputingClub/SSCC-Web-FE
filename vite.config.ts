@@ -18,14 +18,14 @@ export default defineConfig({
         background_color: '#111827',
         icons: [
           { src: '/pwa-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/pwa-512.png', sizes: '512x512', type: 'image/png' }
-        ]
-      }
-    })
+          { src: '/pwa-512.png', sizes: '512x512', type: 'image/png' },
+        ],
+      },
+    }),
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src')
-    }
-  }
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
 });
