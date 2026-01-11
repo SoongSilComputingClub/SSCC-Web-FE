@@ -1,16 +1,14 @@
+import SectionHeader from "../components/section-header";
+
 export default function TargetSection() {
   return (
     <section className="w-full bg-bg-default px-6 py-16 flex justify-center">
       <div className="w-full max-w-5xl flex flex-col items-center text-center gap-12">
         {/* Header */}
-        <div className="flex flex-col items-center gap-2">
-          <p className="text-sm font-semibold text-point tracking-wider">
-            TARGET
-          </p>
-          <h2 className="text-xl font-bold leading-snug text-text-default">
-            모집 타겟
-          </h2>
-        </div>
+        <SectionHeader
+          label="TARGET"
+          title="모집 타겟"
+        />
 
         {/* Targets */}
         <div className="w-full flex flex-col items-center gap-16">
