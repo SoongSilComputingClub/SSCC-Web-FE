@@ -1,23 +1,23 @@
-import { useState } from "react"
-import SectionHeader from "../components/section-header";
+import { useState } from 'react';
+import SectionHeader from '../components/section-header';
 
 const FAQS = [
   {
-    q: "휴학생도 활동 가능한가요?",
-    a: "네, 휴학생도 지원 및 활동이 가능합니다. 활동 일정에 성실히 참여할 수 있다면 학적과 무관하게 지원할 수 있습니다.",
+    q: '휴학생도 활동 가능한가요?',
+    a: '네, 휴학생도 지원 및 활동이 가능합니다. 활동 일정에 성실히 참여할 수 있다면 학적과 무관하게 지원할 수 있습니다.',
   },
   {
-    q: "개발 경험이 없어도 괜찮나요?",
-    a: "물론입니다. 기초부터 함께 학습하며 성장하는 것을 목표로 하고 있어 초보자도 환영합니다.",
+    q: '개발 경험이 없어도 괜찮나요?',
+    a: '물론입니다. 기초부터 함께 학습하며 성장하는 것을 목표로 하고 있어 초보자도 환영합니다.',
   },
   {
-    q: "면접은 어떤 방식으로 진행되나요?",
-    a: "면접은 대면으로 진행되며, 지원 동기와 활동 의지를 중심으로 간단한 대화를 나눕니다.",
+    q: '면접은 어떤 방식으로 진행되나요?',
+    a: '면접은 대면으로 진행되며, 지원 동기와 활동 의지를 중심으로 간단한 대화를 나눕니다.',
   },
-] as const
+] as const;
 
 export default function FAQSection() {
-  const [openIdx, setOpenIdx] = useState<number | null>(null)
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   return (
     <section className="w-full bg-bg-default px-6 py-16 flex justify-center">
@@ -26,12 +26,9 @@ export default function FAQSection() {
 
         <div className="w-full flex flex-col gap-4">
           {FAQS.map((item, idx) => {
-            const open = openIdx === idx
+            const open = openIdx === idx;
             return (
-              <div
-                key={item.q}
-                className="w-full rounded-2xl bg-bg-muted px-6 py-5"
-              >
+              <div key={item.q} className="w-full rounded-2xl bg-bg-muted px-6 py-5">
                 <button
                   type="button"
                   onClick={() => setOpenIdx(open ? null : idx)}
@@ -40,15 +37,13 @@ export default function FAQSection() {
                   {/* Question */}
                   <div className="flex items-center gap-2">
                     <span className="text-point">Q.</span>
-                    <span className="text-base text-text-default">
-                      {item.q}
-                    </span>
+                    <span className="text-base text-text-default">{item.q}</span>
                   </div>
 
                   {/* */}
                   <svg
                     className={`w-5 h-5 text-[#B3B3B3] transition-transform ${
-                      open ? "rotate-180" : ""
+                      open ? 'rotate-180' : ''
                     }`}
                     viewBox="0 0 24 24"
                     fill="none"
@@ -68,20 +63,18 @@ export default function FAQSection() {
                 {/* Answer */}
                 <div
                   className={`grid transition-all duration-300 ease-out ${
-                    open ? "grid-rows-[1fr] opacity-100 mt-4" : "grid-rows-[0fr] opacity-0"
+                    open ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0'
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <p className="text-sm text-text-default leading-relaxed">
-                      {item.a}
-                    </p>
+                    <p className="text-sm text-text-default leading-relaxed">{item.a}</p>
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
       </div>
     </section>
-  )
+  );
 }
