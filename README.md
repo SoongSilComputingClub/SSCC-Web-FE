@@ -38,6 +38,25 @@ src/ <br>
 
 ---
 
+### Design Tokens (Colors)
+
+본 프로젝트는 Tailwind CSS theme 기반의 **역할(Role) 중심 컬러 토큰**을 사용합니다.  
+색상 값 자체가 아닌, UI에서의 **의미와 용도**를 기준으로 정의하여 유지보수성과 확장성을 높입니다.
+
+> ⚠️ 모든 색상을 토큰으로 만들지 않습니다.  
+> **여러 화면에서 반복 사용되며 역할이 명확한 색상만** theme에 정의합니다.
+
+
+컬러 테마 및 디자인 토큰은 아래 파일에서 관리됩니다.
+
+- `tailwind.config.ts`
+  - `theme.extend.colors` : text, bg, border, point 등 컬러 토큰
+
+실제 컴포넌트에서는 **직접 색상 값을 사용하지 않고**,  
+반드시 위 theme에 정의된 토큰을 Tailwind 클래스 형태로 사용합니다.
+
+---
+
 ### Development Setup
 
     1.	Node 버전 맞추기 $ nvm use
