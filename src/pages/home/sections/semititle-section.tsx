@@ -1,4 +1,4 @@
-export function SubSection() {
+export default function SubSection() {
   return (
     <section className="w-full pointer-events-none">
       <div className="bg-bg-default flex flex-col items-center px-6 text-center">
