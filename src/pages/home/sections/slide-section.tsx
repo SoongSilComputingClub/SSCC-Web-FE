@@ -9,9 +9,16 @@ type Slide = {
   bgSrc: string;
 };
 
-function SlideIndicator({ active_index, total }: { active_index: number; total: number }) {
+function SlideIndicator({
+  active_index,
+  total,
+  progress,
+}: {
+  active_index: number;
+  total: number;
+  progress: number; // 0~1, 스크롤 연속 게이지
+}) {
   const current = active_index + 1;
-  const progress = total <= 1 ? 1 : current / total;
 
   return (
     <div className="mt-4 w-full flex flex-col">
@@ -20,10 +27,7 @@ function SlideIndicator({ active_index, total }: { active_index: number; total: 
       </div>
 
       <div className="mt-2 h-[2px] w-full bg-text-default/25 overflow-hidden">
-        <div
-          className="h-full bg-text-default transition-[width] duration-500 ease-out"
-          style={{ width: `${progress * 100}%` }}
-        />
+        <div className="h-full bg-text-default" style={{ width: `${progress * 100}%` }} />
       </div>
     </div>
   );
@@ -62,7 +66,10 @@ export default function ScrollSnapSlides() {
 
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [active_index, set_active_index] = useState(0);
-  const [vw, set_vw] = useState(() => window.innerWidth);
+  const [vw, set_vw] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 0));
+
+  // 게이지용: 0~1 연속 진행률
+  const [scroll_progress, set_scroll_progress] = useState(0);
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -70,24 +77,35 @@ export default function ScrollSnapSlides() {
 
     let raf = 0;
 
+    const calc = () => {
+      const rect = el.getBoundingClientRect();
+      const viewport_h = window.innerHeight;
+
+      // 섹션이 스크롤로 "소모"할 수 있는 총 거리
+      const scroll_range = Math.max(el.offsetHeight - viewport_h, 0);
+
+      // 시작 트리거(원래 코드 유지)
+      const start_offset = viewport_h * 0.25;
+
+      const scrolled_raw = -rect.top - start_offset;
+      const scrolled = Math.min(Math.max(scrolled_raw, 0), scroll_range);
+
+      // ✅ 게이지는 연속
+      const p = scroll_range <= 0 ? 1 : scrolled / scroll_range;
+      set_scroll_progress(Math.min(1, Math.max(0, p)));
+
+      // ✅ 슬라이드는 스냅(인덱스 점프) — 기존 로직 유지
+      const len = slides.length;
+      const step = len > 0 ? scroll_range / len : 0;
+
+      const idx = step <= 0 ? 0 : Math.min(len - 1, Math.floor(scrolled / step));
+
+      set_active_index(idx);
+    };
+
     const on_scroll = () => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const rect = el.getBoundingClientRect();
-        const viewport_h = window.innerHeight;
-
-        const scroll_range = Math.max(el.offsetHeight - viewport_h, 0);
-        const start_offset = viewport_h * 0.25;
-
-        const scrolled_raw = -rect.top - start_offset;
-
-        const scrolled = Math.min(Math.max(scrolled_raw, 0), scroll_range);
-        const step = slides.length > 0 ? scroll_range / slides.length : 2;
-
-        const idx = step <= 0 ? 0 : Math.min(slides.length - 1, Math.floor(scrolled / step));
-
-        set_active_index(idx);
-      });
+      raf = requestAnimationFrame(calc);
     };
 
     const on_resize = () => {
@@ -115,7 +133,7 @@ export default function ScrollSnapSlides() {
           className="relative z-10 flex h-full will-change-transform transition-transform duration-500 ease-out"
           style={{
             width: `${slides.length * vw}px`,
-            transform: `translate3d(-${active_index * vw}px, 0, 0)`,
+            transform: `translate3d(-${active_index * vw}px, 0, 0)`, // ✅ 스냅 유지
           }}
         >
           {slides.map((s) => (
@@ -133,7 +151,8 @@ export default function ScrollSnapSlides() {
                   />
                 </div>
               </div>
-              <div className="absolute z-10 max-w-sm text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
+
+              <div className="absolute z-10 max-w-sm text-text-default drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
                 <div className="text-[12px] pb-4">{s.subtitle}</div>
                 <div className="text-3xl font-bold">{s.title}</div>
                 <div className="text-3xl pl-8 font-bold leading-tight">{s.title2}</div>
@@ -143,7 +162,11 @@ export default function ScrollSnapSlides() {
         </div>
 
         <div className="mx-auto w-[70%] pointer-events-none absolute inset-x-0 bottom-20 z-20 flex justify-center">
-          <SlideIndicator active_index={active_index} total={slides.length} />
+          <SlideIndicator
+            active_index={active_index}
+            total={slides.length}
+            progress={scroll_progress} // ✅ 게이지만 연속
+          />
         </div>
       </div>
     </div>
