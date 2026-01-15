@@ -12,6 +12,7 @@ export default {
         /* background 컬러 */
         bg: {
           default: '#000000', // 전체 페이지 배경
+          white: '#FFFFFF', //흰색 배경
           muted: '#1F1F1F', // 진회색 톤 배경
           section: '#303030', // 카드/섹션 배경
         },
