@@ -15,4 +15,5 @@ export default tseslint.config(js.configs.recommended, ...tseslint.configs.recom
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'prettier/prettier': 'error',
   },
+  ignorePatterns: ["node_modules/", "dist/", ".vite/"],
 });
