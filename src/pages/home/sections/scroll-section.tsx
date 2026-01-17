@@ -1,4 +1,12 @@
 import { useEffect, useMemo, useRef } from 'react';
+import picScroll1 from '@/assets/images/home/pic-scroll1.jpg';
+import picScroll2 from '@/assets/images/home/pic-scroll2.jpg';
+import picScroll3 from '@/assets/images/home/pic-scroll3.jpg';
+import picScroll4 from '@/assets/images/home/pic-scroll4.jpg';
+import picScroll5 from '@/assets/images/home/pic-scroll5.jpg';
+import picScroll6 from '@/assets/images/home/pic-scroll6.jpg';
+import picScroll7 from '@/assets/images/home/pic-scroll7.jpg';
+import picScroll8 from '@/assets/images/home/pic-scroll8.jpg';
 
 type ColIndex = 0 | 1 | 2 | 3;
 
@@ -254,56 +262,56 @@ export default function ParallaxSection() {
             col: 0,
             startYPercent: 150,
             speed: 1.1,
-            imageSrc: '/src/assets/images/home/pic-scroll1.jpg',
+            imageSrc: picScroll1,
           },
           {
             id: 'p2',
             col: 0,
             startYPercent: 300,
             speed: 0.9,
-            imageSrc: '/src/assets/images/home/pic-scroll2.jpg',
+            imageSrc: picScroll2,
           },
           {
             id: 'p3',
             col: 1,
             startYPercent: 100,
             speed: 1.3,
-            imageSrc: '/src/assets/images/home/pic-scroll3.jpg',
+            imageSrc: picScroll3,
           },
           {
             id: 'p4',
             col: 1,
             startYPercent: 200,
             speed: 0.8,
-            imageSrc: '/src/assets/images/home/pic-scroll4.jpg',
+            imageSrc: picScroll4,
           },
           {
             id: 'p5',
             col: 2,
             startYPercent: 200,
             speed: 1.2,
-            imageSrc: '/src/assets/images/home/pic-scroll5.jpg',
+            imageSrc: picScroll5,
           },
           {
             id: 'p6',
             col: 2,
             startYPercent: 400,
             speed: 1.15,
-            imageSrc: '/src/assets/images/home/pic-scroll6.jpg',
+            imageSrc: picScroll6,
           },
           {
             id: 'p7',
             col: 3,
             startYPercent: 120,
             speed: 0.95,
-            imageSrc: '/src/assets/images/home/pic-scroll7.jpg',
+            imageSrc: picScroll7,
           },
           {
             id: 'p8',
             col: 3,
             startYPercent: 400,
             speed: 1.0,
-            imageSrc: '/src/assets/images/home/pic-scroll8.jpg',
+            imageSrc: picScroll8,
           },
         ]}
       />

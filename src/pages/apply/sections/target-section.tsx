@@ -1,4 +1,7 @@
 import SectionHeader from '../components/section-header';
+import targetPassion from '@/assets/images/apply/target-passion.png';
+import targetCoding from '@/assets/images/apply/target-coding.png';
+import targetChallenge from '@/assets/images/apply/target-challenge.png';
 
 export default function TargetSection() {
   return (
@@ -11,7 +14,7 @@ export default function TargetSection() {
         <div className="w-full flex flex-col items-center gap-16">
           <div className="flex flex-col items-center text-center gap-6">
             <img
-              src="/src/assets/images/apply/target-passion.png"
+              src={targetPassion}
               alt="배움에 열정이 넘치는 학생"
               className="w-full max-w-[320px] h-auto select-none"
               draggable={false}
@@ -21,7 +24,7 @@ export default function TargetSection() {
 
           <div className="flex flex-col items-center text-center gap-6">
             <img
-              src="/src/assets/images/apply/target-coding.png"
+              src={targetCoding}
               alt="코딩에 관심 있는 학생"
               className="w-full max-w-[360px] h-auto select-none"
               draggable={false}
@@ -31,7 +34,7 @@ export default function TargetSection() {
 
           <div className="flex flex-col items-center text-center gap-6">
             <img
-              src="/src/assets/images/apply/target-challenge.png"
+              src={targetChallenge}
               alt="도전을 두려워 않는 학생"
               className="w-full max-w-[360px] h-auto select-none"
               draggable={false}

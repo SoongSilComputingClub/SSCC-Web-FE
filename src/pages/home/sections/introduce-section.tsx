@@ -1,5 +1,15 @@
 import { useMemo, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import picIntro1 from '@/assets/images/home/pic-intro1.jpg';
+import picIntro2 from '@/assets/images/home/pic-intro2.jpg';
+import picIntro3 from '@/assets/images/home/pic-intro3.jpeg';
+import picIntro4 from '@/assets/images/home/pic-intro4.jpg';
+import logoGradi from '@/assets/images/home/logo-gradi.png';
+import picScroll1 from '@/assets/images/home/pic-scroll1.jpg';
+import picScroll2 from '@/assets/images/home/pic-scroll2.jpg';
+import picScroll3 from '@/assets/images/home/pic-scroll3.jpg';
+import picScroll4 from '@/assets/images/home/pic-scroll4.jpg';
+import picScroll5 from '@/assets/images/home/pic-scroll5.jpg';
 
 type CardItem = {
   id: string;
@@ -280,7 +290,7 @@ export default function IntroSection() {
 
         {/* ✅ 이미지: 맨 아래, 가로 꽉 */}
         <img
-          src="/src/assets/images/home/logo-gradi.png"
+          src={logoGradi}
           alt=""
           aria-hidden="true"
           className="absolute inset-x-0 bottom-48 w-full h-auto block z-10"
@@ -297,28 +307,28 @@ export default function IntroSection() {
               title: '세미나',
               subtitle: 'Seminar',
               desc: 'SSCC 출신 선배가 직접 전하는 생생한 업계 현황과 핵심 기술을 배우며 실무 감각을 깨우는 시간.',
-              imageSrc: '/src/assets/images/home/pic-intro1.jpg',
+              imageSrc: picIntro1,
             },
             {
               id: 'c2',
               title: '프로젝트',
               subtitle: 'Projects',
               desc: '아이디어를 서비스로 구현하는 협업의 여정. 팀원과 소통하며 완성도 높은 결과물을 일굽니다.',
-              imageSrc: '/src/assets/images/home/pic-intro2.jpg',
+              imageSrc: picIntro2,
             },
             {
               id: 'c3',
               title: '스터디',
               subtitle: 'Study',
               desc: '기초부터 심화까지 함께하는 몰입의 시간. 함께 지식을 나누며 기본기를 다지는 과정.',
-              imageSrc: '/src/assets/images/home/pic-intro3.jpeg',
+              imageSrc: picIntro3,
             },
             {
               id: 'c4',
               title: '행사',
               subtitle: 'Event',
               desc: '선후배가 어우러지는 소통의 장.',
-              imageSrc: '/src/assets/images/home/pic-intro4.jpg',
+              imageSrc: picIntro4,
             },
           ]}
         />
@@ -328,11 +338,11 @@ export default function IntroSection() {
       </div>
       <AutoSlideMarquee
         items={[
-          { id: 'm1', src: '/src/assets/images/home/pic-scroll1.jpg' },
-          { id: 'm2', src: '/src/assets/images/home/pic-scroll2.jpg' },
-          { id: 'm3', src: '/src/assets/images/home/pic-scroll3.jpg' },
-          { id: 'm4', src: '/src/assets/images/home/pic-scroll4.jpg' },
-          { id: 'm5', src: '/src/assets/images/home/pic-scroll5.jpg' },
+          { id: 'm1', src: picScroll1 },
+          { id: 'm2', src: picScroll2 },
+          { id: 'm3', src: picScroll3 },
+          { id: 'm4', src: picScroll4 },
+          { id: 'm5', src: picScroll5 },
         ]}
         speedPxPerSec={50} // ✅ 속도
         cardSizePx={270} // ✅ 정사각형 카드 한 변

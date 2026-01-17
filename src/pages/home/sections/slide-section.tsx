@@ -1,4 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import picSide1 from '@/assets/images/home/pic-side1.jpg';
+import picSide2 from '@/assets/images/home/pic-side2.jpg';
+import picSide3 from '@/assets/images/home/pic-side3.jpg';
 
 type Slide = {
   id: string;
@@ -42,7 +45,7 @@ export default function ScrollSnapSlides() {
         title: '함께 배우고 나누며',
         title2: '성장하는 동아리',
         className: 'bg-bg-default text-text-default',
-        bgSrc: '/src/assets/images/home/pic-side1.jpg',
+        bgSrc: picSide1,
       },
       {
         id: 's2',
@@ -50,7 +53,7 @@ export default function ScrollSnapSlides() {
         title: '끊임없는 도전으로',
         title2: '가치를 증명하는 곳',
         className: 'bg-bg-default text-text-default',
-        bgSrc: '/src/assets/images/home/pic-side2.jpg',
+        bgSrc: picSide2,
       },
       {
         id: 's3',
@@ -58,7 +61,7 @@ export default function ScrollSnapSlides() {
         title: '서로를 밀어주고',
         title2: '함께 완주하는 동아리',
         className: 'bg-bg-default text-text-default',
-        bgSrc: '/src/assets/images/home/pic-side3.jpg',
+        bgSrc: picSide3,
       },
     ],
     [],
