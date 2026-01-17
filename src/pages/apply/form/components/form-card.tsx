@@ -1,9 +1,9 @@
-import React from "react"
+import React from 'react';
 
 type FormCardProps = {
-  children: React.ReactNode
-  className?: string
-}
+  children: React.ReactNode;
+  className?: string;
+};
 
 export default function FormCard({ children, className }: FormCardProps) {
   return (
@@ -14,10 +14,10 @@ export default function FormCard({ children, className }: FormCardProps) {
         border border-border-default
         bg-bg-muted
         shadow-[8px_8px_4px_0_rgba(0,0,0,0.25)]
-        ${className ?? ""}
+        ${className ?? ''}
       `}
     >
       {children}
     </div>
-  )
+  );
 }
