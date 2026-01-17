@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 type ColIndex = 0 | 1 | 2 | 3;
 
@@ -72,9 +72,6 @@ function ParallaxSectionContainer({
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const imgRefs = useRef<Array<Array<HTMLDivElement | null>>>([[], [], [], []]);
 
-  // 원래 progress (디버그/필요시)
-  const [progress01, setProgress01] = useState(0);
-
   // ✅ 스크롤 보간(부드럽게 따라가기)
   const smoothedRef = useRef(0);
 
@@ -104,7 +101,6 @@ function ParallaxSectionContainer({
 
       const scrollRange = Math.max(el.offsetHeight - vh, 0);
       const scrolled = clamp01(scrollRange <= 0 ? 0 : -rect.top / scrollRange);
-      setProgress01(scrolled);
 
       // ✅ 스무딩: 목표 scrolled를 천천히 따라감
       const k = Math.min(0.35, Math.max(0.01, smoothFactor)); // 안전 클램프
