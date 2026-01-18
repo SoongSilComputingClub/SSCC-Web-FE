@@ -1,38 +1,40 @@
-import { useMemo, useState } from "react";
-import FormSectionHeader from "../components/form-section-header";
-import InterviewDayCard from "../components/interview-day-card";
+import { useMemo, useState } from 'react';
+import FormSectionHeader from '../components/form-section-header';
+import InterviewDayCard from '../components/interview-day-card';
 
 export default function BasicInfo() {
-  const [name, setName] = useState("");
-  const [major, setMajor] = useState("");
-  const [studentId, setStudentId] = useState("");
-  const [grade, setGrade] = useState("1");
-  const [phone, setPhone] = useState("");
-  const [gender, setGender] = useState<"male" | "female" | null>(null);
-  const [intro, setIntro] = useState("");
+  const [name, setName] = useState('');
+  const [major, setMajor] = useState('');
+  const [studentId, setStudentId] = useState('');
+  const [grade, setGrade] = useState('1');
+  const [phone, setPhone] = useState('');
+  const [gender, setGender] = useState<'male' | 'female' | null>(null);
+  const [intro, setIntro] = useState('');
 
   const [codingSkill, setCodingSkill] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
-  const [techStack, setTechStack] = useState("");
+  const [techStack, setTechStack] = useState('');
   const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
 
   const interviewOptions = useMemo(
     () => [
       {
-        id: "2026-03-05",
-        label: "03월 05일 화요일",
-        slots: ["10:00 - 11:00", "10:00 - 11:00", "10:00 - 11:00", "10:00 - 11:00"],
+        id: '2026-03-05',
+        label: '03월 05일 화요일',
+        slots: ['10:00 - 11:00', '10:00 - 11:00', '10:00 - 11:00', '10:00 - 11:00'],
       },
       {
-        id: "2026-03-06",
-        label: "03월 06일 수요일",
-        slots: ["10:00 - 11:00", "10:00 - 11:00", "10:00 - 11:00"],
+        id: '2026-03-06',
+        label: '03월 06일 수요일',
+        slots: ['10:00 - 11:00', '10:00 - 11:00', '10:00 - 11:00'],
       },
     ],
-    []
+    [],
   );
 
   const toggleSlot = (key: string) => {
-    setSelectedSlots((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
+    setSelectedSlots((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
+    );
   };
 
   return (
@@ -96,7 +98,13 @@ export default function BasicInfo() {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path d="M6 9L12 15L18 9" stroke="#B3B3B3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path
+                    d="M6 9L12 15L18 9"
+                    stroke="#B3B3B3"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </div>
             </div>
@@ -120,8 +128,8 @@ export default function BasicInfo() {
                     type="radio"
                     name="gender"
                     value="male"
-                    checked={gender === "male"}
-                    onChange={() => setGender("male")}
+                    checked={gender === 'male'}
+                    onChange={() => setGender('male')}
                     className="h-5 w-5 accent-point"
                   />
                   남자
@@ -131,8 +139,8 @@ export default function BasicInfo() {
                     type="radio"
                     name="gender"
                     value="female"
-                    checked={gender === "female"}
-                    onChange={() => setGender("female")}
+                    checked={gender === 'female'}
+                    onChange={() => setGender('female')}
                     className="h-5 w-5 accent-point"
                   />
                   여자
@@ -154,7 +162,7 @@ export default function BasicInfo() {
             rows={5}
           />
         </section>
-        
+
         {/* 기술 스택 */}
         <section className="mt-12">
           <FormSectionHeader title="기술 스택" />
@@ -164,16 +172,21 @@ export default function BasicInfo() {
               <p className="text-lg font-semibold text-text-default">코딩 실력</p>
 
               <div className="flex items-center gap-6">
-                {([
-                  { label: "최하", value: 1 },
-                  { label: "하", value: 2 },
-                  { label: "중", value: 3 },
-                  { label: "상", value: 4 },
-                  { label: "최상", value: 5 },
-                ] as const).map((opt) => {
+                {(
+                  [
+                    { label: '최하', value: 1 },
+                    { label: '하', value: 2 },
+                    { label: '중', value: 3 },
+                    { label: '상', value: 4 },
+                    { label: '최상', value: 5 },
+                  ] as const
+                ).map((opt) => {
                   const checked = codingSkill === opt.value;
                   return (
-                    <label key={opt.value} className="flex flex-col items-center gap-2 cursor-pointer select-none">
+                    <label
+                      key={opt.value}
+                      className="flex flex-col items-center gap-2 cursor-pointer select-none"
+                    >
                       <input
                         type="radio"
                         name="coding-skill"
@@ -184,13 +197,15 @@ export default function BasicInfo() {
                       />
                       <span
                         className={[
-                          "flex h-6 w-6 items-center justify-center rounded-full border",
-                          checked ? "border-point" : "border-border-emphasis",
-                        ].join(" ")}
+                          'flex h-6 w-6 items-center justify-center rounded-full border',
+                          checked ? 'border-point' : 'border-border-emphasis',
+                        ].join(' ')}
                       >
                         {checked ? <span className="h-3 w-3 rounded-full bg-point" /> : null}
                       </span>
-                      <span className="text-sm font-semibold text-text-default/70">{opt.label}</span>
+                      <span className="text-sm font-semibold text-text-default/70">
+                        {opt.label}
+                      </span>
                     </label>
                   );
                 })}

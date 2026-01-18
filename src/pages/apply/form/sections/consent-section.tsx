@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export const CONSENT_CONTENT = {
   title: '개인 정보 수집 동의서',
@@ -13,7 +13,11 @@ export const CONSENT_CONTENT = {
     '개인정보 수집 및 이용에 대한 동의를 거부할 권리가 있으나, 동의하지 않을 경우 SSCC 지원이 제한될 수 있습니다.',
 } as const;
 
-export default function ConsentSection({ onConsentChange }: { onConsentChange?: (agreed: boolean) => void }) {
+export default function ConsentSection({
+  onConsentChange,
+}: {
+  onConsentChange?: (agreed: boolean) => void;
+}) {
   const [agreed, setAgreed] = useState(false);
 
   const handleChange = (checked: boolean) => {

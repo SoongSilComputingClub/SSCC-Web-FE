@@ -12,11 +12,11 @@ export default function SubmitSection({ disabled = false, onSubmit }: SubmitSect
           aria-disabled={disabled}
           onClick={onSubmit}
           className={[
-            "w-full rounded-[20px] py-5 text-center text-xl font-extrabold transition-all",
+            'w-full rounded-[20px] py-5 text-center text-xl font-extrabold transition-all',
             disabled
-              ? "bg-gray-500/40 text-gray-300"
-              : "bg-point text-black shadow-[0_8px_24px_rgba(0,0,0,0.25)] hover:brightness-95",
-          ].join(" ")}
+              ? 'bg-gray-500/40 text-gray-300'
+              : 'bg-point text-black shadow-[0_8px_24px_rgba(0,0,0,0.25)] hover:brightness-95',
+          ].join(' ')}
         >
           제출하기
         </button>
