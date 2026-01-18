@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export const CONSENT_CONTENT = {
   title: '개인 정보 수집 동의서',
   intro:
@@ -11,7 +13,14 @@ export const CONSENT_CONTENT = {
     '개인정보 수집 및 이용에 대한 동의를 거부할 권리가 있으나, 동의하지 않을 경우 SSCC 지원이 제한될 수 있습니다.',
 } as const;
 
-export default function ConsentSection() {
+export default function ConsentSection({ onConsentChange }: { onConsentChange?: (agreed: boolean) => void }) {
+  const [agreed, setAgreed] = useState(false);
+
+  const handleChange = (checked: boolean) => {
+    setAgreed(checked);
+    onConsentChange?.(checked);
+  };
+
   return (
     <div className="w-full max-w-[560px] mx-auto flex flex-col gap-4 px-4 bg-bg-default">
       {/* Title */}
@@ -48,6 +57,9 @@ export default function ConsentSection() {
         <label className="mt-4 flex items-center gap-2 text-xs text-text-default/80">
           <input
             type="checkbox"
+            checked={agreed}
+            required
+            onChange={(e) => handleChange(e.target.checked)}
             className="h-4 w-4 accent-point cursor-pointer"
           />
           개인정보 수집 및 이용에 동의합니다. (필수)
