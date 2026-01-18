@@ -19,8 +19,8 @@ export default function ConsentSection() {
         <h2 className="text-point text-xl font-bold text-center">{CONSENT_CONTENT.title}</h2>
 
         {/* 세부 내용 */}
-        <div className="mt-4 w-full rounded-[20px] bg-bg-muted px-5 py-4">
-          <div className="text-sm text-text-default/90 leading-relaxed">
+        <div className="mt-4 w-full rounded-[20px] bg-bg-muted px-7 py-4">
+          <div className="mt-2 mb-2 text-sm text-text-default/90 leading-relaxed">
             <p>{CONSENT_CONTENT.intro}</p>
 
             <div className="mt-4">
