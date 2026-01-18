@@ -225,16 +225,6 @@ export default function BasicInfo() {
           </div>
         </section>
       </div>
-      
-      {/* 제출하기 */}
-      <div className="mt-10 pb-12">
-        <button
-          type="button"
-          className="w-full rounded-[20px] bg-point py-5 text-center text-xl font-extrabold text-black shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
-        >
-          제출하기
-        </button>
-      </div>
     </div>
   );
 }
