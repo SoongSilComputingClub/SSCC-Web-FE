@@ -12,7 +12,9 @@ import { queryClient } from './app/queryClient';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <div className="min-h-screen bg-bg-default">
+        <RouterProvider router={router} />
+      </div>
     </QueryClientProvider>
   </React.StrictMode>,
 );
