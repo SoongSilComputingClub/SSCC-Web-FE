@@ -8,10 +8,10 @@ export default function BasicInfo() {
   const [studentId, setStudentId] = useState("");
   const [grade, setGrade] = useState("1");
   const [phone, setPhone] = useState("");
-  const [gender, setGender] = useState<"male" | "female">("male");
+  const [gender, setGender] = useState<"male" | "female" | null>(null);
   const [intro, setIntro] = useState("");
 
-  const [codingSkill, setCodingSkill] = useState<1 | 2 | 3 | 4 | 5>(1);
+  const [codingSkill, setCodingSkill] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
   const [techStack, setTechStack] = useState("");
   const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
 
@@ -49,7 +49,7 @@ export default function BasicInfo() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section px-4 py-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
-                placeholder=""
+                placeholder="이름을 기입하세요."
               />
             </div>
 
@@ -59,7 +59,7 @@ export default function BasicInfo() {
                 value={major}
                 onChange={(e) => setMajor(e.target.value)}
                 className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section px-4 py-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
-                placeholder="학과명을 기입하세요"
+                placeholder="학과명을 기입하세요."
               />
             </div>
 
@@ -70,7 +70,7 @@ export default function BasicInfo() {
                 onChange={(e) => setStudentId(e.target.value)}
                 inputMode="numeric"
                 className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section px-4 py-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
-                placeholder="20231234"
+                placeholder="20261234"
               />
             </div>
 
@@ -115,28 +115,33 @@ export default function BasicInfo() {
             <div>
               <label className="block text-base font-semibold text-text-default">성별</label>
               <div className="mt-4 flex items-center gap-10">
-                <label className="flex items-center gap-3 text-base font-semibold text-text-default">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="male"
-                    checked={gender === "male"}
-                    onChange={() => setGender("male")}
-                    className="h-5 w-5 accent-point"
-                  />
-                  남자
-                </label>
-                <label className="flex items-center gap-3 text-base font-semibold text-text-default">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="female"
-                    checked={gender === "female"}
-                    onChange={() => setGender("female")}
-                    className="h-5 w-5 accent-point"
-                  />
-                  여자
-                </label>
+                {([
+                  { label: "남자", value: "male" },
+                  { label: "여자", value: "female" },
+                ] as const).map((opt) => {
+                  const checked = gender === opt.value;
+                  return (
+                    <label key={opt.value} className="flex items-center gap-3 cursor-pointer select-none">
+                      <input
+                        type="radio"
+                        name="gender"
+                        value={opt.value}
+                        checked={checked}
+                        onChange={() => setGender(opt.value)}
+                        className="sr-only"
+                      />
+                      <span
+                        className={[
+                          "flex h-6 w-6 items-center justify-center rounded-full border",
+                          checked ? "border-point" : "border-border-emphasis",
+                        ].join(" ")}
+                      >
+                        {checked ? <span className="h-3 w-3 rounded-full bg-point" /> : null}
+                      </span>
+                      <span className="text-base font-semibold text-text-default">{opt.label}</span>
+                    </label>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -150,7 +155,7 @@ export default function BasicInfo() {
             value={intro}
             onChange={(e) => setIntro(e.target.value)}
             className="mt-6 w-full rounded-[20px] border border-border-emphasis bg-bg-muted px-4 py-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
-            placeholder="동아리에 가입하게 된 계기를 마음껏 써주세요."
+            placeholder="동아리에 가입하게 된 계기를 작성해주세요."
             rows={5}
           />
         </section>

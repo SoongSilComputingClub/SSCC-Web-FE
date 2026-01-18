@@ -5,7 +5,7 @@ type SubmitSectionProps = {
 
 export default function SubmitSection({ disabled = false, onSubmit }: SubmitSectionProps) {
   return (
-    <section className="mt-12 pb-16">
+    <section className="mt-3 pb-10">
       <div className="mx-auto w-full max-w-[560px] px-4 md:max-w-[760px] md:px-0">
         <button
           type="button"
