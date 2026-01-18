@@ -115,33 +115,28 @@ export default function BasicInfo() {
             <div>
               <label className="block text-base font-semibold text-text-default">성별</label>
               <div className="mt-4 flex items-center gap-10">
-                {([
-                  { label: "남자", value: "male" },
-                  { label: "여자", value: "female" },
-                ] as const).map((opt) => {
-                  const checked = gender === opt.value;
-                  return (
-                    <label key={opt.value} className="flex items-center gap-3 cursor-pointer select-none">
-                      <input
-                        type="radio"
-                        name="gender"
-                        value={opt.value}
-                        checked={checked}
-                        onChange={() => setGender(opt.value)}
-                        className="sr-only"
-                      />
-                      <span
-                        className={[
-                          "flex h-6 w-6 items-center justify-center rounded-full border",
-                          checked ? "border-point" : "border-border-emphasis",
-                        ].join(" ")}
-                      >
-                        {checked ? <span className="h-3 w-3 rounded-full bg-point" /> : null}
-                      </span>
-                      <span className="text-base font-semibold text-text-default">{opt.label}</span>
-                    </label>
-                  );
-                })}
+                <label className="flex items-center gap-3 text-base font-semibold text-text-default">
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="male"
+                    checked={gender === "male"}
+                    onChange={() => setGender("male")}
+                    className="h-5 w-5 accent-point"
+                  />
+                  남자
+                </label>
+                <label className="flex items-center gap-3 text-base font-semibold text-text-default">
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="female"
+                    checked={gender === "female"}
+                    onChange={() => setGender("female")}
+                    className="h-5 w-5 accent-point"
+                  />
+                  여자
+                </label>
               </div>
             </div>
           </div>
