@@ -2,14 +2,14 @@ name: Lint Check
 
 on:
   push:
-    branches: [ "main", "develop", "master" ]
+    branches: ['main', 'develop', 'master']
   pull_request:
-    branches: [ "main", "develop", "master" ]
+    branches: ['main', 'develop', 'master']
 
 jobs:
   lint:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
