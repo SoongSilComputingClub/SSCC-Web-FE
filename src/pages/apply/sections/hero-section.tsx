@@ -14,7 +14,7 @@ export default function HeroSection() {
 
         <Link
           to="/apply/form"
-          className="item-center mt-4 inline-flex justify-center rounded-xl bg-point px-8 py-4 text-xl font-semibold text-black shadow-md transition hover:opacity-90"
+          className="mt-4 inline-flex items-center justify-center rounded-xl bg-point px-8 py-4 text-xl font-semibold text-black shadow-md transition hover:opacity-90"
         >
           신청서 작성하기 {/* 추후 로그인 유무에 따른 조건부 렌더링 */}
         </Link>
