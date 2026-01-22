@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+
 import picScroll1 from '@/assets/images/home/pic-scroll1.jpg';
 import picScroll2 from '@/assets/images/home/pic-scroll2.jpg';
 import picScroll3 from '@/assets/images/home/pic-scroll3.jpg';
@@ -50,13 +51,13 @@ function clamp(n: number, min: number, max: number) {
 function clamp01(n: number) {
   return clamp(n, 0, 1);
 }
-function ease_out_cubic(t: number) {
+function easeOutCubic(t: number) {
   t = clamp01(t);
   return 1 - Math.pow(1 - t, 3);
 }
 
 /** col 지정된 아이템은 고정 배치, col 미지정 아이템은 남는 슬롯에 라운드로빈 분배 */
-function arrange_columns(items: ParallaxColumnItem[]) {
+function arrangeColumns(items: ParallaxColumnItem[]) {
   const cols: ParallaxColumnItem[][] = [[], [], [], []];
 
   const fixed = items.filter((it) => it.col !== undefined) as Array<
@@ -76,21 +77,21 @@ function arrange_columns(items: ParallaxColumnItem[]) {
 }
 
 /** 0~1 스크롤 진행도(섹션 내부에서 얼마나 소모됐는지) */
-function get_scroll_progress(el: HTMLElement) {
+function getScrollProgress(el: HTMLElement) {
   const rect = el.getBoundingClientRect();
   const vh = window.innerHeight;
 
-  const scroll_range = Math.max(el.offsetHeight - vh, 0);
-  if (scroll_range <= 0) return 0;
+  const scrollRange = Math.max(el.offsetHeight - vh, 0);
+  if (scrollRange <= 0) return 0;
 
-  const raw = -rect.top / scroll_range;
+  const raw = -rect.top / scrollRange;
   return clamp01(raw);
 }
 
 type MeasureCell = {
   travel: number; // 최종 travel(px)
-  node_h: number;
-  offset_top: number;
+  nodeH: number;
+  offsetTop: number;
 };
 
 function Parallax4Split({
@@ -105,26 +106,26 @@ function Parallax4Split({
   smoothFactor = 0.08,
   enableIntersectionGate = true,
 }: Parallax4SplitProps) {
-  const wrap_ref = useRef<HTMLDivElement | null>(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
 
   // [col][idx]
-  const img_refs = useRef<Array<Array<HTMLDivElement | null>>>([[], [], [], []]);
-  const measure_cache = useRef<Array<Array<MeasureCell | null>>>([[], [], [], []]);
+  const imgRefs = useRef<Array<Array<HTMLDivElement | null>>>([[], [], [], []]);
+  const measureCache = useRef<Array<Array<MeasureCell | null>>>([[], [], [], []]);
 
   // 스크롤 스무딩 누적값(=lenis/scrollTrigger scrub 느낌)
-  const smoothed_ref = useRef(0);
+  const smoothedRef = useRef(0);
 
   //스크롤 위치 확인
-  const p2_gone_logged = useRef(false);
+  const p2GoneLogged = useRef(false);
 
   // 섹션 구동 on/off (intersection gate)
-  const active_ref = useRef(true);
+  const activeRef = useRef(true);
 
   // raf 스케줄링
-  const raf_id_ref = useRef<number>(0);
-  const measure_raf_ref = useRef<number>(0);
+  const rafIdRef = useRef<number>(0);
+  const measureRafRef = useRef<number>(0);
 
-  const cols = useMemo(() => arrange_columns(items), [items]);
+  const cols = useMemo(() => arrangeColumns(items), [items]);
 
   const presets: Preset[] = useMemo(
     () => [
@@ -138,77 +139,77 @@ function Parallax4Split({
 
   // cols 바뀌면 refs/caches 초기화(인덱스 꼬임 방지)
   // useEffect(() => {
-  //   img_refs.current = [[], [], [], []];
-  //   measure_cache.current = [[], [], [], []];
+  //   imgRefs.current = [[], [], [], []];
+  //   measureCache.current = [[], [], [], []];
   // }, [cols]);
 
-  const schedule_tick = () => {
-    if (raf_id_ref.current) return;
-    raf_id_ref.current = window.requestAnimationFrame(tick);
+  const scheduleTick = () => {
+    if (rafIdRef.current) return;
+    rafIdRef.current = window.requestAnimationFrame(tick);
   };
 
-  const schedule_measure = () => {
-    if (measure_raf_ref.current) return;
-    measure_raf_ref.current = window.requestAnimationFrame(() => {
-      measure_raf_ref.current = 0;
-      measure_all();
-      schedule_tick();
+  const scheduleMeasure = () => {
+    if (measureRafRef.current) return;
+    measureRafRef.current = window.requestAnimationFrame(() => {
+      measureRafRef.current = 0;
+      measureAll();
+      scheduleTick();
     });
   };
 
-  const measure_all = () => {
-    const el = wrap_ref.current;
+  const measureAll = () => {
+    const el = wrapRef.current;
     if (!el) return;
 
     const vh = window.innerHeight;
-    const title_safe_px = vh * 0.28 + 160;
+    const titleSafePx = vh * 0.28 + 160;
 
-    for (let col_i = 0; col_i < 4; col_i++) {
-      const col_items = cols[col_i] ?? [];
-      for (let item_i = 0; item_i < col_items.length; item_i++) {
-        const node = img_refs.current[col_i]?.[item_i];
+    for (let colI = 0; colI < 4; colI++) {
+      const colItems = cols[colI] ?? [];
+      for (let itemI = 0; itemI < colItems.length; itemI++) {
+        const node = imgRefs.current[colI]?.[itemI];
         if (!node) continue;
 
-        const it = col_items[item_i];
+        const it = colItems[itemI];
 
-        const offset_top = (node as HTMLElement).offsetTop;
-        const node_h = node.getBoundingClientRect().height;
+        const offsetTop = (node as HTMLElement).offsetTop;
+        const nodeH = node.getBoundingClientRect().height;
 
-        const auto_travel = offset_top + node_h + title_safe_px;
-        const travel = (it.travelPx ?? auto_travel) + (it.strengthPx ?? 0);
+        const autoTravel = offsetTop + nodeH + titleSafePx;
+        const travel = (it.travelPx ?? autoTravel) + (it.strengthPx ?? 0);
 
-        if (!measure_cache.current[col_i]) measure_cache.current[col_i] = [];
-        measure_cache.current[col_i][item_i] = { travel, node_h, offset_top };
+        if (!measureCache.current[colI]) measureCache.current[colI] = [];
+        measureCache.current[colI][itemI] = { travel, nodeH, offsetTop };
       }
     }
   };
 
   const tick = () => {
-    raf_id_ref.current = 0;
+    rafIdRef.current = 0;
 
-    const el = wrap_ref.current;
+    const el = wrapRef.current;
     if (!el) return;
-    if (enableIntersectionGate && !active_ref.current) return;
+    if (enableIntersectionGate && !activeRef.current) return;
 
-    const target = get_scroll_progress(el);
-    const eased_target = ease_out_cubic(target);
+    const target = getScrollProgress(el);
+    const easedTarget = easeOutCubic(target);
 
     const k = clamp(smoothFactor, 0.01, 0.35);
-    smoothed_ref.current += (eased_target - smoothed_ref.current) * k;
-    const s = smoothed_ref.current;
+    smoothedRef.current += (easedTarget - smoothedRef.current) * k;
+    const s = smoothedRef.current;
 
-    for (let col_i = 0; col_i < 4; col_i++) {
-      const preset = presets[col_i] ?? presets[0];
-      const col_items = cols[col_i] ?? [];
+    for (let colI = 0; colI < 4; colI++) {
+      const preset = presets[colI] ?? presets[0];
+      const colItems = cols[colI] ?? [];
 
-      for (let item_i = 0; item_i < col_items.length; item_i++) {
-        const node = img_refs.current[col_i]?.[item_i];
+      for (let itemI = 0; itemI < colItems.length; itemI++) {
+        const node = imgRefs.current[colI]?.[itemI];
         if (!node) continue;
 
-        const it = col_items[item_i];
+        const it = colItems[itemI];
         const speed = Math.max(0, it.speed ?? preset.baseSpeed);
 
-        const cached = measure_cache.current[col_i]?.[item_i];
+        const cached = measureCache.current[colI]?.[itemI];
         const travel = cached?.travel ?? 0;
 
         const y = -s * travel * speed;
@@ -216,45 +217,45 @@ function Parallax4Split({
         node.style.transform = `translate3d(0, ${y}px, 0)`;
         node.style.opacity = '1';
 
-        if (it.id === 'p2' && !p2_gone_logged.current) {
+        if (it.id === 'p2' && !p2GoneLogged.current) {
           const r = node.getBoundingClientRect();
-          const is_gone = r.bottom < 0; // 완전히 위로 나감
+          const isGone = r.bottom < 0; // 완전히 위로 나감
 
-          if (is_gone) {
-            p2_gone_logged.current = true;
-            console.log('[p2 gone] s =', s, 'target =', target, 'eased =', eased_target);
+          if (isGone) {
+            p2GoneLogged.current = true;
+            // console.log('[p2 gone] s =', s, 'target =', target, 'eased =', easedTarget);
           }
         }
       }
     }
 
     // 아직 차이가 남아있으면 다음 프레임도 계속(=스크럽 계속 따라가기)
-    if (Math.abs(eased_target - smoothed_ref.current) > 0.0008) {
-      schedule_tick();
+    if (Math.abs(easedTarget - smoothedRef.current) > 0.0008) {
+      scheduleTick();
     }
   };
 
   // 스크롤/리사이즈는 raf 예약만
   useEffect(() => {
-    const on_scroll = () => schedule_tick();
-    const on_resize = () => {
+    const onScroll = () => scheduleTick();
+    const onResize = () => {
       // 리사이즈 시 측정값 무조건 갱신
-      schedule_measure();
+      scheduleMeasure();
     };
 
-    window.addEventListener('scroll', on_scroll, { passive: true });
-    window.addEventListener('resize', on_resize);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize);
 
     return () => {
-      window.removeEventListener('scroll', on_scroll);
-      window.removeEventListener('resize', on_resize);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cols, presets, smoothFactor]);
 
   // 최초/이미지 로드 시 측정
   useLayoutEffect(() => {
-    schedule_measure();
+    scheduleMeasure();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cols]);
 
@@ -262,16 +263,16 @@ function Parallax4Split({
   useEffect(() => {
     if (!enableIntersectionGate) return;
 
-    const el = wrap_ref.current;
+    const el = wrapRef.current;
     if (!el) return;
 
     const io = new IntersectionObserver(
       (entries) => {
         const e = entries[0];
-        active_ref.current = !!e?.isIntersecting;
-        if (active_ref.current) {
-          schedule_measure();
-          schedule_tick();
+        activeRef.current = !!e?.isIntersecting;
+        if (activeRef.current) {
+          scheduleMeasure();
+          scheduleTick();
         }
       },
       { root: null, rootMargin: '300px 0px', threshold: 0.01 },
@@ -284,7 +285,7 @@ function Parallax4Split({
 
   return (
     <section
-      ref={wrap_ref}
+      ref={wrapRef}
       className={`relative w-full ${className}`}
       style={{ height: `${sectionHeightVh}vh` }}
     >
@@ -295,11 +296,11 @@ function Parallax4Split({
             className="mx-auto max-w-6xl px-6"
             style={{ transform: `translate3d(0, ${textOffsetYPx}px, 0)` }}
           >
-            <div className="text-[27px] md:text-5xl font-extrabold tracking-tight leading-none text-text-default">
+            <div className="text-[27px] font-extrabold leading-none tracking-tight text-text-default md:text-5xl">
               {title}
             </div>
             {subtitle ? (
-              <div className="mt-4 text-[15px] md:text-xl max-w-xl mx-auto leading-snug text-text-default/80">
+              <div className="mx-auto mt-4 max-w-xl text-[15px] leading-snug text-text-default/80 md:text-xl">
                 {subtitle}
               </div>
             ) : null}
@@ -329,15 +330,14 @@ function Parallax4Split({
               ) : null}
 
               <div className="grid h-full grid-cols-4">
-                {cols.map((col_items, col_i) => {
-                  const preset = presets[col_i] ?? presets[0];
+                {cols.map((colItems, colI) => {
+                  const preset = presets[colI] ?? presets[0];
 
                   return (
-                    <div key={`col-${col_i}`} className="relative h-full overflow-hidden">
-
-                      {col_items.map((it, item_i) => {
-                        const start_y =
-                          it.startYPercent ?? preset.baseStartY + item_i * itemGapPercent;
+                    <div key={`col-${colI}`} className="relative h-full overflow-hidden">
+                      {colItems.map((it, itemI) => {
+                        const startY =
+                          it.startYPercent ?? preset.baseStartY + itemI * itemGapPercent;
                         const size = it.sizeClassName ?? 'w-full max-w-[150px] md:max-w-[220px]';
 
                         const scale = it.imageScale ?? 1.12;
@@ -346,24 +346,24 @@ function Parallax4Split({
                           <div
                             key={it.id}
                             ref={(node) => {
-                              if (!img_refs.current[col_i]) img_refs.current[col_i] = [];
-                              img_refs.current[col_i][item_i] = node;
+                              if (!imgRefs.current[colI]) imgRefs.current[colI] = [];
+                              imgRefs.current[colI][itemI] = node;
                             }}
-                            className="absolute w-full will-change-transform opacity-0"
-                            style={{ top: `${start_y}%` }}
+                            className="absolute w-full opacity-0 will-change-transform"
+                            style={{ top: `${startY}%` }}
                           >
-                            <div className={`mx-auto pl-2 pr-2 overflow-hidden ${size}`}>
+                            <div className={`mx-auto overflow-hidden px-2 ${size}`}>
                               <img
                                 src={it.imageSrc}
                                 alt=""
                                 aria-hidden="true"
-                                className="w-full h-auto object-contain"
+                                className="h-auto w-full object-contain"
                                 style={{
                                   transform: `scale(${scale})`,
                                   transformOrigin: 'center',
                                   willChange: 'transform',
                                 }}
-                                onLoad={schedule_measure}
+                                onLoad={scheduleMeasure}
                               />
                             </div>
                           </div>

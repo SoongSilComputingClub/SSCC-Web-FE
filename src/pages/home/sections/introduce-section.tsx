@@ -1,4 +1,5 @@
 import { useMemo, useRef, useEffect } from 'react';
+
 import { NavLink } from 'react-router-dom';
 
 import logoGradi from '@/assets/images/home/logo-gradi.png';
@@ -33,14 +34,14 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
       <div className="mx-auto max-w-6xl px-4 py-16">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-2">
           {data.map((it) => {
-            const Wrapper: any = 'div';
+            const Wrapper = 'div';
             return (
               <Wrapper
                 key={it.id}
                 className={[
                   'group relative overflow-hidden rounded-2xl',
                   'bg-bg-default',
-                  'transition-[filter] dutation-300',
+                  'dutation-300 transition-[filter]',
                   'brightness-120 hover:brightness-65',
                   'aspect-square w-full',
                 ].join(' ')}
@@ -51,7 +52,7 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
                     src={it.imageSrc}
                     alt=""
                     aria-hidden="true"
-                    className="absolute inset-0 h-full w-full object-cover opacity-85 transition-opacity duration-300 group-hover:opacity-55"
+                    className="absolute inset-0 size-full object-cover opacity-85 transition-opacity duration-300 group-hover:opacity-55"
                   />
                 ) : null}
 
@@ -60,20 +61,20 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
                 <div className="absolute inset-0 bg-gradient-to-b from-point/30 via-bg-default/15 to-transparent opacity-0 group-hover:opacity-100" />
 
                 {/* content */}
-                <div className="relative z-10 h-full w-full">
+                <div className="relative z-10 size-full">
                   <div
                     className={[
-                      'absolute left-1/2 -translate-x-1/2 mt-2',
-                      'text-[12px] text-text-default font-extrabold text-center',
-                      'border border-bg-white rounded-[10px] bg-bg-white/50 w-20 py-1',
+                      'absolute left-1/2 mt-2 -translate-x-1/2',
+                      'text-center text-[12px] font-extrabold text-text-default',
+                      'w-20 rounded-[10px] border border-bg-white bg-bg-white/50 py-1',
                     ].join(' ')}
                   >
                     {/* 기본: title */}
                     <div
                       className={[
                         'transition-all duration-300',
-                        'opacity-100 translate-y-0',
-                        'group-hover:opacity-0 group-hover:-translate-y-1',
+                        'translate-y-0 opacity-100',
+                        'group-hover:-translate-y-1 group-hover:opacity-0',
                       ].join(' ')}
                     >
                       {it.title}
@@ -84,8 +85,8 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
                       className={[
                         'absolute inset-0 flex items-center justify-center', // ✅ 같은 박스 안, 같은 중앙
                         'transition-all duration-300',
-                        'opacity-0 translate-y-1',
-                        'group-hover:opacity-100 group-hover:translate-y-0',
+                        'translate-y-1 opacity-0',
+                        'group-hover:translate-y-0 group-hover:opacity-100',
                       ].join(' ')}
                     >
                       {it.subtitle}
@@ -102,11 +103,11 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
                     >
                       <div
                         className={[
-                          'w-[95%] text-[12px] text-text-default text-center',
-                          'leading-snug whitespace-pre-line',
+                          'w-[95%] text-center text-[12px] text-text-default',
+                          'whitespace-pre-line leading-snug',
                           'transition-all duration-300',
-                          'opacity-0 translate-y-3',
-                          'group-hover:opacity-100 group-hover:translate-y-0',
+                          'translate-y-3 opacity-0',
+                          'group-hover:translate-y-0 group-hover:opacity-100',
                         ].join(' ')}
                       >
                         {it.desc}
@@ -281,7 +282,7 @@ function AutoSlideMarquee({
   return (
     <section className={`w-full bg-bg-white ${className}`}>
       <div ref={viewportRef} className={`relative w-full overflow-hidden ${heightClassName}`}>
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full">
+        <div className="absolute left-0 top-1/2 w-full -translate-y-1/2">
           <div
             ref={trackRef}
             className="flex items-center will-change-transform"
@@ -300,7 +301,7 @@ function AutoSlideMarquee({
                   src={it.src}
                   alt={it.alt ?? ''}
                   draggable={false}
-                  className="h-full w-full object-cover"
+                  className="size-full object-cover"
                 />
               </button>
             ))}
@@ -323,11 +324,11 @@ export default function IntroSection() {
           src={logoGradi}
           alt=""
           aria-hidden="true"
-          className="absolute inset-x-0 bottom-48 w-full h-auto block z-10"
+          className="absolute inset-x-0 bottom-48 z-10 block h-auto w-full"
         />
       </div>
       <div className="relative flex flex-col items-center">
-        <div className="mt-10 text-xl text-text-black font-semibold">
+        <div className="text-text-black mt-10 text-xl font-semibold">
           SSCC는 이런 활동을 진행합니다.
         </div>
         <TwoByTwoCardsSection
@@ -363,7 +364,7 @@ export default function IntroSection() {
           ]}
         />
       </div>
-      <div className="text-center mt-20 mb-20 text-xl text-text-black font-semibold">
+      <div className="text-text-black my-20 text-center text-xl font-semibold">
         더 다양한 SSCC의 소식이 궁금하다면!
       </div>
       <AutoSlideMarquee
@@ -382,12 +383,12 @@ export default function IntroSection() {
       <div className="relative h-80 w-full overflow-hidden">
         {/* ✅ 배경: 위→아래 그라데이션 */}
         <div className="absolute inset-0 bg-gradient-to-b from-white to-black" />
-        <div className="mt-20 relative z-10 flex flex-col items-center">
+        <div className="relative z-10 mt-20 flex flex-col items-center">
           <div className="text-text-black text-xl font-bold">이런 SSCC에 흥미가 생긴다면</div>
           <NavLink
             to="/apply"
             onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' })}
-            className="mt-10 bg-bg-muted shrink-0 rounded-full border-[1.5px] border-point px-20 py-3 text-[13px] font-semibold text-point"
+            className="mt-10 shrink-0 rounded-full border-[1.5px] border-point bg-bg-muted px-20 py-3 text-[13px] font-semibold text-point"
           >
             지금 바로 지원하기
           </NavLink>
