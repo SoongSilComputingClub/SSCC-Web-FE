@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import picScroll1 from '@/assets/images/home/pic-scroll1.jpg';
 import picScroll2 from '@/assets/images/home/pic-scroll2.jpg';
 import picScroll3 from '@/assets/images/home/pic-scroll3.jpg';
@@ -10,15 +10,17 @@ import picScroll8 from '@/assets/images/home/pic-scroll8.jpg';
 
 type ColIndex = 0 | 1 | 2 | 3;
 
-type ParallaxColumnItem = {
+export type ParallaxColumnItem = {
   id: string;
   imageSrc: string;
-
+  imageScale?: number;
   col?: ColIndex;
   startYPercent?: number;
-  travelPx?: number;
-  speed?: number;
-  strengthPx?: number;
+
+  /** 이미지별 추가 파라미터 */
+  travelPx?: number; // 직접 지정하면 측정값 대신 사용
+  speed?: number; // 0 이상
+  strengthPx?: number; // travel 보정(+/-)
 
   sizeClassName?: string;
 };
@@ -27,26 +29,33 @@ type Parallax4SplitProps = {
   title: string;
   subtitle?: string;
   items: ParallaxColumnItem[];
+
   sectionHeightVh?: number;
   className?: string;
   showDividers?: boolean;
   itemGapPercent?: number;
 
-  /** ✅ 글자 세로 위치 미세 조정(px). 음수=위로, 양수=아래로 */
   textOffsetYPx?: number; // default -24
-
-  /** ✅ 스크롤 스무딩 강도(0~1). 작을수록 더 부드럽고 느리게 따라감 */
   smoothFactor?: number; // default 0.08
+
+  /** 성능: 화면 근처일 때만 구동 */
+  enableIntersectionGate?: boolean; // default true
 };
 
+type Preset = { baseStartY: number; baseSpeed: number };
+
+function clamp(n: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, n));
+}
 function clamp01(n: number) {
-  return Math.min(1, Math.max(0, n));
+  return clamp(n, 0, 1);
+}
+function ease_out_cubic(t: number) {
+  t = clamp01(t);
+  return 1 - Math.pow(1 - t, 3);
 }
 
-/**
- * col 지정된 아이템은 고정 배치,
- * col 미지정 아이템은 남는 슬롯에 라운드로빈 분배
- */
+/** col 지정된 아이템은 고정 배치, col 미지정 아이템은 남는 슬롯에 라운드로빈 분배 */
 function arrange_columns(items: ParallaxColumnItem[]) {
   const cols: ParallaxColumnItem[][] = [[], [], [], []];
 
@@ -60,13 +69,31 @@ function arrange_columns(items: ParallaxColumnItem[]) {
   let cursor: ColIndex = 0;
   loose.forEach((it) => {
     cols[cursor].push(it);
-    cursor = ((cursor + 1) % 4) as unknown as ColIndex;
+    cursor = ((cursor + 1) % 4) as ColIndex;
   });
 
   return cols;
 }
 
-function ParallaxSectionContainer({
+/** 0~1 스크롤 진행도(섹션 내부에서 얼마나 소모됐는지) */
+function get_scroll_progress(el: HTMLElement) {
+  const rect = el.getBoundingClientRect();
+  const vh = window.innerHeight;
+
+  const scroll_range = Math.max(el.offsetHeight - vh, 0);
+  if (scroll_range <= 0) return 0;
+
+  const raw = -rect.top / scroll_range;
+  return clamp01(raw);
+}
+
+type MeasureCell = {
+  travel: number; // 최종 travel(px)
+  node_h: number;
+  offset_top: number;
+};
+
+function Parallax4Split({
   title,
   subtitle,
   items,
@@ -76,16 +103,30 @@ function ParallaxSectionContainer({
   itemGapPercent = 55,
   textOffsetYPx = -24,
   smoothFactor = 0.08,
+  enableIntersectionGate = true,
 }: Parallax4SplitProps) {
-  const wrapRef = useRef<HTMLDivElement | null>(null);
-  const imgRefs = useRef<Array<Array<HTMLDivElement | null>>>([[], [], [], []]);
+  const wrap_ref = useRef<HTMLDivElement | null>(null);
 
-  // ✅ 스크롤 보간(부드럽게 따라가기)
-  const smoothedRef = useRef(0);
+  // [col][idx]
+  const img_refs = useRef<Array<Array<HTMLDivElement | null>>>([[], [], [], []]);
+  const measure_cache = useRef<Array<Array<MeasureCell | null>>>([[], [], [], []]);
+
+  // 스크롤 스무딩 누적값(=lenis/scrollTrigger scrub 느낌)
+  const smoothed_ref = useRef(0);
+
+  //스크롤 위치 확인
+  const p2_gone_logged = useRef(false);
+
+  // 섹션 구동 on/off (intersection gate)
+  const active_ref = useRef(true);
+
+  // raf 스케줄링
+  const raf_id_ref = useRef<number>(0);
+  const measure_raf_ref = useRef<number>(0);
 
   const cols = useMemo(() => arrange_columns(items), [items]);
 
-  const presets = useMemo(
+  const presets: Preset[] = useMemo(
     () => [
       { baseStartY: 72, baseSpeed: 1.0 },
       { baseStartY: 10, baseSpeed: 1.0 },
@@ -95,149 +136,243 @@ function ParallaxSectionContainer({
     [],
   );
 
-  useEffect(() => {
-    const el = wrapRef.current;
+  // cols 바뀌면 refs/caches 초기화(인덱스 꼬임 방지)
+  // useEffect(() => {
+  //   img_refs.current = [[], [], [], []];
+  //   measure_cache.current = [[], [], [], []];
+  // }, [cols]);
+
+  const schedule_tick = () => {
+    if (raf_id_ref.current) return;
+    raf_id_ref.current = window.requestAnimationFrame(tick);
+  };
+
+  const schedule_measure = () => {
+    if (measure_raf_ref.current) return;
+    measure_raf_ref.current = window.requestAnimationFrame(() => {
+      measure_raf_ref.current = 0;
+      measure_all();
+      schedule_tick();
+    });
+  };
+
+  const measure_all = () => {
+    const el = wrap_ref.current;
     if (!el) return;
 
-    let raf = 0;
+    const vh = window.innerHeight;
+    const title_safe_px = vh * 0.28 + 160;
 
-    const update = () => {
-      raf = 0;
+    for (let col_i = 0; col_i < 4; col_i++) {
+      const col_items = cols[col_i] ?? [];
+      for (let item_i = 0; item_i < col_items.length; item_i++) {
+        const node = img_refs.current[col_i]?.[item_i];
+        if (!node) continue;
 
-      const rect = el.getBoundingClientRect();
-      const vh = window.innerHeight;
+        const it = col_items[item_i];
 
-      const scrollRange = Math.max(el.offsetHeight - vh, 0);
-      const scrolled = clamp01(scrollRange <= 0 ? 0 : -rect.top / scrollRange);
+        const offset_top = (node as HTMLElement).offsetTop;
+        const node_h = node.getBoundingClientRect().height;
 
-      // ✅ 스무딩: 목표 scrolled를 천천히 따라감
-      const k = Math.min(0.35, Math.max(0.01, smoothFactor)); // 안전 클램프
-      smoothedRef.current += (scrolled - smoothedRef.current) * k;
-      const s = smoothedRef.current;
+        const auto_travel = offset_top + node_h + title_safe_px;
+        const travel = (it.travelPx ?? auto_travel) + (it.strengthPx ?? 0);
 
-      // ✅ 끝에서 사진이 "텍스트 위로" 확실히 넘어가게 하는 버퍼
-      const title_safe_px = vh * 0.28 + 160;
+        if (!measure_cache.current[col_i]) measure_cache.current[col_i] = [];
+        measure_cache.current[col_i][item_i] = { travel, node_h, offset_top };
+      }
+    }
+  };
 
-      for (let colIdx = 0; colIdx < 4; colIdx++) {
-        const preset = presets[colIdx] ?? presets[0];
-        const colItems = cols[colIdx] ?? [];
+  const tick = () => {
+    raf_id_ref.current = 0;
 
-        for (let itemIdx = 0; itemIdx < colItems.length; itemIdx++) {
-          const node = imgRefs.current[colIdx]?.[itemIdx];
-          if (!node) continue;
+    const el = wrap_ref.current;
+    if (!el) return;
+    if (enableIntersectionGate && !active_ref.current) return;
 
-          const it = colItems[itemIdx];
+    const target = get_scroll_progress(el);
+    const eased_target = ease_out_cubic(target);
 
-          const speed = it.speed ?? preset.baseSpeed;
+    const k = clamp(smoothFactor, 0.01, 0.35);
+    smoothed_ref.current += (eased_target - smoothed_ref.current) * k;
+    const s = smoothed_ref.current;
 
-          const offsetTop = (node as HTMLElement).offsetTop;
-          const nodeH = node.getBoundingClientRect().height;
+    for (let col_i = 0; col_i < 4; col_i++) {
+      const preset = presets[col_i] ?? presets[0];
+      const col_items = cols[col_i] ?? [];
 
-          // travelPx 없으면 자동 계산(끝에서 무조건 위로 사라짐)
-          const autoTravel = offsetTop + nodeH + title_safe_px;
-          const travel = (it.travelPx ?? autoTravel) + (it.strengthPx ?? 0);
+      for (let item_i = 0; item_i < col_items.length; item_i++) {
+        const node = img_refs.current[col_i]?.[item_i];
+        if (!node) continue;
 
-          // ✅ 이동(부드러운 s 사용)
-          const y = -s * travel * Math.max(0, speed);
+        const it = col_items[item_i];
+        const speed = Math.max(0, it.speed ?? preset.baseSpeed);
 
-          node.style.transform = `translate3d(0, ${y}px, 0)`;
-          node.style.opacity = '1'; // 페이드 없음
+        const cached = measure_cache.current[col_i]?.[item_i];
+        const travel = cached?.travel ?? 0;
+
+        const y = -s * travel * speed;
+
+        node.style.transform = `translate3d(0, ${y}px, 0)`;
+        node.style.opacity = '1';
+
+        if (it.id === 'p2' && !p2_gone_logged.current) {
+          const r = node.getBoundingClientRect();
+          const is_gone = r.bottom < 0; // 완전히 위로 나감
+
+          if (is_gone) {
+            p2_gone_logged.current = true;
+            console.log('[p2 gone] s =', s, 'target =', target, 'eased =', eased_target);
+          }
         }
       }
+    }
+
+    // 아직 차이가 남아있으면 다음 프레임도 계속(=스크럽 계속 따라가기)
+    if (Math.abs(eased_target - smoothed_ref.current) > 0.0008) {
+      schedule_tick();
+    }
+  };
+
+  // 스크롤/리사이즈는 raf 예약만
+  useEffect(() => {
+    const on_scroll = () => schedule_tick();
+    const on_resize = () => {
+      // 리사이즈 시 측정값 무조건 갱신
+      schedule_measure();
     };
 
-    const onScroll = () => {
-      if (raf) return;
-      raf = requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    window.addEventListener('scroll', on_scroll, { passive: true });
+    window.addEventListener('resize', on_resize);
 
     return () => {
-      if (raf) cancelAnimationFrame(raf);
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      window.removeEventListener('scroll', on_scroll);
+      window.removeEventListener('resize', on_resize);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cols, presets, smoothFactor]);
+
+  // 최초/이미지 로드 시 측정
+  useLayoutEffect(() => {
+    schedule_measure();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cols]);
+
+  // 섹션이 화면 근처일 때만 구동 (옵션)
+  useEffect(() => {
+    if (!enableIntersectionGate) return;
+
+    const el = wrap_ref.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        const e = entries[0];
+        active_ref.current = !!e?.isIntersecting;
+        if (active_ref.current) {
+          schedule_measure();
+          schedule_tick();
+        }
+      },
+      { root: null, rootMargin: '300px 0px', threshold: 0.01 },
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enableIntersectionGate, cols]);
 
   return (
     <section
-      ref={wrapRef}
+      ref={wrap_ref}
       className={`relative w-full ${className}`}
-      style={{ height: `${sectionHeightVh + 100}vh` }}
+      style={{ height: `${sectionHeightVh}vh` }}
     >
       <div className="sticky top-0 h-screen overflow-hidden">
-        {/* ✅ 텍스트: 화면 중앙 고정(색 변화 없음) */}
-        <div
-          data-parallax-text="1"
-          className="absolute inset-0 z-20 flex items-center justify-center text-center"
-        >
+        {/* 텍스트 레이어 */}
+        <div className="absolute inset-0 z-20 flex items-center justify-center text-center">
           <div
             className="mx-auto max-w-6xl px-6"
-            style={{ transform: `translateY(${textOffsetYPx}px)` }}
+            style={{ transform: `translate3d(0, ${textOffsetYPx}px, 0)` }}
           >
-            <div className="text-2xl md:text-5xl font-extrabold tracking-tight leading-none text-white">
+            <div className="text-[27px] md:text-5xl font-extrabold tracking-tight leading-none text-text-default">
               {title}
             </div>
             {subtitle ? (
-              <div className="mt-4 text-xl md:text-base max-w-xl mx-auto leading-none text-white/80">
+              <div className="mt-4 text-[15px] md:text-xl max-w-xl mx-auto leading-snug text-text-default/80">
                 {subtitle}
               </div>
             ) : null}
           </div>
         </div>
 
-        {/* 4 split columns (사진 레이어) */}
+        {/* 사진 레이어 */}
         <div className="absolute inset-0 z-10">
           <div className="mx-auto h-full max-w-6xl px-6">
-            <div className="grid h-full grid-cols-4">
-              {cols.map((colItems, colIdx) => {
-                const preset = presets[colIdx] ?? presets[0];
+            <div className="relative h-full">
+              {/* ✅ Dividers overlay (양끝 포함) */}
+              {showDividers ? (
+                <div className="pointer-events-none absolute inset-0 z-20">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <div
+                      key={`divider-${i}`}
+                      className="absolute top-0 h-full w-[3px]"
+                      style={{
+                        left: `${(i * 100) / 4}%`, // 0%, 25%, 50%, 75%, 100%
+                        transform: i === 4 ? 'translateX(-1px)' : undefined, // 100% 라인이 밖으로 밀리는 것 방지(선 두께 보정)
+                        background:
+                          'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.18) 20%, rgba(255,255,255,0.18) 80%, rgba(255,255,255,0) 100%)',
+                      }}
+                    />
+                  ))}
+                </div>
+              ) : null}
 
-                return (
-                  <div key={`col-${colIdx}`} className="relative h-full overflow-hidden">
-                    {/* ✅ 컬럼 divider: 위/아래 그라데이션 라인 */}
-                    {showDividers && colIdx !== 0 ? (
-                      <div
-                        className="absolute left-0 top-0 h-full w-px pointer-events-none"
-                        style={{
-                          background:
-                            'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.18) 20%, rgba(255,255,255,0.18) 80%, rgba(255,255,255,0) 100%)',
-                        }}
-                      />
-                    ) : null}
+              <div className="grid h-full grid-cols-4">
+                {cols.map((col_items, col_i) => {
+                  const preset = presets[col_i] ?? presets[0];
 
-                    {colItems.map((it, itemIdx) => {
-                      const startY =
-                        it.startYPercent ?? preset.baseStartY + itemIdx * itemGapPercent;
-                      const size = it.sizeClassName ?? 'w-full max-w-[150px] md:max-w-[220px]';
+                  return (
+                    <div key={`col-${col_i}`} className="relative h-full overflow-hidden">
 
-                      return (
-                        <div
-                          key={it.id}
-                          ref={(el) => {
-                            if (!imgRefs.current[colIdx]) imgRefs.current[colIdx] = [];
-                            imgRefs.current[colIdx][itemIdx] = el;
-                          }}
-                          className="absolute will-change-transform w-full"
-                          style={{ top: `${startY}%` }}
-                        >
-                          <div className={`mx-auto overflow-hidden ${size}`}>
-                            <img
-                              src={it.imageSrc}
-                              alt=""
-                              aria-hidden="true"
-                              className="w-full h-auto object-contain"
-                            />
+                      {col_items.map((it, item_i) => {
+                        const start_y =
+                          it.startYPercent ?? preset.baseStartY + item_i * itemGapPercent;
+                        const size = it.sizeClassName ?? 'w-full max-w-[150px] md:max-w-[220px]';
+
+                        const scale = it.imageScale ?? 1.12;
+
+                        return (
+                          <div
+                            key={it.id}
+                            ref={(node) => {
+                              if (!img_refs.current[col_i]) img_refs.current[col_i] = [];
+                              img_refs.current[col_i][item_i] = node;
+                            }}
+                            className="absolute w-full will-change-transform opacity-0"
+                            style={{ top: `${start_y}%` }}
+                          >
+                            <div className={`mx-auto pl-2 pr-2 overflow-hidden ${size}`}>
+                              <img
+                                src={it.imageSrc}
+                                alt=""
+                                aria-hidden="true"
+                                className="w-full h-auto object-contain"
+                                style={{
+                                  transform: `scale(${scale})`,
+                                  transformOrigin: 'center',
+                                  willChange: 'transform',
+                                }}
+                                onLoad={schedule_measure}
+                              />
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              })}
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -246,16 +381,18 @@ function ParallaxSectionContainer({
   );
 }
 
+// 사용 예시
 export default function ParallaxSection() {
   return (
     <main className="bg-black pt-20">
-      <ParallaxSectionContainer
+      <Parallax4Split
         title="당신의 성장에"
         subtitle="SSCC가 함께합니다"
-        sectionHeightVh={220}
+        sectionHeightVh={255} //255
         itemGapPercent={55}
-        textOffsetYPx={-10} // ✅ 글자 위치 조절(위/아래)
-        smoothFactor={0.08} // ✅ 더 부드럽게: 0.05 / 더 빠르게 반응: 0.12
+        textOffsetYPx={-10}
+        smoothFactor={0.08}
+        enableIntersectionGate={true}
         items={[
           {
             id: 'p1',
@@ -268,7 +405,7 @@ export default function ParallaxSection() {
             id: 'p2',
             col: 0,
             startYPercent: 300,
-            speed: 0.9,
+            speed: 0.88,
             imageSrc: picScroll2,
           },
           {
@@ -282,7 +419,7 @@ export default function ParallaxSection() {
             id: 'p4',
             col: 1,
             startYPercent: 200,
-            speed: 0.8,
+            speed: 1,
             imageSrc: picScroll4,
           },
           {
