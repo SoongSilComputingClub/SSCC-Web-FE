@@ -1,7 +1,8 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useState } from 'react';
+
 import { Canvas, useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
 import { NavLink } from 'react-router-dom';
+import * as THREE from 'three';
 
 const PARTICLE_SIZE = 0.035; // 점 크기(0.5)
 const PARTICLE_OPACITY = 0.5; // 투명도(0.8)
@@ -13,7 +14,7 @@ const WaveParticles = () => {
 
   const count = 20000;
 
-  const positions = useMemo(() => {
+  const [positions] = useState(() => {
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * FIELD_X;
@@ -21,7 +22,7 @@ const WaveParticles = () => {
       pos[i * 3 + 2] = (Math.random() - 0.5) * FIELD_Z;
     }
     return pos;
-  }, [count]);
+  });
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
@@ -62,7 +63,7 @@ const WaveParticles = () => {
 
 export const WaveSection = () => {
   return (
-    <section className="relative w-full h-screen bg-black overflow-hidden">
+    <section className="relative h-screen w-full overflow-hidden bg-black">
       {/* 배경 레이어: 깊이감을 위해 카메라 각도를 낮춤 (Low Angle) */}
       <div className="absolute inset-0 z-0">
         <Canvas camera={{ position: [0, 1.5, 10], fov: 40 }} dpr={1}>
@@ -74,15 +75,15 @@ export const WaveSection = () => {
       </div>
 
       {/* Overlay UI */}
-      <div className="absolute inset-0 z-10 flex flex-col items-left justify-center px-6 text-left select-none pt-72">
+      <div className="absolute inset-0 z-10 flex select-none flex-col justify-center px-6 pt-72 text-left">
         {/* Title */}
-        <h1 className="text-[32px] font-bold text-text-default leading-none">
+        <h1 className="text-[32px] font-bold leading-none text-text-default">
           SSCC, <br />
           Where Coding Begins.
         </h1>
         <NavLink
           to="/apply"
-          className="self-start mt-4 bg-bg-default shrink-0 rounded-full border-[1.5px] border-point px-6 py-2 text-[10px] font-semibold text-point"
+          className="mt-4 shrink-0 self-start rounded-full border-[1.5px] border-point bg-bg-default px-6 py-2 text-[10px] font-semibold text-point"
         >
           지금 바로 지원하기 →
         </NavLink>
