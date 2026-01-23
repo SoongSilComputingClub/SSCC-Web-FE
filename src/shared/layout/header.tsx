@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 
 export function Header() {
   return (
-    <header className="w-full bg-bg-default px-6 py-3 text-text-default">
+    <header className="w-full bg-bg-default text-text-default px-6 py-3">
       <div className="mx-auto max-w-7xl">
         <nav className="flex items-center justify-between">
           {/*Logo*/}
@@ -10,10 +10,10 @@ export function Header() {
             <img src="/logo2.svg" alt="SSCC Logo" className="h-8 w-auto" />
           </NavLink>
 
-          <NavLink to="/about" className="shrink-0 text-[11px] font-semibold text-text-default">
+          <NavLink to="/about" className="text-[11px] font-semibold text-text-default shrink-0">
             소개
           </NavLink>
-          <NavLink to="/projects" className="shrink-0 text-[11px] font-semibold text-text-default">
+          <NavLink to="/projects" className="text-[11px] font-semibold text-text-default shrink-0">
             프로젝트
           </NavLink>
 

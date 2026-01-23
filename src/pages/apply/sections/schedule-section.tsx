@@ -8,8 +8,8 @@ const SCHEDULE_ITEMS = [
 
 export default function ScheduleSection() {
   return (
-    <section className="flex w-full justify-center bg-bg-default px-6 py-16">
-      <div className="flex w-full max-w-5xl flex-col items-center gap-12 text-center">
+    <section className="w-full bg-bg-default px-6 py-16 flex justify-center">
+      <div className="w-full max-w-5xl flex flex-col items-center text-center gap-12">
         {/* Header */}
         <SectionHeader label="SCHEDULE" title="모집 일정" />
 
