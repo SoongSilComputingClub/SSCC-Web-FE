@@ -84,8 +84,8 @@ export default function ValueSection() {
   return (
     <section className="relative flex min-h-screen w-full flex-col bg-bg-default px-6 py-16">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[20%] top-[85%] h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-tr from-white/35 via-white/15 to-transparent blur-2xl" />
-        <div className="absolute left-[80%] top-[15%] h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-bl from-white/35 via-white/15 to-transparent blur-2xl" />{' '}
+        <div className="absolute left-[20%] top-[85%] size-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-tr from-white/35 via-white/15 to-transparent blur-2xl" />
+        <div className="absolute left-[80%] top-[15%] size-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-bl from-white/35 via-white/15 to-transparent blur-2xl" />{' '}
       </div>
 
       <div

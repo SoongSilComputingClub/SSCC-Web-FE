@@ -113,7 +113,7 @@ export default function RecordSection() {
         '[contain:layout_paint] [overflow-anchor:none]',
       ].join(' ')}
     >
-      <div className="flex w-full max-w-[420px] flex-col gap-4 pb-20 pt-20 text-center text-text-default">
+      <div className="flex w-full max-w-[420px] flex-col gap-4 py-20 text-center text-text-default">
         <div className="text-[15px] font-bold">43기 활동 레코드</div>
 
         <div className="flex flex-row items-center justify-center gap-4">
@@ -125,7 +125,7 @@ export default function RecordSection() {
                 idx === 0 ? 'bg-bg-muted/80' : '',
               ].join(' ')}
             >
-              <div className="-translate-y-[70%] text-[12px] font-semibold leading-none text-text-default/60">
+              <div className="translate-y-[-70%] text-[12px] font-semibold leading-none text-text-default/60">
                 {it.title}
               </div>
 

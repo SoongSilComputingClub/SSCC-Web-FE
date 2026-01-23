@@ -24,11 +24,11 @@ function TimelineRow({
   return (
     <div className="relative pl-2">
       {/* dot */}
-      <div className="absolute -left-3 top-2.5 z-10 h-4 w-4 rounded-full border-[2px] border-point bg-bg-white" />
+      <div className="absolute -left-3 top-2.5 z-10 size-4 rounded-full border-2 border-point bg-bg-white" />
 
       {/* line */}
       {showLine ? (
-        <div className="absolute -left-1 top-[1.5rem] h-[calc(100%+2rem)] w-px bg-point" />
+        <div className="absolute -left-1 top-6 h-[calc(100%+2rem)] w-px bg-point" />
       ) : null}
 
       {/* ✅ 텍스트만 한 번에 등장 */}
