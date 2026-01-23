@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import SectionHeader from '../components/section-header';
 
 const FAQS = [
@@ -21,11 +20,11 @@ export default function FAQSection() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   return (
-    <section className="flex w-full justify-center bg-bg-default px-6 py-16">
-      <div className="flex w-full max-w-5xl flex-col items-center gap-12">
+    <section className="w-full bg-bg-default px-6 py-16 flex justify-center">
+      <div className="w-full max-w-5xl flex flex-col items-center gap-12">
         <SectionHeader label="F&Q" title="자주 들어오는 질문" />
 
-        <div className="flex w-full flex-col gap-4">
+        <div className="w-full flex flex-col gap-4">
           {FAQS.map((item, idx) => {
             const open = openIdx === idx;
             return (
@@ -33,7 +32,7 @@ export default function FAQSection() {
                 <button
                   type="button"
                   onClick={() => setOpenIdx(open ? null : idx)}
-                  className="flex w-full items-center justify-between gap-4 text-left"
+                  className="w-full flex items-center justify-between gap-4 text-left"
                 >
                   {/* Question */}
                   <div className="flex items-center gap-2">
@@ -43,7 +42,7 @@ export default function FAQSection() {
 
                   {/* */}
                   <svg
-                    className={`size-5 text-[#B3B3B3] transition-transform ${
+                    className={`w-5 h-5 text-[#B3B3B3] transition-transform ${
                       open ? 'rotate-180' : ''
                     }`}
                     viewBox="0 0 24 24"
@@ -64,11 +63,11 @@ export default function FAQSection() {
                 {/* Answer */}
                 <div
                   className={`grid transition-all duration-300 ease-out ${
-                    open ? 'mt-4 grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    open ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0'
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <p className="text-sm leading-relaxed text-text-default">{item.a}</p>
+                    <p className="text-sm text-text-default leading-relaxed">{item.a}</p>
                   </div>
                 </div>
               </div>
