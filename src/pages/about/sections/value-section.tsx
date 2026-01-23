@@ -102,7 +102,7 @@ export default function ValueSection() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-6 pt-28 text-text-default">
+      <div className="flex flex-col gap-6 pb-40 pt-28 text-text-default">
         {items.map((it, idx) => {
           const isVisible = visible[idx];
 
