@@ -5,6 +5,13 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json ./
+
+# Mitigate npm network flakiness (retry/timeout)
+RUN npm config set fetch-retries 5 \
+ && npm config set fetch-retry-mintimeout 20000 \
+ && npm config set fetch-retry-maxtimeout 120000 \
+ && npm config set fetch-timeout 600000
+
 RUN npm ci
 
 # Copy source code
