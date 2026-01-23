@@ -1,11 +1,10 @@
 import { useMemo, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-
-import logoGradi from '@/assets/images/home/logo-gradi.png';
 import picIntro1 from '@/assets/images/home/pic-intro1.jpg';
 import picIntro2 from '@/assets/images/home/pic-intro2.jpg';
 import picIntro3 from '@/assets/images/home/pic-intro3.jpeg';
 import picIntro4 from '@/assets/images/home/pic-intro4.jpg';
+import logoGradi from '@/assets/images/home/logo-gradi.png';
 import picScroll1 from '@/assets/images/home/pic-scroll1.jpg';
 import picScroll2 from '@/assets/images/home/pic-scroll2.jpg';
 import picScroll3 from '@/assets/images/home/pic-scroll3.jpg';
@@ -39,10 +38,11 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
                 key={it.id}
                 className={[
                   'group relative overflow-hidden rounded-2xl',
-                  'bg-bg-default',
-                  'transition-[filter] dutation-300',
-                  'brightness-120 hover:brightness-65',
+                  'bg-gradient-to-b from-bg-default to-bg-white',
+                  'transition-colors',
+                  'brightness-125',
                   'aspect-square w-full',
+                  'hover:brightness-95',
                 ].join(' ')}
               >
                 {/* background image */}
@@ -56,61 +56,31 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
                 ) : null}
 
                 {/* gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-point/30 via-point/15 to-transparent group-hover:opacity-0" />
-                <div className="absolute inset-0 bg-gradient-to-b from-point/30 via-bg-default/15 to-transparent opacity-0 group-hover:opacity-100" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/55 to-black/80" />
 
                 {/* content */}
-                <div className="relative z-10 h-full w-full">
+                <div className="relative z-10 flex min-h-[180px] flex-col justify-end p-6">
                   <div
                     className={[
-                      'absolute left-1/2 -translate-x-1/2 mt-2',
-                      'text-[12px] text-text-default font-extrabold text-center',
-                      'border border-bg-white rounded-[10px] bg-bg-white/50 w-20 py-1',
+                      'absolute text-l md:text-xl font-bold text-text-default',
+                      'transition-all duration-250',
+                      'opacity-100 translate-y-0',
+                      'group-hover:opacity-0 group-hover:translate-y-2',
                     ].join(' ')}
                   >
-                    {/* 기본: title */}
-                    <div
-                      className={[
-                        'transition-all duration-300',
-                        'opacity-100 translate-y-0',
-                        'group-hover:opacity-0 group-hover:-translate-y-1',
-                      ].join(' ')}
-                    >
-                      {it.title}
-                    </div>
-
-                    {/* hover: subtitle */}
-                    <div
-                      className={[
-                        'absolute inset-0 flex items-center justify-center', // ✅ 같은 박스 안, 같은 중앙
-                        'transition-all duration-300',
-                        'opacity-0 translate-y-1',
-                        'group-hover:opacity-100 group-hover:translate-y-0',
-                      ].join(' ')}
-                    >
-                      {it.subtitle}
-                    </div>
+                    {it.title}
                   </div>
-
+                  {/* ✅ hover 시 desc 등장 */}
                   {it.desc ? (
                     <div
                       className={[
-                        'absolute inset-0 z-10',
-                        'flex items-center justify-center', // ✅ 카드 정중앙
-                        'pointer-events-none',
+                        'absolute w-[70%] text-[12px] text-text-default',
+                        'transition-all duration-300',
+                        'opacity-0 translate-y-3',
+                        'group-hover:opacity-100 group-hover:translate-y-0',
                       ].join(' ')}
                     >
-                      <div
-                        className={[
-                          'w-[95%] text-[12px] text-text-default text-center',
-                          'leading-snug whitespace-pre-line',
-                          'transition-all duration-300',
-                          'opacity-0 translate-y-3',
-                          'group-hover:opacity-100 group-hover:translate-y-0',
-                        ].join(' ')}
-                      >
-                        {it.desc}
-                      </div>
+                      {it.desc}
                     </div>
                   ) : null}
                 </div>
@@ -335,29 +305,29 @@ export default function IntroSection() {
             {
               id: 'c1',
               title: '세미나',
-              subtitle: 'seminar',
-              desc: 'SSCC 출신 선배가 직접 \n전하는 생생한 업계 현황과 \n핵심 기술을 배우며 \n실무 감각을 깨우는 시간',
+              subtitle: 'Seminar',
+              desc: 'SSCC 출신 선배가 직접 전하는 생생한 업계 현황과 핵심 기술을 배우며 실무 감각을 깨우는 시간.',
               imageSrc: picIntro1,
             },
             {
               id: 'c2',
               title: '프로젝트',
-              subtitle: 'project',
-              desc: '아이디어를 서비스로 구현하는 \n협업의 여정. 팀원과 소통하며 \n완성도 높은 결과물을 일굽니다',
+              subtitle: 'Projects',
+              desc: '아이디어를 서비스로 구현하는 협업의 여정. 팀원과 소통하며 완성도 높은 결과물을 일굽니다.',
               imageSrc: picIntro2,
             },
             {
               id: 'c3',
               title: '스터디',
-              subtitle: 'study',
-              desc: '기초부터 심화까지 함께하는 \n몰입의 시간. 함께 지식을 나누며 \n기본기를 다지는 과정',
+              subtitle: 'Study',
+              desc: '기초부터 심화까지 함께하는 몰입의 시간. 함께 지식을 나누며 기본기를 다지는 과정.',
               imageSrc: picIntro3,
             },
             {
               id: 'c4',
               title: '행사',
-              subtitle: 'event',
-              desc: '선후배가 어우러지는 소통의 장',
+              subtitle: 'Event',
+              desc: '선후배가 어우러지는 소통의 장.',
               imageSrc: picIntro4,
             },
           ]}
@@ -386,7 +356,6 @@ export default function IntroSection() {
           <div className="text-text-black text-xl font-bold">이런 SSCC에 흥미가 생긴다면</div>
           <NavLink
             to="/apply"
-            onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' })}
             className="mt-10 bg-bg-muted shrink-0 rounded-full border-[1.5px] border-point px-20 py-3 text-[13px] font-semibold text-point"
           >
             지금 바로 지원하기
