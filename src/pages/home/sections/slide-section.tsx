@@ -12,10 +12,6 @@ type Slide = {
   bgSrc: string;
 };
 
-function clamp(n: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, n));
-}
-
 function SlideIndicator({
   active_index,
   total,
@@ -23,7 +19,7 @@ function SlideIndicator({
 }: {
   active_index: number;
   total: number;
-  progress: number; // 0~1
+  progress: number; // 0~1, 스크롤 연속 게이지
 }) {
   const current = active_index + 1;
 
@@ -71,40 +67,48 @@ export default function ScrollSnapSlides() {
     [],
   );
 
-  const wrap_ref = useRef<HTMLDivElement | null>(null);
-
+  const wrapRef = useRef<HTMLDivElement | null>(null);
   const [active_index, set_active_index] = useState(0);
-  const [scroll_progress, set_scroll_progress] = useState(0);
   const [vw, set_vw] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 0));
 
+  // 게이지용: 0~1 연속 진행률
+  const [scroll_progress, set_scroll_progress] = useState(0);
+
   useEffect(() => {
-    const el = wrap_ref.current;
+    const el = wrapRef.current;
     if (!el) return;
 
     let raf = 0;
 
-    const calc_scroll = () => {
+    const calc = () => {
       const rect = el.getBoundingClientRect();
-      const vh = window.innerHeight;
+      const viewport_h = window.innerHeight;
 
-      const scroll_range = Math.max(el.offsetHeight - vh, 0);
-      const start_offset = vh * 0.25;
+      // 섹션이 스크롤로 "소모"할 수 있는 총 거리
+      const scroll_range = Math.max(el.offsetHeight - viewport_h, 0);
+
+      // 시작 트리거(원래 코드 유지)
+      const start_offset = viewport_h * 0.25;
 
       const scrolled_raw = -rect.top - start_offset;
-      const scrolled = clamp(scrolled_raw, 0, scroll_range);
+      const scrolled = Math.min(Math.max(scrolled_raw, 0), scroll_range);
 
+      // ✅ 게이지는 연속
       const p = scroll_range <= 0 ? 1 : scrolled / scroll_range;
-      set_scroll_progress(clamp(p, 0, 1));
+      set_scroll_progress(Math.min(1, Math.max(0, p)));
 
+      // ✅ 슬라이드는 스냅(인덱스 점프) — 기존 로직 유지
       const len = slides.length;
       const step = len > 0 ? scroll_range / len : 0;
+
       const idx = step <= 0 ? 0 : Math.min(len - 1, Math.floor(scrolled / step));
+
       set_active_index(idx);
     };
 
     const on_scroll = () => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(calc_scroll);
+      raf = requestAnimationFrame(calc);
     };
 
     const on_resize = () => {
@@ -124,51 +128,47 @@ export default function ScrollSnapSlides() {
   }, [slides.length]);
 
   const wrapper_height = `${slides.length * 120}vh`;
-  const track_width = `${slides.length * vw}px`;
-  const track_transform = `translate3d(-${active_index * vw}px, 0, 0)`;
 
   return (
-    <div ref={wrap_ref} className="relative w-full" style={{ height: wrapper_height }}>
+    <div ref={wrapRef} className="relative w-full" style={{ height: wrapper_height }}>
       <div className="sticky top-0 h-screen overflow-hidden">
-        {/* 슬라이드 트랙 */}
         <div
-          className="relative z-10 flex h-full will-change-transform transition-transform duration-700 ease-in-out"
+          className="relative z-10 flex h-full will-change-transform transition-transform duration-500 ease-out"
           style={{
-            width: track_width,
-            transform: track_transform,
+            width: `${slides.length * vw}px`,
+            transform: `translate3d(-${active_index * vw}px, 0, 0)`, // ✅ 스냅 유지
           }}
         >
           {slides.map((s) => (
             <section
               key={s.id}
-              className={`relative h-full w-screen pt-32 flex items-start justify-start px-6 ${
-                s.className ?? ''
-              }`}
+              className={`h-full w-screen pt-32 flex items-start justify-start px-6 ${s.className ?? ''}`}
             >
               <div className="relative w-[70%] h-[65%] flex justify-center mx-auto my-7 overflow-hidden">
-                <img
-                  src={s.bgSrc}
-                  alt=""
-                  aria-hidden="true"
-                  className="h-full w-full object-cover object-center"
-                />
+                <div className="relative inset-0 z-0">
+                  <img
+                    src={s.bgSrc}
+                    alt=""
+                    aria-hidden="true"
+                    className="h-full w-full object-cover object-center"
+                  />
+                </div>
               </div>
 
               <div className="absolute z-10 max-w-sm text-text-default drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
                 <div className="text-[12px] pb-4">{s.subtitle}</div>
-                <div className="text-[27px] font-bold">{s.title}</div>
-                <div className="text-[27px] pl-8 font-bold leading-tight">{s.title2}</div>
+                <div className="text-3xl font-bold">{s.title}</div>
+                <div className="text-3xl pl-8 font-bold leading-tight">{s.title2}</div>
               </div>
             </section>
           ))}
         </div>
 
-        {/* 인디케이터 */}
         <div className="mx-auto w-[70%] pointer-events-none absolute inset-x-0 bottom-20 z-20 flex justify-center">
           <SlideIndicator
             active_index={active_index}
             total={slides.length}
-            progress={scroll_progress}
+            progress={scroll_progress} // ✅ 게이지만 연속
           />
         </div>
       </div>
