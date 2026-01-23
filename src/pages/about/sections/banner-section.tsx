@@ -10,9 +10,9 @@ export default function BannerSection() {
             className="max-h-[35%] max-w-[35%] translate-x-[7%] select-none object-contain leading-none"
             draggable={false}
           />
-          <div className="-translate-y-[40%]">
+          <div className="translate-y-[-40%]">
             <div className="mb-4 text-[27px] font-bold italic leading-none">SSCC</div>
-            <div className="mb-6 -translate-y-[55%] text-[15px] font-light">SSCC 44th</div>
+            <div className="mb-6 translate-y-[-55%] text-[15px] font-light">SSCC 44th</div>
           </div>
         </div>
       </div>
