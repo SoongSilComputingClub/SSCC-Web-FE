@@ -328,7 +328,7 @@ export default function IntroSection() {
         />
       </div>
       <div className="relative flex flex-col items-center">
-        <div className="mt-10 text-xl font-semibold text-text-black">
+        <div className="text-text-black mt-10 text-xl font-semibold">
           SSCC는 이런 활동을 진행합니다.
         </div>
         <TwoByTwoCardsSection
@@ -364,7 +364,7 @@ export default function IntroSection() {
           ]}
         />
       </div>
-      <div className="my-20 text-center text-xl font-semibold text-text-black">
+      <div className="text-text-black my-20 text-center text-xl font-semibold">
         더 다양한 SSCC의 소식이 궁금하다면!
       </div>
       <AutoSlideMarquee
@@ -384,7 +384,7 @@ export default function IntroSection() {
         {/* ✅ 배경: 위→아래 그라데이션 */}
         <div className="absolute inset-0 bg-gradient-to-b from-white to-black" />
         <div className="relative z-10 mt-20 flex flex-col items-center">
-          <div className="text-xl font-bold text-text-black">이런 SSCC에 흥미가 생긴다면</div>
+          <div className="text-text-black text-xl font-bold">이런 SSCC에 흥미가 생긴다면</div>
           <NavLink
             to="/apply"
             onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' })}
