@@ -1,10 +1,12 @@
 import { useMemo, useRef, useEffect } from 'react';
+
 import { NavLink } from 'react-router-dom';
+
+import logoGradi from '@/assets/images/home/logo-gradi.png';
 import picIntro1 from '@/assets/images/home/pic-intro1.jpg';
 import picIntro2 from '@/assets/images/home/pic-intro2.jpg';
 import picIntro3 from '@/assets/images/home/pic-intro3.jpeg';
 import picIntro4 from '@/assets/images/home/pic-intro4.jpg';
-import logoGradi from '@/assets/images/home/logo-gradi.png';
 import picScroll1 from '@/assets/images/home/pic-scroll1.jpg';
 import picScroll2 from '@/assets/images/home/pic-scroll2.jpg';
 import picScroll3 from '@/assets/images/home/pic-scroll3.jpg';
@@ -32,17 +34,16 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
       <div className="mx-auto max-w-6xl px-4 py-16">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-2">
           {data.map((it) => {
-            const Wrapper: any = 'div';
+            const Wrapper = 'div';
             return (
               <Wrapper
                 key={it.id}
                 className={[
                   'group relative overflow-hidden rounded-2xl',
-                  'bg-gradient-to-b from-bg-default to-bg-white',
-                  'transition-colors',
-                  'brightness-125',
+                  'bg-bg-default',
+                  'dutation-300 transition-[filter]',
+                  'brightness-120 hover:brightness-65',
                   'aspect-square w-full',
-                  'hover:brightness-95',
                 ].join(' ')}
               >
                 {/* background image */}
@@ -51,36 +52,66 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
                     src={it.imageSrc}
                     alt=""
                     aria-hidden="true"
-                    className="absolute inset-0 h-full w-full object-cover opacity-85 transition-opacity duration-300 group-hover:opacity-55"
+                    className="absolute inset-0 size-full object-cover opacity-85 transition-opacity duration-300 group-hover:opacity-55"
                   />
                 ) : null}
 
                 {/* gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/55 to-black/80" />
+                <div className="absolute inset-0 bg-gradient-to-b from-point/30 via-point/15 to-transparent group-hover:opacity-0" />
+                <div className="absolute inset-0 bg-gradient-to-b from-point/30 via-bg-default/15 to-transparent opacity-0 group-hover:opacity-100" />
 
                 {/* content */}
-                <div className="relative z-10 flex min-h-[180px] flex-col justify-end p-6">
+                <div className="relative z-10 size-full">
                   <div
                     className={[
-                      'absolute text-l md:text-xl font-bold text-text-default',
-                      'transition-all duration-250',
-                      'opacity-100 translate-y-0',
-                      'group-hover:opacity-0 group-hover:translate-y-2',
+                      'absolute left-1/2 mt-2 -translate-x-1/2',
+                      'text-center text-[12px] font-extrabold text-text-default',
+                      'w-20 rounded-[10px] border border-bg-white bg-bg-white/50 py-1',
                     ].join(' ')}
                   >
-                    {it.title}
+                    {/* 기본: title */}
+                    <div
+                      className={[
+                        'transition-all duration-300',
+                        'translate-y-0 opacity-100',
+                        'group-hover:-translate-y-1 group-hover:opacity-0',
+                      ].join(' ')}
+                    >
+                      {it.title}
+                    </div>
+
+                    {/* hover: subtitle */}
+                    <div
+                      className={[
+                        'absolute inset-0 flex items-center justify-center', // ✅ 같은 박스 안, 같은 중앙
+                        'transition-all duration-300',
+                        'translate-y-1 opacity-0',
+                        'group-hover:translate-y-0 group-hover:opacity-100',
+                      ].join(' ')}
+                    >
+                      {it.subtitle}
+                    </div>
                   </div>
-                  {/* ✅ hover 시 desc 등장 */}
+
                   {it.desc ? (
                     <div
                       className={[
-                        'absolute w-[70%] text-[12px] text-text-default',
-                        'transition-all duration-300',
-                        'opacity-0 translate-y-3',
-                        'group-hover:opacity-100 group-hover:translate-y-0',
+                        'absolute inset-0 z-10',
+                        'flex items-center justify-center', // ✅ 카드 정중앙
+                        'pointer-events-none',
                       ].join(' ')}
                     >
-                      {it.desc}
+                      <div
+                        className={[
+                          'w-[95%] text-center text-[12px] text-text-default',
+                          'whitespace-pre-line leading-snug',
+                          'transition-all duration-300',
+                          'translate-y-3 opacity-0',
+                          'group-hover:translate-y-0 group-hover:opacity-100',
+                        ].join(' ')}
+                      >
+                        {it.desc}
+                      </div>
                     </div>
                   ) : null}
                 </div>
@@ -251,7 +282,7 @@ function AutoSlideMarquee({
   return (
     <section className={`w-full bg-bg-white ${className}`}>
       <div ref={viewportRef} className={`relative w-full overflow-hidden ${heightClassName}`}>
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full">
+        <div className="absolute left-0 top-1/2 w-full -translate-y-1/2">
           <div
             ref={trackRef}
             className="flex items-center will-change-transform"
@@ -270,7 +301,7 @@ function AutoSlideMarquee({
                   src={it.src}
                   alt={it.alt ?? ''}
                   draggable={false}
-                  className="h-full w-full object-cover"
+                  className="size-full object-cover"
                 />
               </button>
             ))}
@@ -293,11 +324,11 @@ export default function IntroSection() {
           src={logoGradi}
           alt=""
           aria-hidden="true"
-          className="absolute inset-x-0 bottom-48 w-full h-auto block z-10"
+          className="absolute inset-x-0 bottom-48 z-10 block h-auto w-full"
         />
       </div>
       <div className="relative flex flex-col items-center">
-        <div className="mt-10 text-xl text-text-black font-semibold">
+        <div className="mt-10 text-xl font-semibold text-text-black">
           SSCC는 이런 활동을 진행합니다.
         </div>
         <TwoByTwoCardsSection
@@ -305,35 +336,35 @@ export default function IntroSection() {
             {
               id: 'c1',
               title: '세미나',
-              subtitle: 'Seminar',
-              desc: 'SSCC 출신 선배가 직접 전하는 생생한 업계 현황과 핵심 기술을 배우며 실무 감각을 깨우는 시간.',
+              subtitle: 'seminar',
+              desc: 'SSCC 출신 선배가 직접 \n전하는 생생한 업계 현황과 \n핵심 기술을 배우며 \n실무 감각을 깨우는 시간',
               imageSrc: picIntro1,
             },
             {
               id: 'c2',
               title: '프로젝트',
-              subtitle: 'Projects',
-              desc: '아이디어를 서비스로 구현하는 협업의 여정. 팀원과 소통하며 완성도 높은 결과물을 일굽니다.',
+              subtitle: 'project',
+              desc: '아이디어를 서비스로 구현하는 \n협업의 여정. 팀원과 소통하며 \n완성도 높은 결과물을 일굽니다',
               imageSrc: picIntro2,
             },
             {
               id: 'c3',
               title: '스터디',
-              subtitle: 'Study',
-              desc: '기초부터 심화까지 함께하는 몰입의 시간. 함께 지식을 나누며 기본기를 다지는 과정.',
+              subtitle: 'study',
+              desc: '기초부터 심화까지 함께하는 \n몰입의 시간. 함께 지식을 나누며 \n기본기를 다지는 과정',
               imageSrc: picIntro3,
             },
             {
               id: 'c4',
               title: '행사',
-              subtitle: 'Event',
-              desc: '선후배가 어우러지는 소통의 장.',
+              subtitle: 'event',
+              desc: '선후배가 어우러지는 소통의 장',
               imageSrc: picIntro4,
             },
           ]}
         />
       </div>
-      <div className="text-center mt-20 mb-20 text-xl text-text-black font-semibold">
+      <div className="my-20 text-center text-xl font-semibold text-text-black">
         더 다양한 SSCC의 소식이 궁금하다면!
       </div>
       <AutoSlideMarquee
@@ -352,11 +383,12 @@ export default function IntroSection() {
       <div className="relative h-80 w-full overflow-hidden">
         {/* ✅ 배경: 위→아래 그라데이션 */}
         <div className="absolute inset-0 bg-gradient-to-b from-white to-black" />
-        <div className="mt-20 relative z-10 flex flex-col items-center">
-          <div className="text-text-black text-xl font-bold">이런 SSCC에 흥미가 생긴다면</div>
+        <div className="relative z-10 mt-20 flex flex-col items-center">
+          <div className="text-xl font-bold text-text-black">이런 SSCC에 흥미가 생긴다면</div>
           <NavLink
             to="/apply"
-            className="mt-10 bg-bg-muted shrink-0 rounded-full border-[1.5px] border-point px-20 py-3 text-[13px] font-semibold text-point"
+            onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' })}
+            className="mt-10 shrink-0 rounded-full border-[1.5px] border-point bg-bg-muted px-20 py-3 text-[13px] font-semibold text-point"
           >
             지금 바로 지원하기
           </NavLink>

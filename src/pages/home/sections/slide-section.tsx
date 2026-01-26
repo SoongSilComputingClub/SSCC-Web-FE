@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+
 import picSide1 from '@/assets/images/home/pic-side1.jpg';
 import picSide2 from '@/assets/images/home/pic-side2.jpg';
 import picSide3 from '@/assets/images/home/pic-side3.jpg';
@@ -12,24 +13,28 @@ type Slide = {
   bgSrc: string;
 };
 
+function clamp(n: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, n));
+}
+
 function SlideIndicator({
-  active_index,
+  activeIndex,
   total,
   progress,
 }: {
-  active_index: number;
+  activeIndex: number;
   total: number;
-  progress: number; // 0~1, 스크롤 연속 게이지
+  progress: number; // 0~1
 }) {
-  const current = active_index + 1;
+  const current = activeIndex + 1;
 
   return (
-    <div className="mt-4 w-full flex flex-col">
+    <div className="mt-4 flex w-full flex-col">
       <div className="self-start text-center text-[12px] font-semibold text-white/80">
         [{current}/{total}]
       </div>
 
-      <div className="mt-2 h-[2px] w-full bg-text-default/25 overflow-hidden">
+      <div className="mt-2 h-[2px] w-full overflow-hidden bg-text-default/25">
         <div className="h-full bg-text-default" style={{ width: `${progress * 100}%` }} />
       </div>
     </div>
@@ -68,11 +73,10 @@ export default function ScrollSnapSlides() {
   );
 
   const wrapRef = useRef<HTMLDivElement | null>(null);
-  const [active_index, set_active_index] = useState(0);
-  const [vw, set_vw] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 0));
 
-  // 게이지용: 0~1 연속 진행률
-  const [scroll_progress, set_scroll_progress] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [vw, setVw] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 0));
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -80,95 +84,92 @@ export default function ScrollSnapSlides() {
 
     let raf = 0;
 
-    const calc = () => {
+    const calcScroll = () => {
       const rect = el.getBoundingClientRect();
-      const viewport_h = window.innerHeight;
+      const vh = window.innerHeight;
 
-      // 섹션이 스크롤로 "소모"할 수 있는 총 거리
-      const scroll_range = Math.max(el.offsetHeight - viewport_h, 0);
+      const scrollRange = Math.max(el.offsetHeight - vh, 0);
+      const startOffset = vh * 0.25;
 
-      // 시작 트리거(원래 코드 유지)
-      const start_offset = viewport_h * 0.25;
+      const scrolledRaw = -rect.top - startOffset;
+      const scrolled = clamp(scrolledRaw, 0, scrollRange);
 
-      const scrolled_raw = -rect.top - start_offset;
-      const scrolled = Math.min(Math.max(scrolled_raw, 0), scroll_range);
+      const p = scrollRange <= 0 ? 1 : scrolled / scrollRange;
+      setScrollProgress(clamp(p, 0, 1));
 
-      // ✅ 게이지는 연속
-      const p = scroll_range <= 0 ? 1 : scrolled / scroll_range;
-      set_scroll_progress(Math.min(1, Math.max(0, p)));
-
-      // ✅ 슬라이드는 스냅(인덱스 점프) — 기존 로직 유지
       const len = slides.length;
-      const step = len > 0 ? scroll_range / len : 0;
-
+      const step = len > 0 ? scrollRange / len : 0;
       const idx = step <= 0 ? 0 : Math.min(len - 1, Math.floor(scrolled / step));
-
-      set_active_index(idx);
+      setActiveIndex(idx);
     };
 
-    const on_scroll = () => {
+    const onScroll = () => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(calc);
+      raf = requestAnimationFrame(calcScroll);
     };
 
-    const on_resize = () => {
-      set_vw(window.innerWidth);
-      on_scroll();
+    const onResize = () => {
+      setVw(window.innerWidth);
+      onScroll();
     };
 
-    on_scroll();
-    window.addEventListener('scroll', on_scroll, { passive: true });
-    window.addEventListener('resize', on_resize);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize);
 
     return () => {
       cancelAnimationFrame(raf);
-      window.removeEventListener('scroll', on_scroll);
-      window.removeEventListener('resize', on_resize);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
     };
   }, [slides.length]);
 
-  const wrapper_height = `${slides.length * 120}vh`;
+  const wrapperHeight = `${slides.length * 120}vh`;
+  const trackWidth = `${slides.length * vw}px`;
+  const trackTransform = `translate3d(-${activeIndex * vw}px, 0, 0)`;
 
   return (
-    <div ref={wrapRef} className="relative w-full" style={{ height: wrapper_height }}>
+    <div ref={wrapRef} className="relative w-full" style={{ height: wrapperHeight }}>
       <div className="sticky top-0 h-screen overflow-hidden">
+        {/* 슬라이드 트랙 */}
         <div
-          className="relative z-10 flex h-full will-change-transform transition-transform duration-500 ease-out"
+          className="relative z-10 flex h-full transition-transform duration-700 ease-in-out will-change-transform"
           style={{
-            width: `${slides.length * vw}px`,
-            transform: `translate3d(-${active_index * vw}px, 0, 0)`, // ✅ 스냅 유지
+            width: trackWidth,
+            transform: trackTransform,
           }}
         >
           {slides.map((s) => (
             <section
               key={s.id}
-              className={`h-full w-screen pt-32 flex items-start justify-start px-6 ${s.className ?? ''}`}
+              className={`relative flex h-full w-screen items-start justify-start px-6 pt-32 ${
+                s.className ?? ''
+              }`}
             >
-              <div className="relative w-[70%] h-[65%] flex justify-center mx-auto my-7 overflow-hidden">
-                <div className="relative inset-0 z-0">
-                  <img
-                    src={s.bgSrc}
-                    alt=""
-                    aria-hidden="true"
-                    className="h-full w-full object-cover object-center"
-                  />
-                </div>
+              <div className="relative mx-auto my-7 flex h-[65%] w-[70%] justify-center overflow-hidden">
+                <img
+                  src={s.bgSrc}
+                  alt=""
+                  aria-hidden="true"
+                  className="size-full object-cover object-center"
+                />
               </div>
 
               <div className="absolute z-10 max-w-sm text-text-default drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
-                <div className="text-[12px] pb-4">{s.subtitle}</div>
-                <div className="text-3xl font-bold">{s.title}</div>
-                <div className="text-3xl pl-8 font-bold leading-tight">{s.title2}</div>
+                <div className="pb-4 text-[12px]">{s.subtitle}</div>
+                <div className="text-[27px] font-bold">{s.title}</div>
+                <div className="pl-8 text-[27px] font-bold leading-tight">{s.title2}</div>
               </div>
             </section>
           ))}
         </div>
 
-        <div className="mx-auto w-[70%] pointer-events-none absolute inset-x-0 bottom-20 z-20 flex justify-center">
+        {/* 인디케이터 */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-20 z-20 mx-auto flex w-[70%] justify-center">
           <SlideIndicator
-            active_index={active_index}
+            activeIndex={activeIndex}
             total={slides.length}
-            progress={scroll_progress} // ✅ 게이지만 연속
+            progress={scrollProgress}
           />
         </div>
       </div>
