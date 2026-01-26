@@ -12,7 +12,9 @@ import { router } from './app/router';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <div className="min-h-screen bg-bg-default">
+        <RouterProvider router={router} />
+      </div>
     </QueryClientProvider>
   </StrictMode>,
 );
