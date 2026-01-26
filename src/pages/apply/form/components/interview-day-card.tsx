@@ -14,7 +14,7 @@ export default function InterviewDayCard({
   onToggle,
 }: InterviewDayCardProps) {
   return (
-    <div className="w-full rounded-[20px] border border-border-emphasis bg-bg-muted px-5 py-5">
+    <div className="w-full rounded-[20px] border border-border-emphasis bg-bg-muted p-5">
       <p className="text-base font-bold text-text-default/60">{label}</p>
 
       <div className="mt-5 space-y-4">
@@ -27,7 +27,7 @@ export default function InterviewDayCard({
                 type="checkbox"
                 checked={checked}
                 onChange={() => onToggle(key)}
-                className="h-5 w-5 accent-point"
+                className="size-5 accent-point"
               />
               <span className="text-base font-semibold text-text-default">{time}</span>
             </label>

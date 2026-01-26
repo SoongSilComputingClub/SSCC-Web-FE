@@ -26,19 +26,19 @@ export default function ConsentSection({
   };
 
   return (
-    <div className="w-full max-w-[560px] mx-auto flex flex-col gap-4 px-4 bg-bg-default">
+    <div className="mx-auto flex w-full max-w-[560px] flex-col gap-4 bg-bg-default px-4">
       {/* Title */}
       <div className="rounded-[20px] bg-bg-section px-5 py-6">
-        <h2 className="text-point text-xl font-bold text-center">{CONSENT_CONTENT.title}</h2>
+        <h2 className="text-center text-xl font-bold text-point">{CONSENT_CONTENT.title}</h2>
 
         {/* 세부 내용 */}
         <div className="mt-4 w-full rounded-[20px] bg-bg-muted px-7 py-4">
-          <div className="mt-2 mb-2 text-sm text-text-default/90 leading-relaxed">
+          <div className="my-2 text-sm leading-relaxed text-text-default/90">
             <p>{CONSENT_CONTENT.intro}</p>
 
             <div className="mt-4">
               <p className="font-semibold text-text-default">■ {CONSENT_CONTENT.purposesTitle}</p>
-              <ul className="mt-2 list-disc pl-5 space-y-1">
+              <ul className="mt-2 list-disc space-y-1 pl-5">
                 {CONSENT_CONTENT.purposes.map((p) => (
                   <li key={p}>{p}</li>
                 ))}
@@ -64,7 +64,7 @@ export default function ConsentSection({
             checked={agreed}
             required
             onChange={(e) => handleChange(e.target.checked)}
-            className="h-4 w-4 accent-point cursor-pointer"
+            className="size-4 cursor-pointer accent-point"
           />
           개인정보 수집 및 이용에 동의합니다. (필수)
         </label>

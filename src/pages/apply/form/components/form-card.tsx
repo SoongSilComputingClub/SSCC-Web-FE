@@ -1,5 +1,3 @@
-import React from 'react';
-
 type FormCardProps = {
   children: React.ReactNode;
   className?: string;

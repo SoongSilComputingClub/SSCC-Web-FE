@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+
 import FormSectionHeader from '../components/form-section-header';
 import InterviewDayCard from '../components/interview-day-card';
 
@@ -38,7 +39,7 @@ export default function BasicInfo() {
   };
 
   return (
-    <div className="w-full max-w-[560px] mx-auto flex flex-col gap-4 px-4 bg-bg-default">
+    <div className="mx-auto flex w-full max-w-[560px] flex-col gap-4 bg-bg-default px-4">
       <div className="rounded-[20px] bg-bg-muted px-5">
         {/* 기본 정보 */}
         <section className="mt-8">
@@ -50,7 +51,7 @@ export default function BasicInfo() {
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section px-4 py-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
+                className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
                 placeholder="이름을 기입하세요."
               />
             </div>
@@ -60,7 +61,7 @@ export default function BasicInfo() {
               <input
                 value={major}
                 onChange={(e) => setMajor(e.target.value)}
-                className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section px-4 py-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
+                className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
                 placeholder="학과명을 기입하세요."
               />
             </div>
@@ -71,7 +72,7 @@ export default function BasicInfo() {
                 value={studentId}
                 onChange={(e) => setStudentId(e.target.value)}
                 inputMode="numeric"
-                className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section px-4 py-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
+                className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
                 placeholder="20261234"
               />
             </div>
@@ -82,7 +83,7 @@ export default function BasicInfo() {
                 <select
                   value={grade}
                   onChange={(e) => setGrade(e.target.value)}
-                  className="w-full appearance-none rounded-[20px] border border-border-emphasis bg-bg-section px-4 py-4 pr-12 text-text-default focus:outline-none focus:ring-2 focus:ring-point/40"
+                  className="w-full appearance-none rounded-[20px] border border-border-emphasis bg-bg-section p-4 pr-12 text-text-default focus:outline-none focus:ring-2 focus:ring-point/40"
                 >
                   <option value="1">1학년</option>
                   <option value="2">2학년</option>
@@ -115,7 +116,7 @@ export default function BasicInfo() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 inputMode="tel"
-                className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section px-4 py-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
+                className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
                 placeholder="010-1234-5678"
               />
             </div>
@@ -130,7 +131,7 @@ export default function BasicInfo() {
                     value="male"
                     checked={gender === 'male'}
                     onChange={() => setGender('male')}
-                    className="h-5 w-5 accent-point"
+                    className="size-5 accent-point"
                   />
                   남자
                 </label>
@@ -141,7 +142,7 @@ export default function BasicInfo() {
                     value="female"
                     checked={gender === 'female'}
                     onChange={() => setGender('female')}
-                    className="h-5 w-5 accent-point"
+                    className="size-5 accent-point"
                   />
                   여자
                 </label>
@@ -157,7 +158,7 @@ export default function BasicInfo() {
           <textarea
             value={intro}
             onChange={(e) => setIntro(e.target.value)}
-            className="mt-6 w-full rounded-[20px] border border-border-emphasis bg-bg-muted px-4 py-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
+            className="mt-6 w-full rounded-[20px] border border-border-emphasis bg-bg-muted p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
             placeholder="동아리에 가입하게 된 계기를 작성해주세요."
             rows={5}
           />
@@ -185,7 +186,7 @@ export default function BasicInfo() {
                   return (
                     <label
                       key={opt.value}
-                      className="flex flex-col items-center gap-2 cursor-pointer select-none"
+                      className="flex cursor-pointer select-none flex-col items-center gap-2"
                     >
                       <input
                         type="radio"
@@ -201,7 +202,7 @@ export default function BasicInfo() {
                           checked ? 'border-point' : 'border-border-emphasis',
                         ].join(' ')}
                       >
-                        {checked ? <span className="h-3 w-3 rounded-full bg-point" /> : null}
+                        {checked ? <span className="size-3 rounded-full bg-point" /> : null}
                       </span>
                       <span className="text-sm font-semibold text-text-default/70">
                         {opt.label}
@@ -215,7 +216,7 @@ export default function BasicInfo() {
             <textarea
               value={techStack}
               onChange={(e) => setTechStack(e.target.value)}
-              className="mt-6 w-full rounded-[20px] border border-border-emphasis bg-bg-muted px-4 py-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
+              className="mt-6 w-full rounded-[20px] border border-border-emphasis bg-bg-muted p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
               placeholder="보유한 기술 스택을 써주세요. (예 : HTML, CSS, Python...)"
               rows={4}
             />
