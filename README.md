@@ -83,7 +83,7 @@ src/ <br>
 ### Git Workflow
 
     •	본 레포지토리를 fork 후 작업
-    •	base branch: v1
+    •	base branch: develop
     •	작업 브랜치 생성 후 개발
     •	feat/* : 기능 개발
     •	chore/* : 설정, 환경 작업
@@ -95,11 +95,13 @@ src/ <br>
 
 ### Available Scripts
 
+```bash
 npm run dev # 개발 서버 실행 <br>
 npm run build # 프로덕션 빌드 <br>
 npm run preview # 빌드 결과 미리보기 <br>
 npm run lint # ESLint 검사 <br>
 npm run format # Prettier 포맷 <br>
+```
 
 ---
 
@@ -113,9 +115,11 @@ npm run format # Prettier 포맷 <br>
 
 ### Quick Start
 
+```bash
 nvm use <br>
 cp .env.example .env <br>
 npm install <br>
 npm run dev <br>
+```
 
 ---
