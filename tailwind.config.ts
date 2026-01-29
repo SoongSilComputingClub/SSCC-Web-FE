@@ -27,6 +27,15 @@ export default {
           placeholder: '#696969', // place holder 글자 색
         },
       },
+      fontSize: {
+        '2xs': ['8px', { lineHeight: '12px' }],
+        xs: ['10px', { lineHeight: '14px' }],
+        sm: ['15px', { lineHeight: '22px' }],
+
+        lg: ['22px', { lineHeight: '30px' }],
+        xl: ['25px', { lineHeight: '34px' }],
+        '2xl': ['36px', { lineHeight: '44px' }],
+      },
     },
   },
   plugins: [],

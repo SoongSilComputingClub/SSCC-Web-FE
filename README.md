@@ -56,6 +56,36 @@ src/ <br>
 
 ---
 
+### Design Tokens (Typography)
+
+본 프로젝트는 **디자인 스펙 기반 타이포그래피 스케일**을 사용하며,  
+Tailwind CSS `fontSize`를 `extend` 방식으로 재정의합니다.
+
+> ⚠️ 임의의 `text-[px]` 사용은 지양합니다.  
+> 반드시 아래에 정의된 타이포그래피 스케일을 사용합니다.
+
+#### Typography Scale
+
+| 용도          | Tailwind Class | Font Size |
+| ------------- | -------------- | --------- |
+| 캡션(보조)    | text-2xs       | 8px       |
+| 캡션 / 라벨   | text-xs        | 10px      |
+| 본문 기본     | text-sm        | 15px      |
+| 섹션 타이틀   | text-lg        | 22px      |
+| 페이지 타이틀 | text-xl        | 25px      |
+| 히어로 타이틀 | text-2xl       | 36px      |
+
+- `text-sm`는 본 프로젝트에서 **본문 기본 텍스트**를 의미합니다.
+- `text-lg` 이상은 제목/타이틀 용도로 사용합니다.
+- line-height는 `tailwind.config.ts`에서 함께 관리합니다.
+
+Typography 설정은 아래 파일에서 관리됩니다.
+
+- `tailwind.config.ts`
+  - `theme.extend.fontSize`
+
+---
+
 ### Development Setup
 
     1.	Node 버전 맞추기 $ nvm use
