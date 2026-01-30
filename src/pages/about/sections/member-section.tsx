@@ -15,20 +15,20 @@ function MemberCard({ member, size }: { member: Member; size: CardSize }) {
   const cardSizeClass = isLg ? 'h-[240px]' : isMd ? 'h-[180px]' : 'h-[140px]';
 
   const avatarSizeClass = isLg
-    ? 'h-[100px] w-[100px]'
+    ? 'h-[100px] w-[90px]'
     : isMd
-      ? 'h-[66px] w-[66px]'
+      ? 'h-[66px] w-[55px]'
       : 'h-[62px] w-[62px]';
 
-  const roleTextClass = isLg ? 'text-[14px]' : isMd ? 'text-[10px]' : 'text-[10px]';
-  const nameTextClass = isLg ? 'text-[22px]' : isMd ? 'text-[14px]' : 'text-[12px]';
-  const metaTextClass = isLg ? 'text-[8px]' : isMd ? 'text-[6px]' : 'text-[9px]';
+  const roleTextClass = isLg ? 'text-sm' : isMd ? 'text-xs' : 'text-xs';
+  const nameTextClass = isLg ? 'text-lg' : isMd ? 'text-sm' : 'text-[12px]';
+  const metaTextClass = isLg ? 'text-2xs' : isMd ? 'text-[6px]' : 'text-[9px]';
 
   const quoteClass = isLg
-    ? 'mt-5 rounded-xl px-4 py-3 text-[8px]'
+    ? 'mt-3 mb-3 rounded-xl px-4 py-3 text-2xs'
     : isMd
-      ? 'mt-3 rounded-[10px] px-1 py-2 text-[6px]'
-      : 'mt-3 rounded-lg px-3 py-2 text-[9px]';
+      ? 'mt-3 mb-3 rounded-[10px] px-1 py-2 text-[6px]'
+      : 'mt-3 mb-3 rounded-lg px-3 py-2 text-[9px]';
 
   return (
     <div
@@ -150,7 +150,7 @@ export default function MemberSection() {
   return (
     <section className="w-full bg-bg-default px-6 py-14">
       <div className="mx-auto w-full max-w-[420px]">
-        <h2 className="text-center text-[26px] font-bold text-text-default">44기 운영진</h2>
+        <h2 className="text-center text-xl font-bold text-text-default">44기 운영진</h2>
 
         {/* 2개 큰 카드 */}
         <div className="mt-10 grid grid-cols-2 gap-6">

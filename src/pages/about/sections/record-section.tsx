@@ -55,7 +55,7 @@ export default function RecordSection() {
       clearTimers();
 
       // ✅ 업데이트 횟수 제한(모바일 튐 완화)
-      const STEPS = 60; // 12~18 추천
+      const STEPS = 120; // 12~18 추천
 
       records.forEach((rec, i) => {
         const durationMs = rec.durationMs ?? 900;
@@ -114,7 +114,7 @@ export default function RecordSection() {
       ].join(' ')}
     >
       <div className="flex w-full max-w-[420px] flex-col gap-4 py-20 text-center text-text-default">
-        <div className="text-[15px] font-bold">43기 활동 레코드</div>
+        <div className="text-sm font-bold">43기 활동 레코드</div>
 
         <div className="flex flex-row items-center justify-center gap-4">
           {records.map((it, idx) => (
@@ -125,12 +125,12 @@ export default function RecordSection() {
                 idx === 0 ? 'bg-bg-muted/80' : '',
               ].join(' ')}
             >
-              <div className="translate-y-[-70%] text-[12px] font-semibold leading-none text-text-default/60">
+              <div className="translate-y-[-70%] text-xs font-semibold leading-none text-text-default/60">
                 {it.title}
               </div>
 
               {/* ✅ 숫자만 카운트업, 단위는 고정 */}
-              <div className="mt-2 whitespace-nowrap text-[15px] tabular-nums leading-snug">
+              <div className="mt-2 whitespace-nowrap text-sm tabular-nums leading-snug">
                 <span className="inline-block min-w-[4ch] text-center">{values[idx]}</span>
                 <span className="text-text-default/80">{it.unit}</span>
               </div>

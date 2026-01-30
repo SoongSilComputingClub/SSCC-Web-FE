@@ -11,8 +11,8 @@ export default function BannerSection() {
             draggable={false}
           />
           <div className="translate-y-[-40%]">
-            <div className="mb-4 text-[27px] font-bold italic leading-none">SSCC</div>
-            <div className="mb-6 translate-y-[-55%] text-[15px] font-light">SSCC 44th</div>
+            <div className="mb-4 text-xl font-bold italic leading-none">SSCC</div>
+            <div className="mb-6 translate-y-[-55%] text-sm font-light">SSCC 44th</div>
           </div>
         </div>
       </div>
