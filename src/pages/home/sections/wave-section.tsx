@@ -76,15 +76,15 @@ export const WaveSection = () => {
       </div>
 
       {/* Overlay UI */}
-      <div className="absolute inset-0 z-10 flex select-none flex-col justify-center px-6 pt-72 text-left">
+      <div className="absolute inset-0 z-10 flex select-none flex-col justify-center px-4 pt-72 text-left">
         {/* Title */}
-        <h1 className="text-[32px] font-bold leading-none text-text-default">
+        <h1 className="text-2xl font-bold leading-none tracking-tight text-text-default">
           SSCC, <br />
           Where Coding Begins.
         </h1>
         <NavLink
           to="/apply"
-          className="mt-4 shrink-0 self-start rounded-full border-[1.5px] border-point bg-bg-default px-6 py-2 text-[10px] font-semibold text-point"
+          className="mt-4 shrink-0 self-start rounded-full border-[1.5px] border-point bg-bg-default px-6 py-2 text-xs font-semibold text-point"
         >
           지금 바로 지원하기 →
         </NavLink>

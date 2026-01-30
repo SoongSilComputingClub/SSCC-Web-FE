@@ -296,11 +296,11 @@ function Parallax4Split({
             className="mx-auto max-w-6xl px-6"
             style={{ transform: `translate3d(0, ${textOffsetYPx}px, 0)` }}
           >
-            <div className="text-[27px] font-extrabold leading-none tracking-tight text-text-default md:text-5xl">
+            <div className="text-xl font-extrabold leading-none tracking-tight text-text-default">
               {title}
             </div>
             {subtitle ? (
-              <div className="mx-auto mt-4 max-w-xl text-[15px] leading-snug text-text-default/80 md:text-xl">
+              <div className="mx-auto mt-4 max-w-xl text-sm leading-snug text-text-default/80">
                 {subtitle}
               </div>
             ) : null}
