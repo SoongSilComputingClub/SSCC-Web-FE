@@ -30,12 +30,12 @@ function SlideIndicator({
 
   return (
     <div className="mt-4 flex w-full flex-col">
-      <div className="self-start text-center text-[12px] font-semibold text-white/80">
+      <div className="self-start text-center text-xs font-semibold text-white/80">
         [{current}/{total}]
       </div>
 
-      <div className="mt-2 h-[2px] w-full overflow-hidden bg-text-default/25">
-        <div className="h-full bg-text-default" style={{ width: `${progress * 100}%` }} />
+      <div className="mt-2 h-[2px] w-full overflow-hidden bg-bg-white/25">
+        <div className="h-full bg-bg-white" style={{ width: `${progress * 100}%` }} />
       </div>
     </div>
   );
@@ -156,9 +156,9 @@ export default function ScrollSnapSlides() {
               </div>
 
               <div className="absolute z-10 max-w-sm text-text-default drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
-                <div className="pb-4 text-[12px]">{s.subtitle}</div>
-                <div className="text-[27px] font-bold">{s.title}</div>
-                <div className="pl-8 text-[27px] font-bold leading-tight">{s.title2}</div>
+                <div className="pb-4 text-xs">{s.subtitle}</div>
+                <div className="text-xl font-bold">{s.title}</div>
+                <div className="pl-8 text-xl font-bold leading-tight">{s.title2}</div>
               </div>
             </section>
           ))}

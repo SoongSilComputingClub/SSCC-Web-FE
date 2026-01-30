@@ -1,4 +1,4 @@
-import { useMemo, useRef, useEffect } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { NavLink } from 'react-router-dom';
 
@@ -65,7 +65,7 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
                   <div
                     className={[
                       'absolute left-1/2 mt-2 -translate-x-1/2',
-                      'text-center text-[12px] font-extrabold text-text-default',
+                      'text-center text-xs font-extrabold text-text-default',
                       'w-20 rounded-[10px] border border-bg-white bg-bg-white/50 py-1',
                     ].join(' ')}
                   >
@@ -103,7 +103,7 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
                     >
                       <div
                         className={[
-                          'w-[95%] text-center text-[12px] text-text-default',
+                          'w-[95%] text-center text-xs text-text-default',
                           'whitespace-pre-line leading-snug',
                           'transition-all duration-300',
                           'translate-y-3 opacity-0',
@@ -327,7 +327,7 @@ export default function IntroSection() {
           className="absolute inset-x-0 bottom-48 z-10 block h-auto w-full"
         />
       </div>
-      <div className="relative flex flex-col items-center">
+      <div className="relative flex flex-col items-center bg-bg-white">
         <div className="mt-10 text-xl font-semibold text-text-black">
           SSCC는 이런 활동을 진행합니다.
         </div>
@@ -364,7 +364,7 @@ export default function IntroSection() {
           ]}
         />
       </div>
-      <div className="my-20 text-center text-xl font-semibold text-text-black">
+      <div className="bg-bg-white py-20 text-center text-lg font-semibold tracking-tighter text-text-black">
         더 다양한 SSCC의 소식이 궁금하다면!
       </div>
       <AutoSlideMarquee
@@ -388,7 +388,7 @@ export default function IntroSection() {
           <NavLink
             to="/apply"
             onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' })}
-            className="mt-10 shrink-0 rounded-full border-[1.5px] border-point bg-bg-muted px-20 py-3 text-[13px] font-semibold text-point"
+            className="mt-10 shrink-0 rounded-full border-[1.5px] border-point bg-bg-muted px-20 py-3 text-sm font-semibold text-point"
           >
             지금 바로 지원하기
           </NavLink>

@@ -38,8 +38,8 @@ function TimelineRow({
           allVisible ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
         ].join(' ')}
       >
-        <p className="text-[15px] font-semibold leading-none text-text-default">{item.yearTitle}</p>
-        <p className="mt-2 whitespace-pre-line text-[12px] text-text-default/30">{item.desc}</p>
+        <p className="text-sm font-semibold leading-none text-text-default">{item.yearTitle}</p>
+        <p className="mt-2 whitespace-pre-line text-xs text-text-default/30">{item.desc}</p>
       </div>
     </div>
   );
@@ -68,9 +68,7 @@ export default function HistorySection() {
     <section className="bg-bg-default px-8 pb-16 pt-8">
       {/* ✅ 이 박스를 관찰 */}
       <div ref={sectionRef} className="relative rounded-2xl bg-bg-muted px-6 pb-10">
-        <div className="mb-8 pt-6 text-center text-[25px] font-bold text-text-default">
-          동아리 연혁
-        </div>
+        <div className="mb-8 pt-6 text-center text-xl font-bold text-text-default">동아리 연혁</div>
 
         <div className="relative flex flex-col gap-8">
           {TIMELINE_ITEMS.map((item, idx) => (
