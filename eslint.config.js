@@ -7,14 +7,18 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import importX from 'eslint-plugin-import-x';
 import tailwindcss from 'eslint-plugin-tailwindcss';
 import prettier from 'eslint-config-prettier';
+import storybook from 'eslint-plugin-storybook';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 
 export default tseslint.config(
-  { ignores: ['dist', '.vite', '*.config.js', '*.config.ts', 'tailwind.config.ts'] },
+  { ignores: ['dist', '.vite', '*.config.js', '*.config.ts', 'tailwind.config.ts', 'storybook-static', '.storybook'] },
 
   // Base recommended rules
   js.configs.recommended,
   ...tseslint.configs.recommended,
+
+  // Storybook
+  ...storybook.configs['flat/recommended'],
 
   // Prettier must come last to disable conflicting rules
   prettier,
