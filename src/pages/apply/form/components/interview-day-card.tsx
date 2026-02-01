@@ -17,19 +17,19 @@ export default function InterviewDayCard({
     <div className="w-full rounded-[20px] border border-border-emphasis bg-bg-muted p-5">
       <p className="text-base font-bold text-text-default/60">{label}</p>
 
-      <div className="mt-5 space-y-4">
+      <div className="mt-5 grid grid-cols-2 gap-y-4 gap-x-6">
         {slots.map((time, idx) => {
           const key = `${dayId}-${idx}`;
           const checked = selectedKeys.includes(key);
           return (
-            <label key={key} className="flex items-center gap-4">
+            <label key={key} className="flex items-center gap-2">
               <input
                 type="checkbox"
                 checked={checked}
                 onChange={() => onToggle(key)}
-                className="size-5 accent-point"
+                className="size-4 accent-point"
               />
-              <span className="text-base font-semibold text-text-default">{time}</span>
+              <span className="text-sm font-semibold text-text-default">{time}</span>
             </label>
           );
         })}
