@@ -29,12 +29,12 @@ export default function ScheduleSection() {
           <div className="flex flex-col gap-6">
             {RECRUITMENT_SCHEDULE.map((item, idx) => (
               <div key={item.title} className="flex items-center justify-between gap-6">
-                <div className="flex items-center gap-3 text-lg font-semibold text-text-default">
+                <div className="flex items-center gap-3 text-md font-normal text-text-default">
                   <span>{idx + 1}.</span>
                   <span>{item.title}</span>
                 </div>
 
-                <div className="text-lg">
+                <div className="text-md">
                   {item.range ? renderRange(item.range.startIso, item.range.endIso) : null}
                 </div>
               </div>

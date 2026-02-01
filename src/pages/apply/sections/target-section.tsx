@@ -20,7 +20,7 @@ export default function TargetSection() {
               className="h-auto w-full max-w-[320px] select-none"
               draggable={false}
             />
-            <p className="text-sm text-text-default">배움에 열정이 넘치는 숭실대학교 학생</p>
+            <p className="text-base text-text-default">배움에 열정이 넘치는 숭실대학교 학생</p>
           </div>
 
           <div className="flex flex-col items-center gap-6 text-center">
@@ -30,7 +30,7 @@ export default function TargetSection() {
               className="h-auto w-full max-w-[360px] select-none"
               draggable={false}
             />
-            <p className="text-sm text-text-default">코딩에 관심 있는 숭실대학교 학생</p>
+            <p className="text-base text-text-default">코딩에 관심 있는 숭실대학교 학생</p>
           </div>
 
           <div className="flex flex-col items-center gap-6 text-center">
@@ -40,7 +40,7 @@ export default function TargetSection() {
               className="h-auto w-full max-w-[360px] select-none"
               draggable={false}
             />
-            <p className="text-sm text-text-default">도전을 두려워 않는 숭실대학교 학생</p>
+            <p className="text-base text-text-default">도전을 두려워 않는 숭실대학교 학생</p>
           </div>
         </div>
       </div>
