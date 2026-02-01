@@ -37,7 +37,7 @@ export default function ConsentSection({
             <p>{CONSENT_CONTENT.intro}</p>
 
             <div className="mt-4">
-              <p className="font-semibold text-text-default">■ {CONSENT_CONTENT.purposesTitle}</p>
+              <p className="font-semibold text-text-default">▫ {CONSENT_CONTENT.purposesTitle}</p>
               <ul className="mt-2 list-disc space-y-1 pl-5">
                 {CONSENT_CONTENT.purposes.map((p) => (
                   <li key={p}>{p}</li>
@@ -46,12 +46,12 @@ export default function ConsentSection({
             </div>
 
             <div className="mt-4">
-              <p className="font-semibold text-text-default">■ {CONSENT_CONTENT.retentionTitle}</p>
+              <p className="font-semibold text-text-default">▫ {CONSENT_CONTENT.retentionTitle}</p>
               <p className="mt-2">{CONSENT_CONTENT.retention}</p>
             </div>
 
             <div className="mt-4">
-              <p className="font-semibold text-text-default">■ {CONSENT_CONTENT.rightsTitle}</p>
+              <p className="font-semibold text-text-default">▫ {CONSENT_CONTENT.rightsTitle}</p>
               <p className="mt-2">{CONSENT_CONTENT.rights}</p>
             </div>
           </div>
