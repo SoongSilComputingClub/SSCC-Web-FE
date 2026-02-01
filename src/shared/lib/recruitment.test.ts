@@ -1,11 +1,7 @@
-
-
 import { describe, expect, it } from 'vitest';
 
-import {
-  APPLICATION_CLOSE_AT_ISO,
-  APPLICATION_OPEN_AT_ISO,
-} from '@/shared/config/recruitment';
+import { APPLICATION_CLOSE_AT_ISO, APPLICATION_OPEN_AT_ISO } from '@/shared/config/recruitment';
+
 import { getApplicationPhase, isApplicationOpen } from './recruitment';
 
 describe('recruitment period guard', () => {

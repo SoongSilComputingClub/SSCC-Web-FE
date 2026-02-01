@@ -1,5 +1,6 @@
-import SectionHeader from '../components/section-header';
 import { RECRUITMENT_SCHEDULE } from '@/shared/config/recruitment';
+
+import SectionHeader from '../components/section-header';
 
 function formatRange(startIso?: string, endIso?: string) {
   if (!startIso || !endIso) return null;

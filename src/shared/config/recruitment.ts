@@ -9,8 +9,8 @@
 // 접수 가능 기간 (실제 로직 기준)
 // ※ 매 기수마다 반드시 수정해야 하는 값
 // TO DO : 실제 날짜로 변경하기
-export const APPLICATION_OPEN_AT_ISO = "2026-02-01T00:00:00+09:00"; // 접수 시작 시각
-export const APPLICATION_CLOSE_AT_ISO = "2026-03-02T23:59:59+09:00"; // 접수 마감 시각
+export const APPLICATION_OPEN_AT_ISO = '2026-02-01T00:00:00+09:00'; // 접수 시작 시각
+export const APPLICATION_CLOSE_AT_ISO = '2026-03-02T23:59:59+09:00'; // 접수 마감 시각
 
 export const APPLICATION_OPEN_AT = new Date(APPLICATION_OPEN_AT_ISO);
 export const APPLICATION_CLOSE_AT = new Date(APPLICATION_CLOSE_AT_ISO);
@@ -46,27 +46,27 @@ export type RecruitmentScheduleItem = {
 
 export const RECRUITMENT_SCHEDULE: RecruitmentScheduleItem[] = [
   {
-    title: "서류 접수",
+    title: '서류 접수',
     range: {
       startIso: APPLICATION_OPEN_AT_ISO,
       endIso: APPLICATION_CLOSE_AT_ISO,
     },
-    description: "접수 기간 내에만 지원서 작성 및 제출이 가능합니다.",
+    description: '접수 기간 내에만 지원서 작성 및 제출이 가능합니다.',
   },
   {
-     title: "면접",
-     range: {
-       startIso: "2026-03-03T10:00:00+09:00",
-       endIso: "2026-03-08T20:00:00+09:00",
-     },
-   },
+    title: '면접',
+    range: {
+      startIso: '2026-03-03T10:00:00+09:00',
+      endIso: '2026-03-08T20:00:00+09:00',
+    },
+  },
   {
-     title: "결과 발표",
-     range: {
-       startIso: "2026-03-08T00:00:00+09:00",
-       endIso: "2026-03-10T23:59:59+09:00",
-     },
-   },
+    title: '결과 발표',
+    range: {
+      startIso: '2026-03-08T00:00:00+09:00',
+      endIso: '2026-03-10T23:59:59+09:00',
+    },
+  },
 ];
 
 // 접수 상태별 안내 문구 (UI 가드용)
@@ -75,27 +75,27 @@ export const RECRUITMENT_SCHEDULE: RecruitmentScheduleItem[] = [
 export const APPLICATION_GUARD_COPY = {
   /** 접수 진행 */
   open: {
-    title: "SSCC는 여러분을 기다립니다!",
-    body: "지금 바로 SSCC에 지원하세요",
+    title: 'SSCC는 여러분을 기다립니다!',
+    body: '지금 바로 SSCC에 지원하세요',
     cta: {
       unauth: {
-        label: "지원 전 로그인",
-        action: "login" as const,
+        label: '지원 전 로그인',
+        action: 'login' as const,
       },
       auth: {
-        label: "신청서 작성하기",
-        action: "apply" as const,
+        label: '신청서 작성하기',
+        action: 'apply' as const,
       },
     },
   },
 
   /** 접수 마감 */
   closed: {
-    title: "지금은 SSCC 신청 기간이\n아닙니다.",
-    body: "",
+    title: '지금은 SSCC 신청 기간이\n아닙니다.',
+    body: '',
     cta: null,
   },
 } as const;
 
 export type ApplicationPhase = keyof typeof APPLICATION_GUARD_COPY;
-export type ApplicationCtaAction = "login" | "apply";
+export type ApplicationCtaAction = 'login' | 'apply';
