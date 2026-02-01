@@ -306,6 +306,8 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
         run: npm run build
 
       - name: Upload Build Artifact
@@ -321,9 +323,3 @@ jobs:
           echo "- **Branch** : ${{ github.ref }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Commit** : ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Node.js**: ${{ env.NODE_VERSION }}" >> $GITHUB_STEP_SUMMARY
-
-      - name: Trigger Coolify Deployment
-        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-        run: |
-          echo "Triggering Coolify deployment..."
-          curl -X GET "${{ secrets.COOLIFY_WEBHOOK }}"
