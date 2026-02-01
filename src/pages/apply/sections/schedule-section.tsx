@@ -2,7 +2,7 @@ import { RECRUITMENT_SCHEDULE } from '@/shared/config/recruitment';
 
 import SectionHeader from '../components/section-header';
 
-function formatRange(startIso?: string, endIso?: string) {
+function renderRange(startIso?: string, endIso?: string) {
   if (!startIso || !endIso) return null;
   const start = new Date(startIso);
   const end = new Date(endIso);
@@ -35,7 +35,7 @@ export default function ScheduleSection() {
                 </div>
 
                 <div className="text-lg">
-                  {item.range ? formatRange(item.range.startIso, item.range.endIso) : null}
+                  {item.range ? renderRange(item.range.startIso, item.range.endIso) : null}
                 </div>
               </div>
             ))}

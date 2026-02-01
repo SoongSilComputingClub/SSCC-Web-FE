@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 import { APPLICATION_GUARD_COPY } from '@/shared/config/recruitment';
 import { isAuthed } from '@/shared/lib/auth';
-import { getApplicationPhase, isApplicationOpen } from '@/shared/lib/recruitment';
+import { getApplicationPhase } from '@/shared/lib/recruitment';
 
 const CTA_BUTTON_CLASS =
   'mt-4 inline-flex items-center justify-center rounded-xl bg-point px-8 py-4 text-xl font-semibold text-black shadow-md transition hover:opacity-90';
@@ -54,7 +54,7 @@ export default function HeroSection() {
   const { isAuthed } = useAuth();
   const phase = getApplicationPhase();
   const copy = APPLICATION_GUARD_COPY[phase];
-  const isOpen = isApplicationOpen();
+  const isOpen = phase === 'open';
 
   return (
     <section className="flex min-h-[520px] w-full items-center justify-center bg-bg-default px-6 text-text-default">
@@ -69,21 +69,21 @@ export default function HeroSection() {
           {copy.body && <p className="text-xl font-bold">{renderCopyWithHighlight(copy.body)}</p>}
 
           {copy.cta &&
-            (isAuthed ? (
-              isOpen ? (
-                <CtaButton to="/apply/form" label={copy.cta.auth.label} />
+            (() => {
+              const ctaDetails = isAuthed ? copy.cta.auth : copy.cta.unauth;
+              const to = isAuthed ? '/apply/form' : '/login';
+
+              return isOpen ? (
+                <CtaButton to={to} label={ctaDetails.label} />
               ) : (
-                <span className={`${CTA_BUTTON_CLASS} cursor-not-allowed opacity-50`} aria-disabled>
-                  {copy.cta.auth.label}
+                <span
+                  className={`${CTA_BUTTON_CLASS} cursor-not-allowed opacity-50`}
+                  aria-disabled={true}
+                >
+                  {ctaDetails.label}
                 </span>
-              )
-            ) : isOpen ? (
-              <CtaButton to="/login" label={copy.cta.unauth.label} />
-            ) : (
-              <span className={`${CTA_BUTTON_CLASS} cursor-not-allowed opacity-50`} aria-disabled>
-                {copy.cta.unauth.label}
-              </span>
-            ))}
+              );
+            })()}
         </div>
       )}
     </section>
