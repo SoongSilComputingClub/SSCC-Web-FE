@@ -21,12 +21,12 @@ export default function BasicInfo() {
       {
         id: '2026-03-05',
         label: '03월 05일 화요일',
-        slots: ['10:00 - 11:00', '10:00 - 11:00', '10:00 - 11:00', '10:00 - 11:00'],
+        slots: ['10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00'],
       },
       {
         id: '2026-03-06',
         label: '03월 06일 수요일',
-        slots: ['10:00 - 11:00', '10:00 - 11:00', '10:00 - 11:00'],
+        slots: ['10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00'],
       },
     ],
     [],
@@ -47,7 +47,7 @@ export default function BasicInfo() {
 
           <div className="mt-6 space-y-6">
             <div>
-              <label className="block text-base font-semibold text-text-default">이름</label>
+              <label className="block text-sm font-semibold text-text-default">이름</label>
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -57,17 +57,17 @@ export default function BasicInfo() {
             </div>
 
             <div>
-              <label className="block text-base font-semibold text-text-default">학과</label>
+              <label className="block text-sm font-semibold text-text-default">학과</label>
               <input
                 value={major}
                 onChange={(e) => setMajor(e.target.value)}
                 className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
-                placeholder="학과명을 기입하세요."
+                placeholder="정확한 학과명을 기입하세요."
               />
             </div>
 
             <div>
-              <label className="block text-base font-semibold text-text-default">학번</label>
+              <label className="block text-sm font-semibold text-text-default">학번</label>
               <input
                 value={studentId}
                 onChange={(e) => setStudentId(e.target.value)}
@@ -78,7 +78,7 @@ export default function BasicInfo() {
             </div>
 
             <div>
-              <label className="block text-base font-semibold text-text-default">학년</label>
+              <label className="block text-sm font-semibold text-text-default">학년</label>
               <div className="relative mt-3">
                 <select
                   value={grade}
@@ -111,7 +111,7 @@ export default function BasicInfo() {
             </div>
 
             <div>
-              <label className="block text-base font-semibold text-text-default">전화번호</label>
+              <label className="block text-sm font-semibold text-text-default">전화번호</label>
               <input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
@@ -121,9 +121,10 @@ export default function BasicInfo() {
               />
             </div>
 
-            <div>
-              <label className="block text-base font-semibold text-text-default">성별</label>
-              <div className="mt-4 flex items-center gap-10">
+            <div className="flex items-center gap-6">
+              <span className="shrink-0 text-sm font-semibold text-text-default">성별</span>
+
+              <div className="flex flex-nowrap items-center gap-6">
                 <label className="flex items-center gap-3 text-base font-semibold text-text-default">
                   <input
                     type="radio"
@@ -159,7 +160,7 @@ export default function BasicInfo() {
             value={intro}
             onChange={(e) => setIntro(e.target.value)}
             className="mt-6 w-full rounded-[20px] border border-border-emphasis bg-bg-muted p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
-            placeholder="동아리에 가입하게 된 계기를 작성해주세요."
+            placeholder="SSCC에 지원하게 된 이유와 간단한 자기소개를 작성해주세요."
             rows={5}
           />
         </section>
@@ -170,7 +171,7 @@ export default function BasicInfo() {
 
           <div className="mt-6">
             <div className="flex items-center gap-6">
-              <p className="text-lg font-semibold text-text-default">코딩 실력</p>
+              <p className="text-sm font-semibold text-text-default">코딩 실력</p>
 
               <div className="flex items-center gap-6">
                 {(
@@ -216,7 +217,7 @@ export default function BasicInfo() {
             <textarea
               value={techStack}
               onChange={(e) => setTechStack(e.target.value)}
-              className="mt-6 w-full rounded-[20px] border border-border-emphasis bg-bg-muted p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
+              className="mt-6 w-full rounded-[20px] border border-border-emphasis bg-bg-muted p-4 whitespace-pre-line text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
               placeholder="보유한 기술 스택을 써주세요. (예 : HTML, CSS, Python...)"
               rows={4}
             />

@@ -7,11 +7,29 @@ export const CONSENT_CONTENT = {
   purposesTitle: '수집 및 이용 목적',
   purposes: ['SSCC 신입 부원 선발 및 지원자 관리', '합격 여부 안내 및 동아리 운영 관련 연락'],
   retentionTitle: '보유 및 이용 기간',
-  retention: '동아리 선발 절차 종료 후 1년 이내 (단, 합격자의 경우 동아리 활동 기간 동안 보관)',
+  retention: ['동아리 선발 절차 종료 후 1년 이내\n(단, 합격자의 경우 동아리 활동 기간 동안 보관)'],
   rightsTitle: '동의 거부 권리 및 불이익 안내',
   rights:
     '개인정보 수집 및 이용에 대한 동의를 거부할 권리가 있으나, 동의하지 않을 경우 SSCC 지원이 제한될 수 있습니다.',
 } as const;
+
+const CONSENT_SECTIONS = [
+  {
+    title: CONSENT_CONTENT.purposesTitle,
+    type: 'list',
+    content: CONSENT_CONTENT.purposes,
+  },
+  {
+    title: CONSENT_CONTENT.retentionTitle,
+    type: 'list',
+    content: CONSENT_CONTENT.retention,
+  },
+  {
+    title: CONSENT_CONTENT.rightsTitle,
+    type: 'text',
+    content: CONSENT_CONTENT.rights,
+  },
+] as const;
 
 export default function ConsentSection({
   onConsentChange,
@@ -27,38 +45,35 @@ export default function ConsentSection({
 
   return (
     <div className="mx-auto flex w-full max-w-[560px] flex-col gap-4 bg-bg-default px-4">
-      {/* Title */}
+      {/* 타이틀 */}
       <div className="rounded-[20px] bg-bg-section px-5 py-6">
-        <h2 className="text-center text-xl font-bold text-point">{CONSENT_CONTENT.title}</h2>
+        <h2 className="text-center text-lg font-bold text-point">{CONSENT_CONTENT.title}</h2>
 
         {/* 세부 내용 */}
         <div className="mt-4 w-full rounded-[20px] bg-bg-muted px-7 py-4">
           <div className="my-2 text-sm leading-relaxed text-text-default/90">
             <p>{CONSENT_CONTENT.intro}</p>
 
-            <div className="mt-4">
-              <p className="font-semibold text-text-default">▫ {CONSENT_CONTENT.purposesTitle}</p>
-              <ul className="mt-2 list-disc space-y-1 pl-5">
-                {CONSENT_CONTENT.purposes.map((p) => (
-                  <li key={p}>{p}</li>
-                ))}
-              </ul>
-            </div>
+            {CONSENT_SECTIONS.map((section) => (
+              <div key={section.title} className="mt-4">
+                <p className="font-semibold text-text-default">▫ {section.title}</p>
 
-            <div className="mt-4">
-              <p className="font-semibold text-text-default">▫ {CONSENT_CONTENT.retentionTitle}</p>
-              <p className="mt-2">{CONSENT_CONTENT.retention}</p>
-            </div>
-
-            <div className="mt-4">
-              <p className="font-semibold text-text-default">▫ {CONSENT_CONTENT.rightsTitle}</p>
-              <p className="mt-2">{CONSENT_CONTENT.rights}</p>
-            </div>
+                {section.type === 'list' ? (
+                  <ul className="mt-2 list-disc space-y-1 pl-5 whitespace-pre-line">
+                    {section.content.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-2 whitespace-pre-line">{section.content}</p>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 
         {/* 체크박스 */}
-        <label className="mt-4 flex items-center gap-2 text-xs text-text-default/80">
+        <label className="mt-4 flex items-center gap-2 text-sm text-text-default/80">
           <input
             type="checkbox"
             checked={agreed}
