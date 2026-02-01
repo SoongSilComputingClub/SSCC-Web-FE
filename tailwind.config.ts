@@ -31,7 +31,7 @@ export default {
         '2xs': ['8px', { lineHeight: '12px' }],
         xs: ['10px', { lineHeight: '14px' }],
         sm: ['15px', { lineHeight: '22px' }],
-
+        md : ['18px', { lineHeight: '18px' }],
         lg: ['22px', { lineHeight: '30px' }],
         xl: ['25px', { lineHeight: '34px' }],
         '2xl': ['36px', { lineHeight: '44px' }],

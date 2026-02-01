@@ -71,6 +71,7 @@ Tailwind CSS `fontSize`를 `extend` 방식으로 재정의합니다.
 | 캡션(보조)    | text-2xs       | 8px       |
 | 캡션 / 라벨   | text-xs        | 10px      |
 | 본문 기본     | text-sm        | 15px      |
+| 본문 강조     | text-md        | 18px      |
 | 섹션 타이틀   | text-lg        | 22px      |
 | 페이지 타이틀 | text-xl        | 25px      |
 | 히어로 타이틀 | text-2xl       | 36px      |
