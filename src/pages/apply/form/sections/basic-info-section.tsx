@@ -21,12 +21,34 @@ export default function BasicInfo() {
       {
         id: '2026-03-05',
         label: '03월 05일 화요일',
-        slots: ['10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00'],
+        slots: [
+          '10:00 - 11:00',
+          '11:00 - 12:00',
+          '12:00 - 13:00',
+          '13:00 - 14:00',
+          '14:00 - 15:00',
+          '15:00 - 16:00',
+          '16:00 - 17:00',
+          '17:00 - 18:00',
+          '18:00 - 19:00',
+          '19:00 - 20:00',
+        ],
       },
       {
         id: '2026-03-06',
         label: '03월 06일 수요일',
-        slots: ['10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00'],
+        slots: [
+          '10:00 - 11:00',
+          '11:00 - 12:00',
+          '12:00 - 13:00',
+          '13:00 - 14:00',
+          '14:00 - 15:00',
+          '15:00 - 16:00',
+          '16:00 - 17:00',
+          '17:00 - 18:00',
+          '18:00 - 19:00',
+          '19:00 - 20:00',
+        ],
       },
     ],
     [],
@@ -217,7 +239,7 @@ export default function BasicInfo() {
             <textarea
               value={techStack}
               onChange={(e) => setTechStack(e.target.value)}
-              className="mt-6 w-full rounded-[20px] border border-border-emphasis bg-bg-muted p-4 whitespace-pre-line text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
+              className="mt-6 w-full whitespace-pre-line rounded-[20px] border border-border-emphasis bg-bg-muted p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
               placeholder="보유한 기술 스택을 써주세요. (예 : HTML, CSS, Python...)"
               rows={4}
             />

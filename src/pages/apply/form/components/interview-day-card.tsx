@@ -17,7 +17,7 @@ export default function InterviewDayCard({
     <div className="w-full rounded-[20px] border border-border-emphasis bg-bg-muted p-5">
       <p className="text-base font-bold text-text-default/60">{label}</p>
 
-      <div className="mt-5 grid grid-cols-2 gap-y-4 gap-x-6">
+      <div className="mt-5 grid grid-cols-2 gap-x-6 gap-y-4">
         {slots.map((time, idx) => {
           const key = `${dayId}-${idx}`;
           const checked = selectedKeys.includes(key);

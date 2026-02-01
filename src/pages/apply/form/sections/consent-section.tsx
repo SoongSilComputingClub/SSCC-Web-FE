@@ -59,7 +59,7 @@ export default function ConsentSection({
                 <p className="font-semibold text-text-default">▫ {section.title}</p>
 
                 {section.type === 'list' ? (
-                  <ul className="mt-2 list-disc space-y-1 pl-5 whitespace-pre-line">
+                  <ul className="mt-2 list-disc space-y-1 whitespace-pre-line pl-5">
                     {section.content.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
