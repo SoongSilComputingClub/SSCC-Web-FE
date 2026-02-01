@@ -1,6 +1,6 @@
-name: "Feat"
-description: "새로운 기능 추가"
-labels: ["feat"]
+name: 'Feat'
+description: '새로운 기능 추가'
+labels: ['feat']
 body:
   - type: textarea
     attributes:

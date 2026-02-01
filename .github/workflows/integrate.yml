@@ -128,7 +128,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # SonarQube 분석을 위해 전체 히스토리 필요
+          fetch-depth: 0 # SonarQube 분석을 위해 전체 히스토리 필요
 
       - name: Cache SonarQube packages
         uses: actions/cache@v4
