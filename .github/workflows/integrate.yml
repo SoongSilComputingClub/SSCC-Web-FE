@@ -321,3 +321,9 @@ jobs:
           echo "- **Branch** : ${{ github.ref }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Commit** : ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Node.js**: ${{ env.NODE_VERSION }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Trigger Coolify Deployment
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+        run: |
+          echo "Triggering Coolify deployment..."
+          curl -X GET "${{ secrets.COOLIFY_WEBHOOK }}"
