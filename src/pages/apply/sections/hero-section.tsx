@@ -1,24 +1,91 @@
 import { Link } from 'react-router-dom';
 
+import { APPLICATION_GUARD_COPY } from '@/shared/config/recruitment';
+import { isAuthed } from '@/shared/lib/auth';
+import { getApplicationPhase } from '@/shared/lib/recruitment';
+
+const CTA_BUTTON_CLASS =
+  'mt-4 inline-flex items-center justify-center rounded-xl bg-point px-8 py-4 text-xl font-semibold text-black shadow-md transition hover:opacity-90';
+
+const HIGHLIGHT_TOKEN = 'SSCC';
+
+const useAuth = () => ({
+  // 임시: 실제 로그인 구현 전까지 `?authed=1`이면 로그인 상태로 간주
+  isAuthed: isAuthed(),
+});
+
+/**
+ * 카피 문자열 안의 "SSCC"만 포인트 컬러로 강조해서 렌더링
+ */
+function renderCopyWithHighlight(text: string) {
+  const lines = text.split('\n');
+
+  return lines.map((line, lineIdx) => {
+    const parts = line.split(HIGHLIGHT_TOKEN);
+
+    return (
+      <span key={`line-${lineIdx}`}>
+        {parts.map((chunk, idx) => (
+          <span key={`chunk-${lineIdx}-${idx}`}>
+            {chunk}
+            {idx < parts.length - 1 && <span className="text-point">{HIGHLIGHT_TOKEN}</span>}
+          </span>
+        ))}
+        {lineIdx < lines.length - 1 && <br />}
+      </span>
+    );
+  });
+}
+
+type CtaButtonProps = {
+  to: string;
+  label: string;
+};
+
+function CtaButton({ to, label }: CtaButtonProps) {
+  return (
+    <Link to={to} className={CTA_BUTTON_CLASS}>
+      {label}
+    </Link>
+  );
+}
+
 export default function HeroSection() {
+  const { isAuthed } = useAuth();
+  const phase = getApplicationPhase();
+  const copy = APPLICATION_GUARD_COPY[phase];
+  const isOpen = phase === 'open';
+
   return (
     <section className="flex min-h-[520px] w-full items-center justify-center bg-bg-default px-6 text-text-default">
-      <div className="flex flex-col items-center text-center">
-        <h1 className="text-2xl font-bold leading-snug">
-          <span className="text-point">SSCC</span>는 여러분을 기다립니다!
+      {phase === 'closed' ? (
+        <h1 className="whitespace-pre-line text-center text-2xl font-bold leading-snug text-point">
+          {copy.title}
         </h1>
+      ) : (
+        <div className="flex flex-col items-center text-center">
+          <h1 className="text-2xl font-bold leading-snug">{renderCopyWithHighlight(copy.title)}</h1>
 
-        <p className="text-xl font-bold">
-          지금 바로 <span className="text-point">SSCC</span>에 지원하세요.
-        </p>
+          {copy.body && <p className="text-xl font-bold">{renderCopyWithHighlight(copy.body)}</p>}
 
-        <Link
-          to="/apply/form"
-          className="mt-4 inline-flex items-center justify-center rounded-xl bg-point px-8 py-4 text-xl font-semibold text-black shadow-md transition hover:opacity-90"
-        >
-          신청서 작성하기 {/* 추후 로그인 유무에 따른 조건부 렌더링 */}
-        </Link>
-      </div>
+          {copy.cta &&
+            (() => {
+              const ctaDetails = isAuthed ? copy.cta.auth : copy.cta.unauth;
+              const to = isAuthed ? '/apply/form' : '/login';
+
+              return isOpen ? (
+                <CtaButton to={to} label={ctaDetails.label} />
+              ) : (
+                <span
+                  className={`${CTA_BUTTON_CLASS} cursor-not-allowed opacity-50`}
+                  aria-disabled={true}
+                >
+                  {ctaDetails.label}
+                </span>
+              );
+            })()}
+        </div>
+      )}
     </section>
   );
 }
