@@ -1,43 +1,17 @@
-import { useSyncExternalStore } from 'react';
 import { Link } from 'react-router-dom';
 import { APPLICATION_GUARD_COPY } from '@/shared/config/recruitment';
 import { getApplicationPhase, isApplicationOpen } from '@/shared/lib/recruitment';
+
+import { isAuthed } from '@/shared/lib/auth';
 
 const CTA_BUTTON_CLASS =
   'mt-4 inline-flex items-center justify-center rounded-xl bg-point px-8 py-4 text-xl font-semibold text-black shadow-md transition hover:opacity-90';
 
 const HIGHLIGHT_TOKEN = 'SSCC';
 
-const AUTH_TOKEN_STORAGE_KEY = 'accessToken';
-
-const authStore = {
-  subscribe(callback: () => void) {
-    if (typeof window === 'undefined') {
-      return () => {};
-    }
-
-    const handler = () => callback();
-    window.addEventListener('storage', handler);
-
-    return () => {
-      window.removeEventListener('storage', handler);
-    };
-  },
-  getSnapshot() {
-    if (typeof window === 'undefined') {
-      return false;
-    }
-
-    return Boolean(localStorage.getItem(AUTH_TOKEN_STORAGE_KEY));
-  },
-};
-
 const useAuth = () => ({
-  isAuthed: useSyncExternalStore(
-    authStore.subscribe,
-    authStore.getSnapshot,
-    () => false,
-  ),
+  // 임시: 실제 로그인 구현 전까지 `?authed=1`이면 로그인 상태로 간주
+  isAuthed: isAuthed(),
 });
 
 /**
