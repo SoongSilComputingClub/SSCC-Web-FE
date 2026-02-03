@@ -5,7 +5,7 @@ import { isAuthed } from '@/shared/lib/auth';
 import { getApplicationPhase } from '@/shared/lib/recruitment';
 
 const CTA_BUTTON_CLASS =
-  'mt-4 inline-flex items-center justify-center rounded-xl bg-point px-8 py-4 text-xl font-semibold text-black shadow-md transition hover:opacity-90';
+  'mt-4 inline-flex items-center justify-center rounded-xl bg-point px-8 py-4 text-lg font-semibold text-black shadow-md transition hover:opacity-90';
 
 const HIGHLIGHT_TOKEN = 'SSCC';
 
@@ -64,9 +64,9 @@ export default function HeroSection() {
         </h1>
       ) : (
         <div className="flex flex-col items-center text-center">
-          <h1 className="text-2xl font-bold leading-snug">{renderCopyWithHighlight(copy.title)}</h1>
+          <h1 className="text-xl font-bold leading-snug">{renderCopyWithHighlight(copy.title)}</h1>
 
-          {copy.body && <p className="text-xl font-bold">{renderCopyWithHighlight(copy.body)}</p>}
+          {copy.body && <p className="text-lg font-bold">{renderCopyWithHighlight(copy.body)}</p>}
 
           {copy.cta &&
             (() => {

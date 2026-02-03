@@ -38,12 +38,12 @@ export default function FAQSection() {
                   {/* Question */}
                   <div className="flex items-center gap-2">
                     <span className="text-point">Q.</span>
-                    <span className="text-base text-text-default">{item.q}</span>
+                    <span className="text-md text-text-default">{item.q}</span>
                   </div>
 
-                  {/* */}
+                  {/* 펼침/접힘 아이콘 */}
                   <svg
-                    className={`size-5 text-[#B3B3B3] transition-transform ${
+                    className={`size-5 text-border-emphasis transition-transform ${
                       open ? 'rotate-180' : ''
                     }`}
                     viewBox="0 0 24 24"
@@ -68,7 +68,7 @@ export default function FAQSection() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <p className="text-sm leading-relaxed text-text-default">{item.a}</p>
+                    <p className="text-base leading-relaxed text-text-default">{item.a}</p>
                   </div>
                 </div>
               </div>
