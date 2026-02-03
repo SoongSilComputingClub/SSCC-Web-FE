@@ -84,7 +84,6 @@ export const WaveSection = () => {
         </h1>
         <NavLink
           to="/apply"
-          onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' })}
           className="mt-4 shrink-0 self-start rounded-full border-[1.5px] border-point bg-bg-default px-6 py-2 text-xs font-semibold text-point"
         >
           지금 바로 지원하기 →

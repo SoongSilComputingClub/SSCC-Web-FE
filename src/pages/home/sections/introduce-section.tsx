@@ -387,7 +387,6 @@ export default function IntroSection() {
           <div className="text-xl font-bold text-text-black">이런 SSCC에 흥미가 생긴다면</div>
           <NavLink
             to="/apply"
-            onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' })}
             className="mt-10 shrink-0 rounded-full border-[1.5px] border-point bg-bg-muted px-20 py-3 text-sm font-semibold text-point"
           >
             지금 바로 지원하기
