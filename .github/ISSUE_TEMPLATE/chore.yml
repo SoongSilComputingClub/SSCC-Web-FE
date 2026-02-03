@@ -1,6 +1,6 @@
-name: "Chore"
-description: "설정, 스타일 규칙, 디자인 시스템 등 유지보수 작업"
-labels: ["chore"]
+name: 'Chore'
+description: '설정, 스타일 규칙, 디자인 시스템 등 유지보수 작업'
+labels: ['chore']
 body:
   - type: textarea
     attributes:

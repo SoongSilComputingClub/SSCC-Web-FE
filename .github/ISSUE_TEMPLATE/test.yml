@@ -1,6 +1,6 @@
-name: "Test"
-description: "테스트 코드 작성 / 개선"
-labels: ["test"]
+name: 'Test'
+description: '테스트 코드 작성 / 개선'
+labels: ['test']
 body:
   - type: textarea
     attributes:

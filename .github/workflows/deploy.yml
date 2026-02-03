@@ -27,7 +27,7 @@ name: Deploy Frontend to Coolify
 
 on:
   workflow_run:
-    workflows: ["Integrate Frontend"]
+    workflows: ['Integrate Frontend']
     types:
       - completed
     branches:

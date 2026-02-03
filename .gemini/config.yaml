@@ -17,10 +17,10 @@ code_review:
 
 # 리뷰 제외 패턴
 ignore_patterns:
-  - "**/dist/**"
-  - "**/node_modules/**"
-  - "**/.vite/**"
-  - "**/coverage/**"
-  - "**/storybook-static/**"
-  - "**/*.lock"
-  - "**/*.log"
+  - '**/dist/**'
+  - '**/node_modules/**'
+  - '**/.vite/**'
+  - '**/coverage/**'
+  - '**/storybook-static/**'
+  - '**/*.lock'
+  - '**/*.log'

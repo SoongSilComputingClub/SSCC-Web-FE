@@ -11,7 +11,17 @@ import storybook from 'eslint-plugin-storybook';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 
 export default tseslint.config(
-  { ignores: ['dist', '.vite', '*.config.js', '*.config.ts', 'tailwind.config.ts', 'storybook-static', '.storybook'] },
+  {
+    ignores: [
+      'dist',
+      '.vite',
+      '*.config.js',
+      '*.config.ts',
+      'tailwind.config.ts',
+      'storybook-static',
+      '.storybook',
+    ],
+  },
 
   // Base recommended rules
   js.configs.recommended,
