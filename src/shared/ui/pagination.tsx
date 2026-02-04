@@ -1,5 +1,23 @@
 import type { ReactNode } from 'react';
 
+const WINDOW_SIZE = 10;
+
+function getWindowRange(totalPages: number, page: number, windowSize = WINDOW_SIZE) {
+  const safeTotalPages = Math.max(1, totalPages);
+  const safePage = Math.min(Math.max(1, page), safeTotalPages);
+
+  const windowIndex = Math.floor((safePage - 1) / windowSize);
+  const startPage = windowIndex * windowSize + 1;
+  const endPage = Math.min(startPage + windowSize - 1, safeTotalPages);
+
+  return { safeTotalPages, safePage, startPage, endPage };
+}
+
+const PAGE_BTN_BASE = 'rounded-lg px-3 py-2 text-xs font-medium';
+const PAGE_BTN_ACTIVE = 'bg-point font-semibold text-black';
+const PAGE_BTN_INACTIVE =
+  'border border-border-default bg-bg-default text-text-default hover:bg-bg-muted';
+
 type PaginationProps = {
   /** 현재 페이지(1부터 시작) */
   page: number;
@@ -30,38 +48,46 @@ export function Pagination({
   prevLabel = '이전',
   nextLabel = '다음',
 }: PaginationProps) {
-  const isFirst = page <= 1;
-  const isLast = page >= totalPages;
+  const { safeTotalPages, safePage, startPage, endPage } = getWindowRange(
+    totalPages,
+    page,
+    WINDOW_SIZE,
+  );
+
+  // 윈도우(10개 묶음) 단위로 이동하는 버튼 상태
+  const isFirstWindow = startPage <= 1;
+  const isLastWindow = endPage >= safeTotalPages;
+
+  const prevWindowPage = Math.max(1, startPage - WINDOW_SIZE);
+  const nextWindowPage = Math.min(safeTotalPages, startPage + WINDOW_SIZE);
 
   return (
     <nav
-      className={`flex w-full items-center justify-center gap-2 ${className ?? ''}`}
+      className={['flex w-full items-center justify-center gap-2', className]
+        .filter(Boolean)
+        .join(' ')}
       aria-label={ariaLabel}
     >
       <button
         type="button"
         className="rounded-lg border border-border-default bg-bg-muted px-3 py-2 text-xs font-medium text-text-default disabled:cursor-not-allowed disabled:opacity-50"
-        onClick={() => onChange(page - 1)}
-        disabled={isFirst}
+        onClick={() => onChange(prevWindowPage)}
+        disabled={isFirstWindow}
       >
         {prevLabel}
       </button>
 
       <div className="flex items-center gap-1">
-        {Array.from({ length: totalPages }).map((_, idx) => {
-          const n = idx + 1;
-          const isActive = n === page;
+        {Array.from({ length: endPage - startPage + 1 }).map((_, idx) => {
+          const n = startPage + idx;
+          const isActive = n === safePage;
 
           return (
             <button
               key={n}
               type="button"
               onClick={() => onChange(n)}
-              className={
-                isActive
-                  ? 'rounded-lg bg-point px-3 py-2 text-xs font-semibold text-black'
-                  : 'rounded-lg border border-border-default bg-bg-default px-3 py-2 text-xs font-medium text-text-default hover:bg-bg-muted'
-              }
+              className={`${PAGE_BTN_BASE} ${isActive ? PAGE_BTN_ACTIVE : PAGE_BTN_INACTIVE}`}
               aria-current={isActive ? 'page' : undefined}
             >
               {n}
@@ -73,8 +99,8 @@ export function Pagination({
       <button
         type="button"
         className="rounded-lg border border-border-default bg-bg-muted px-3 py-2 text-xs font-medium text-text-default disabled:cursor-not-allowed disabled:opacity-50"
-        onClick={() => onChange(page + 1)}
-        disabled={isLast}
+        onClick={() => onChange(nextWindowPage)}
+        disabled={isLastWindow}
       >
         {nextLabel}
       </button>
