@@ -1,6 +1,6 @@
 export function GridSection() {
   return (
-    <section className="flex min-h-screen w-full items-center justify-center">
+    <section className="flex w-full items-center justify-center">
       <div className="w-[90%] whitespace-nowrap rounded-2xl p-2 text-center text-sm font-bold text-text-default/70">
         <div className="grid grid-cols-2 gap-0">
           <div className="grid gap-4">
