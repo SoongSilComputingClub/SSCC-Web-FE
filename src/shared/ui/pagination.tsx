@@ -16,18 +16,13 @@ function useResponsiveWindowSize() {
     const mql = window.matchMedia('(min-width: 1024px)');
     const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
 
-    // 초기 동기화
-    setIsDesktop(mql.matches);
-
     // 브라우저 호환 (addEventListener 지원 여부)
     if (typeof mql.addEventListener === 'function') {
       mql.addEventListener('change', onChange);
       return () => mql.removeEventListener('change', onChange);
     }
 
-    // eslint-disable-next-line deprecation/deprecation
     mql.addListener(onChange);
-    // eslint-disable-next-line deprecation/deprecation
     return () => mql.removeListener(onChange);
   }, []);
 
