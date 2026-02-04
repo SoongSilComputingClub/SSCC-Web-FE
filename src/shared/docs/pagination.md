@@ -31,7 +31,7 @@ const filtered = PROJECTS.filter((p) => p.category === category);
 
 const { page, totalPages, pageItems, setPage } = usePagination({
   items: filtered,
-  pageSize: 6, // 한 페이지당 표시 개수
+  pageSize: 6, // 한 페이지당 표시 개수 (페이지별로 원하는 값으로 지정 가능)
 });
 ```
 
@@ -67,6 +67,12 @@ const { page, totalPages, pageItems, setPage } = usePagination({
     을 렌더링합니다.
 - 버튼 클릭 시 onChange(nextPage)를 호출합니다.
 
+> Pagination UI는 페이지 번호를 **반응형 윈도우 단위**로 표시합니다.
+> - 모바일(< 1024px): **5개 단위** (예: 1~5, 6~10 …)
+> - 데스크톱(≥ 1024px): **10개 단위** (예: 1~10, 11~20 …)
+> - `이전/다음` 버튼은 **페이지 1칸 이동이 아니라 현재 윈도우(5/10개) 단위로 이동**합니다.
+> - 숫자 버튼을 누르면 해당 페이지로 바로 이동합니다.
+
 ---
 
 ### **5) 빈 목록(Empty State) 처리 권장**
@@ -100,7 +106,7 @@ export function ProjectList({ category }: ProjectListProps) {
 
   const { page, totalPages, pageItems, setPage } = usePagination({
     items: filtered,
-    pageSize: 6,
+    pageSize: 6, // 한 페이지당 표시 개수 (페이지별로 원하는 값으로 지정 가능)
   });
 
   if (filtered.length === 0) {
@@ -134,5 +140,7 @@ export function ProjectList({ category }: ProjectListProps) {
 - usePagination은 URL의 page 쿼리를 사용하므로, 동일 페이지에서 다른 쿼리를 사용 중이어도 충돌하지 않도록 **page 키는 공통으로 유지**합니다.
 - 페이지/카테고리 등을 쿼리로 함께 관리하는 경우 (tab, search 등)에도 setSearchParams(prev => ...) 방식으로 기존 쿼리를 유지하도록 구현되어 있습니다.
 - SSR 환경이 아닌 일반 SPA(React Router) 기준입니다.
+
+- `pageSize`를 생략하면 `src/shared/lib/use-pagination.ts`의 기본값(`PAGINATION_DEFAULT_PAGE_SIZE = 6`)이 적용됩니다.
 
 ---
