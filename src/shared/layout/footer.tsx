@@ -1,7 +1,7 @@
 export function Footer() {
   return (
     <footer className="w-full bg-black px-6 py-10 text-white">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 md:flex-row md:justify-between">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 md:flex-row md:justify-between">
         {/* Left */}
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
@@ -9,15 +9,16 @@ export function Footer() {
             <img src="/logo.svg" alt="SSCC Logo" className="h-8 w-auto" />
           </div>
 
-          <p className="text-sm leading-relaxed text-gray-300">
-            서울특별시 동작구 상도로 369
-            <br />
-            숭실대학교 학생회관 233호
-          </p>
+          <div>
+            <p className="text-sm leading-relaxed text-gray-300">숭실대학교 학생회관 233호</p>
+            <p className="text-sm leading-relaxed text-text-placeholder">
+              © 2026 SSCC. All rights reserved.
+            </p>
+          </div>
         </div>
 
         {/* Right */}
-        <div className="mt-8 flex flex-col items-end gap-4 self-end text-right md:ml-auto md:mt-0 md:self-auto">
+        <div className="mt-8 flex flex-col items-end gap-2 self-end text-right md:ml-auto md:mt-0 md:self-auto">
           <span className="text-sm text-gray-300">SSCC의 SNS 바로가기</span>
 
           <div className="flex gap-4">
