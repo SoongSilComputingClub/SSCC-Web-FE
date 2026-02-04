@@ -1,8 +1,40 @@
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 
-const WINDOW_SIZE = 10;
+const MOBILE_WINDOW_SIZE = 5;
+const DESKTOP_WINDOW_SIZE = 10;
 
-function getWindowRange(totalPages: number, page: number, windowSize = WINDOW_SIZE) {
+function useResponsiveWindowSize() {
+  const [isDesktop, setIsDesktop] = useState(() => {
+    // SSR/테스트 환경 안전 처리
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(min-width: 1024px)').matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const mql = window.matchMedia('(min-width: 1024px)');
+    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+
+    // 초기 동기화
+    setIsDesktop(mql.matches);
+
+    // 브라우저 호환 (addEventListener 지원 여부)
+    if (typeof mql.addEventListener === 'function') {
+      mql.addEventListener('change', onChange);
+      return () => mql.removeEventListener('change', onChange);
+    }
+
+    // eslint-disable-next-line deprecation/deprecation
+    mql.addListener(onChange);
+    // eslint-disable-next-line deprecation/deprecation
+    return () => mql.removeListener(onChange);
+  }, []);
+
+  return isDesktop ? DESKTOP_WINDOW_SIZE : MOBILE_WINDOW_SIZE;
+}
+
+function getWindowRange(totalPages: number, page: number, windowSize = MOBILE_WINDOW_SIZE) {
   const safeTotalPages = Math.max(1, totalPages);
   const safePage = Math.min(Math.max(1, page), safeTotalPages);
 
@@ -48,18 +80,20 @@ export function Pagination({
   prevLabel = '이전',
   nextLabel = '다음',
 }: PaginationProps) {
+  const windowSize = useResponsiveWindowSize();
+
   const { safeTotalPages, safePage, startPage, endPage } = getWindowRange(
     totalPages,
     page,
-    WINDOW_SIZE,
+    windowSize,
   );
 
-  // 윈도우(10개 묶음) 단위로 이동하는 버튼 상태
+  // 윈도우(모바일 5개 / 데스크톱 10개) 단위로 이동하는 버튼 상태
   const isFirstWindow = startPage <= 1;
   const isLastWindow = endPage >= safeTotalPages;
 
-  const prevWindowPage = Math.max(1, startPage - WINDOW_SIZE);
-  const nextWindowPage = Math.min(safeTotalPages, startPage + WINDOW_SIZE);
+  const prevWindowPage = Math.max(1, startPage - windowSize);
+  const nextWindowPage = Math.min(safeTotalPages, startPage + windowSize);
 
   return (
     <nav
