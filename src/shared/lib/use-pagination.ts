@@ -1,21 +1,19 @@
-import { useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useMemo } from 'react';
+
+import { useSearchParams } from 'react-router-dom';
 
 type UsePaginationParams<T> = {
   items: T[];
   pageSize?: number;
 };
 
-export function usePagination<T>({
-  items,
-  pageSize = 6,
-}: UsePaginationParams<T>) {
+export function usePagination<T>({ items, pageSize = 6 }: UsePaginationParams<T>) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
 
   const page = useMemo(() => {
-    const raw = searchParams.get("page") ?? "1";
+    const raw = searchParams.get('page') ?? '1';
     const parsed = Number(raw);
 
     if (!Number.isFinite(parsed) || parsed < 1) return 1;
@@ -32,7 +30,7 @@ export function usePagination<T>({
 
     setSearchParams((prev) => {
       const sp = new URLSearchParams(prev);
-      sp.set("page", String(clamped));
+      sp.set('page', String(clamped));
       return sp;
     });
   };

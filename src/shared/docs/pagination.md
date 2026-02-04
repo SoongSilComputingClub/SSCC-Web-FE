@@ -18,8 +18,8 @@
 ### **2) Import 경로**
 
 ```tsx
-import { usePagination } from "@/shared/lib/use-pagination";
-import { Pagination } from "@/shared/ui/pagination";
+import { usePagination } from '@/shared/lib/use-pagination';
+import { Pagination } from '@/shared/ui/pagination';
 ```
 
 ### **3) 기본 사용법 (권장 패턴)**
@@ -56,19 +56,15 @@ const { page, totalPages, pageItems, setPage } = usePagination({
 - page가 totalPages보다 크면 마지막 페이지로 보정합니다.
 - items 배열을 기준으로 현재 페이지의 데이터(pageItems)를 잘라 제공합니다.
 - setPage(n) 호출 시 URL의 page 쿼리를 갱신합니다.
-    
-    (다른 쿼리 값은 유지됩니다)
-    
+  (다른 쿼리 값은 유지됩니다)
 
 **Pagination이 하는 일**
 
 - page, totalPages를 기반으로
-    - 이전/다음 버튼
-    - 페이지 번호 버튼
-    - 현재 페이지(active) 스타일
-        
-        을 렌더링합니다.
-        
+  - 이전/다음 버튼
+  - 페이지 번호 버튼
+  - 현재 페이지(active) 스타일
+    을 렌더링합니다.
 - 버튼 클릭 시 onChange(nextPage)를 호출합니다.
 
 ---
@@ -88,12 +84,12 @@ if (filtered.length === 0) {
 ### **6) 예시: Projects 페이지 적용 코드**
 
 ```tsx
-import { usePagination } from "@/shared/lib/use-pagination";
-import { Pagination } from "@/shared/ui/pagination";
+import { usePagination } from '@/shared/lib/use-pagination';
+import { Pagination } from '@/shared/ui/pagination';
 
-import { PROJECTS } from "../lib/data";
-import type { ProjectCategory } from "../lib/types";
-import { ProjectCard } from "./project-card";
+import { PROJECTS } from '../lib/data';
+import type { ProjectCategory } from '../lib/types';
+import { ProjectCard } from './project-card';
 
 type ProjectListProps = {
   category: ProjectCategory;
@@ -117,7 +113,7 @@ export function ProjectList({ category }: ProjectListProps) {
 
   return (
     <div className="flex w-full flex-col gap-6">
-      <ul className="grid w-full grid-cols-1 gap-3 justify-items-center lg:grid-cols-[repeat(3,minmax(0,420px))] lg:justify-center lg:gap-6">
+      <ul className="grid w-full grid-cols-1 justify-items-center gap-3 lg:grid-cols-[repeat(3,minmax(0,420px))] lg:justify-center lg:gap-6">
         {pageItems.map((project) => (
           <li key={project.id} className="w-full">
             <ProjectCard project={project} />

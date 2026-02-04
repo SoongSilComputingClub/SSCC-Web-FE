@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 type PaginationProps = {
   /** 현재 페이지(1부터 시작) */
@@ -25,17 +25,17 @@ export function Pagination({
   page,
   totalPages,
   onChange,
-  ariaLabel = "페이지 이동",
+  ariaLabel = '페이지 이동',
   className,
-  prevLabel = "이전",
-  nextLabel = "다음",
+  prevLabel = '이전',
+  nextLabel = '다음',
 }: PaginationProps) {
   const isFirst = page <= 1;
   const isLast = page >= totalPages;
 
   return (
     <nav
-      className={`flex w-full items-center justify-center gap-2 ${className ?? ""}`}
+      className={`flex w-full items-center justify-center gap-2 ${className ?? ''}`}
       aria-label={ariaLabel}
     >
       <button
@@ -59,10 +59,10 @@ export function Pagination({
               onClick={() => onChange(n)}
               className={
                 isActive
-                  ? "rounded-lg bg-point px-3 py-2 text-xs font-semibold text-black"
-                  : "rounded-lg border border-border-default bg-bg-default px-3 py-2 text-xs font-medium text-text-default hover:bg-bg-muted"
+                  ? 'rounded-lg bg-point px-3 py-2 text-xs font-semibold text-black'
+                  : 'rounded-lg border border-border-default bg-bg-default px-3 py-2 text-xs font-medium text-text-default hover:bg-bg-muted'
               }
-              aria-current={isActive ? "page" : undefined}
+              aria-current={isActive ? 'page' : undefined}
             >
               {n}
             </button>
