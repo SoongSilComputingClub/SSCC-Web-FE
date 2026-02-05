@@ -10,7 +10,7 @@ export default function BannerSection() {
               <img
                 src={logoImg}
                 draggable={false}
-                alt=""
+                alt="SSCC 로고"
                 className="h-full w-full translate-y-[8%] scale-[1.8] select-none object-contain"
               />
             </div>
