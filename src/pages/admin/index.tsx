@@ -75,13 +75,17 @@ export default function IndexPage() {
     pageSize: 10,
   });
 
-  // ✅ CSV 내보내기: (현재 페이지 기준)
+  // ✅ CSV 내보내기: (전체 데이터 기준)
   const exportCsv = () => {
     const header = ['순서', '이름', '학과', '학번', '학년', '성별'];
 
     const lines = rows.map((r) =>
       [r.order, r.name, r.major, r.studentId, r.grade, r.gender]
-        .map((v) => `"${String(v).replaceAll('"', '""')}"`)
+        .map((v) => {
+          const s = String(v);
+          const sanitized = /^[=+\-@]/.test(s) ? "'" + s : s;
+          return '"' + sanitized.replaceAll('"', '""') + '"';
+        })
         .join(','),
     );
 
