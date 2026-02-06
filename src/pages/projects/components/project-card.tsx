@@ -35,7 +35,7 @@ export function ProjectCard({ project }: Props) {
           </p>
 
           {/* 짧은 소개 문구 */}
-          <p className="mt-3 whitespace-pre-line text-xs font-medium leading-relaxed text-text-default lg:mt-1 lg:text-sm">
+          <p className="mt-3 line-clamp-1 text-xs font-medium leading-relaxed text-text-default lg:mt-1 lg:text-sm">
             {project.content}
           </p>
 
