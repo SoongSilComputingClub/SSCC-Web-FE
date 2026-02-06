@@ -1,4 +1,4 @@
-import type { ProjectCategory } from "../lib/types";
+import type { ProjectCategory } from '../lib/types';
 
 type ProjectTabsProps = {
   category: ProjectCategory;
@@ -9,9 +9,9 @@ type ProjectTabsProps = {
 
 export function ProjectTabs({ category, onChange }: ProjectTabsProps) {
   const tabs: Array<{ key: ProjectCategory; label: string }> = [
-    { key: "news" as ProjectCategory, label: "뉴스" },
-    { key: "activity" as ProjectCategory, label: "대외활동" },
-    { key: "social" as ProjectCategory, label: "친목" },
+    { key: 'news' as ProjectCategory, label: '뉴스' },
+    { key: 'activity' as ProjectCategory, label: '대외활동' },
+    { key: 'social' as ProjectCategory, label: '친목' },
   ];
 
   return (
@@ -32,10 +32,10 @@ export function ProjectTabs({ category, onChange }: ProjectTabsProps) {
               aria-selected={isActive}
               onClick={() => onChange(tab.key)}
               className={
-                "inline-flex h-[33px] w-[90px] items-center justify-center rounded-2xl text-sm font-semibold transition " +
+                'inline-flex h-[33px] w-[90px] items-center justify-center rounded-2xl text-sm font-semibold transition ' +
                 (isActive
-                  ? "bg-point text-text-black shadow-sm"
-                  : "bg-black text-point border border-point hover:text-text-default")
+                  ? 'bg-point text-text-black shadow-sm'
+                  : 'border border-point bg-black text-point hover:text-text-default')
               }
             >
               {tab.label}
