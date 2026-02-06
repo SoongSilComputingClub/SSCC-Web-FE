@@ -1,16 +1,24 @@
 import { usePagination } from '@/shared/lib/use-pagination';
 import { Pagination } from '@/shared/ui/pagination';
 
-import { PROJECTS } from '../lib/data';
-import type { ProjectCategory } from '../lib/types';
 import { ProjectCard } from './project-card';
+import { PROJECTS } from '../lib/data';
+
+import type { ProjectCategory } from '../lib/types';
 
 type ProjectListProps = {
   category: ProjectCategory;
 };
 
 export function ProjectList({ category }: ProjectListProps) {
-  const filtered = PROJECTS.filter((p) => p.category === category);
+  /* 최신순 정렬 */
+  const filtered = PROJECTS.filter((p) => p.category === category)
+    .slice()
+    .sort((a, b) => {
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
 
   const { page, totalPages, pageItems, setPage } = usePagination({
     items: filtered,
