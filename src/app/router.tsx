@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import AboutPage from '@/pages/about';
+import AdminPage from '@/pages/admin';
 import ApplyPage from '@/pages/apply';
 import ApplyFormPage from '@/pages/apply/form';
 import HomePage from '@/pages/home';
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
       { path: '/projects', element: <ProjectsPage /> },
       { path: '/apply', element: <ApplyPage /> },
       { path: '/apply/form', element: <ApplyFormPage /> },
+      { path: '/admin', element: <AdminPage /> },
     ],
   },
 ]);
