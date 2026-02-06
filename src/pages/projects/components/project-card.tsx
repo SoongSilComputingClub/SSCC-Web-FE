@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+
 import type { Project } from '../lib/types';
 
 type Props = {
@@ -8,7 +9,7 @@ type Props = {
 export function ProjectCard({ project }: Props) {
   return (
     <Link to={`/projects/${project.id}`} className="block">
-      <article className="group mx-auto flex h-full w-full flex-col overflow-hidden rounded-2xl border border-border-default bg-bg-default shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-1 hover:border-point/70 hover:ring-2 hover:ring-point/40 hover:shadow-[0_0_0_1px_rgba(48,178,200,0.15),0_16px_48px_rgba(0,0,0,0.45),0_0_24px_rgba(48,178,200,0.45)]">
+      <article className="group mx-auto flex h-full w-full flex-col overflow-hidden rounded-2xl border border-border-default bg-bg-default shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-1 hover:border-point/70 hover:shadow-[0_0_0_1px_rgba(48,178,200,0.15),0_16px_48px_rgba(0,0,0,0.45),0_0_24px_rgba(48,178,200,0.45)] hover:ring-2 hover:ring-point/40">
         {/* 썸네일 이미지 */}
         <div className="p-4 lg:p-3">
           <div className="aspect-[2] w-full overflow-hidden rounded-2xl lg:aspect-[16/9]">
