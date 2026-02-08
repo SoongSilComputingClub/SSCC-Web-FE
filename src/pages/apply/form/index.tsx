@@ -10,12 +10,14 @@ import SubmitSection from './sections/submit-section';
 
 export default function ApplyPage() {
   const [consented, setConsented] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const consentRef = useRef<HTMLDivElement | null>(null);
   const basicInfoValidateRef = useRef<null | (() => boolean)>(null);
 
   const applyForm = useApplyForm();
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
     if (!consented) {
       consentRef.current?.scrollIntoView({
         behavior: 'smooth',
@@ -57,12 +59,15 @@ export default function ApplyPage() {
       interviewTimes,
     };
 
+    setIsSubmitting(true);
     try {
       await createApplyForm(payload);
       alert('지원서가 성공적으로 제출되었습니다.');
     } catch (e) {
       console.error(e);
       alert('지원서 제출 중 오류가 발생했습니다.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -76,7 +81,11 @@ export default function ApplyPage() {
         applyForm={applyForm}
         registerValidator={(fn) => (basicInfoValidateRef.current = fn)}
       />
-      <SubmitSection disabled={!consented} onSubmit={handleSubmit} />
+      <SubmitSection
+        disabled={!consented || isSubmitting}
+        disabledReason={!consented ? 'CONSENT' : isSubmitting ? 'SUBMITTING' : undefined}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 }

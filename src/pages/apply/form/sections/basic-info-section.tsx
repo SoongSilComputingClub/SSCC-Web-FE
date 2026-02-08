@@ -10,7 +10,6 @@ import { INTERVIEW_OPTIONS } from '../utils/interview-options';
 
 import type { UseApplyFormReturn } from '../hooks/use-apply-form';
 
-
 type BasicInfoProps = {
   /**
    * 부모 컴포넌트가 제출(submit) 시 호출할 검증 함수를 등록하기 위한 프로퍼티입니다.
