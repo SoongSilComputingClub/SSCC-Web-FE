@@ -41,7 +41,7 @@ const scrollToRef = (ref: React.RefObject<HTMLElement | null>) => {
   if (focusable?.focus) {
     requestAnimationFrame(() => {
       try {
-        focusable.focus({ preventScroll: true } as any);
+        focusable.focus({ preventScroll: true } as FocusOptions);
       } catch {
         focusable.focus();
       }
@@ -102,17 +102,13 @@ export const useApplyForm = () => {
       case 'codingExp':
         return v ? '' : '코딩 경험을 선택해주세요.';
       case 'introduce':
-        return typeof v === 'string' && v.length >= 30
-          ? ''
-          : '자기소개는 30자 이상 작성해주세요.';
+        return typeof v === 'string' && v.length >= 30 ? '' : '자기소개는 30자 이상 작성해주세요.';
       case 'wantedValue':
         return typeof v === 'string' && v.length >= 30
           ? ''
           : '얻고 싶은 가치를 30자 이상 작성해주세요.';
       case 'aspiration':
-        return typeof v === 'string' && v.length >= 30
-          ? ''
-          : '포부를 30자 이상 작성해주세요.';
+        return typeof v === 'string' && v.length >= 30 ? '' : '포부를 30자 이상 작성해주세요.';
       case 'selectedInterviewKeys':
         return Array.isArray(v) && v.length > 0 ? '' : '면접 가능 시간을 선택해주세요.';
       default:

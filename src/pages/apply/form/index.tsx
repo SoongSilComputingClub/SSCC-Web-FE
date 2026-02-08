@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { createApplyForm } from '@/shared/api/apply-forms';
+import { createApplyForm, type CreateApplyFormPayload } from '@/shared/api/apply-forms';
 
 import { useApplyForm } from './hooks/use-apply-form';
 import BasicInfo from './sections/basic-info-section';
@@ -42,7 +42,7 @@ export default function ApplyPage() {
         return { date: m[1], startTime: m[2], endTime: m[3] };
       })
       .filter((v): v is { date: string; startTime: string; endTime: string } => v !== null);
-    const payload = {
+    const payload: CreateApplyFormPayload = {
       applicantName: form.applicantName,
       department: form.department,
       studentNo: form.studentNo,
@@ -52,13 +52,13 @@ export default function ApplyPage() {
       introduce: form.introduce,
       wantedValue: form.wantedValue,
       aspiration: form.aspiration,
-      codingExp: form.codingExp ?? '',
+      codingLevel: form.codingExp ?? '',
       techStackText: form.techStackText,
       interviewTimes,
     };
 
     try {
-      await createApplyForm(payload as any);
+      await createApplyForm(payload);
       alert('지원서가 성공적으로 제출되었습니다.');
     } catch (e) {
       console.error(e);

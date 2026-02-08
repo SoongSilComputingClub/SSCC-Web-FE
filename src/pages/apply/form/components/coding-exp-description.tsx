@@ -21,7 +21,7 @@ const CodingExpDescription: React.FC<CodingExpDescriptionProps> = ({ description
   return (
     <div className="space-y-1 text-sm text-text-default">
       {quotedMatch ? (
-        <p className="font-semibold text-text-default">"{quotedMatch[1]}"</p>
+        <p className="font-semibold text-text-default">&quot;{quotedMatch[1]}&quot;</p>
       ) : (
         <p>{firstLine}</p>
       )}

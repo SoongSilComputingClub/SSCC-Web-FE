@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 
+import CodingExpDescription from '../components/coding-exp-description';
+import ErrorText from '../components/error-text';
 import FormSectionHeader from '../components/form-section-header';
 import InterviewDayCard from '../components/interview-day-card';
-import ErrorText from '../components/error-text';
-import CodingExpDescription from '../components/coding-exp-description';
-
 import { CODING_EXP_OPTIONS } from '../constants/coding-exp-options';
+import { filterDigitsOnly, filterKoreanOnly, formatPhoneNumber } from '../utils/input-filters';
+import { INTERVIEW_OPTIONS } from '../utils/interview-options';
 
 import type { UseApplyFormReturn } from '../hooks/use-apply-form';
 
-import { INTERVIEW_OPTIONS } from '../utils/interview-options';
-import { filterDigitsOnly, filterKoreanOnly, formatPhoneNumber } from '../utils/input-filters';
 
 type BasicInfoProps = {
   /**
@@ -33,8 +32,23 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
     validateAllAndScroll,
     refs,
   } = applyForm;
+  const {
+    applicantNameRef,
+    departmentRef,
+    studentNoRef,
+    gradeRef,
+    phoneRef,
+    genderRef,
+    codingExpRef,
+    introduceRef,
+    wantedValueRef,
+    aspirationRef,
+    interviewRef,
+  } = refs;
 
-  const [openCodingExp, setOpenCodingExp] = useState<(typeof CODING_EXP_OPTIONS)[number]['value'] | null>(null);
+  const [openCodingExp, setOpenCodingExp] = useState<
+    (typeof CODING_EXP_OPTIONS)[number]['value'] | null
+  >(null);
   const [isNameComposing, setIsNameComposing] = useState(false);
 
   useEffect(() => {
@@ -57,7 +71,7 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
           <FormSectionHeader title="기본 정보" />
 
           <div className="mt-6 space-y-6">
-            <div ref={refs.applicantNameRef}>
+            <div ref={applicantNameRef}>
               <label className="block text-sm font-semibold text-text-default">이름</label>
               <input
                 value={form.applicantName}
@@ -82,7 +96,7 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
               <ErrorText show={touched.applicantName} message={errors.applicantName} />
             </div>
 
-            <div ref={refs.departmentRef}>
+            <div ref={departmentRef}>
               <label className="block text-sm font-semibold text-text-default">학과</label>
               <input
                 value={form.department}
@@ -94,7 +108,7 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
               <ErrorText show={touched.department} message={errors.department} />
             </div>
 
-            <div ref={refs.studentNoRef}>
+            <div ref={studentNoRef}>
               <label className="block text-sm font-semibold text-text-default">학번</label>
               <input
                 value={form.studentNo}
@@ -107,7 +121,7 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
               <ErrorText show={touched.studentNo} message={errors.studentNo} />
             </div>
 
-            <div ref={refs.gradeRef}>
+            <div ref={gradeRef}>
               <label className="block text-sm font-semibold text-text-default">학년</label>
               <div className="relative mt-3">
                 <select
@@ -141,7 +155,7 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
               <ErrorText show={touched.grade} message={errors.grade} />
             </div>
 
-            <div ref={refs.phoneRef}>
+            <div ref={phoneRef}>
               <label className="block text-sm font-semibold text-text-default">전화번호</label>
               <input
                 value={form.phone}
@@ -154,7 +168,7 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
               <ErrorText show={touched.phone} message={errors.phone} />
             </div>
 
-            <div ref={refs.genderRef} className="flex items-center gap-6">
+            <div ref={genderRef} className="flex items-center gap-6">
               <span className="shrink-0 text-sm font-semibold text-text-default">성별</span>
 
               <div className="flex flex-nowrap items-center gap-6">
@@ -190,7 +204,7 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
         <section className="mt-12">
           <FormSectionHeader title="기술 스택" />
 
-          <div ref={refs.codingExpRef} className="mt-6">
+          <div ref={codingExpRef} className="mt-6">
             <p className="text-sm font-semibold text-text-default">코딩 경험</p>
 
             <div className="mt-4 space-y-4">
@@ -203,9 +217,7 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
                     key={opt.value}
                     className={[
                       'rounded-[16px] border p-4 transition-colors',
-                      checked
-                        ? 'border-point bg-bg-section'
-                        : 'border-border-emphasis bg-bg-muted',
+                      checked ? 'border-point bg-bg-section' : 'border-border-emphasis bg-bg-muted',
                     ].join(' ')}
                   >
                     <div className="flex items-center gap-3">
@@ -221,15 +233,11 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
                       <button
                         type="button"
                         onClick={() =>
-                          setOpenCodingExp((prev) =>
-                            prev === opt.value ? null : opt.value,
-                          )
+                          setOpenCodingExp((prev) => (prev === opt.value ? null : opt.value))
                         }
                         className="flex flex-1 items-center justify-between text-left"
                       >
-                        <span className="text-sm font-semibold text-text-default">
-                          {opt.label}
-                        </span>
+                        <span className="text-sm font-semibold text-text-default">{opt.label}</span>
 
                         <svg
                           className={[
@@ -278,8 +286,10 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
           <FormSectionHeader title="자기 소개" />
 
           <div className="mt-6 space-y-6">
-            <div ref={refs.introduceRef}>
-              <label className="block text-sm font-semibold text-text-default">자기 소개 및 지원 동기</label>
+            <div ref={introduceRef}>
+              <label className="block text-sm font-semibold text-text-default">
+                자기 소개 및 지원 동기
+              </label>
               <textarea
                 value={form.introduce}
                 onChange={(e) => setField('introduce', e.target.value)}
@@ -293,8 +303,10 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
           </div>
 
           <div className="mt-6 space-y-6">
-            <div ref={refs.wantedValueRef}>
-              <label className="block text-sm font-semibold text-text-default">SSCC를 통해 얻고 싶은 가치</label>
+            <div ref={wantedValueRef}>
+              <label className="block text-sm font-semibold text-text-default">
+                SSCC를 통해 얻고 싶은 가치
+              </label>
               <textarea
                 value={form.wantedValue}
                 onChange={(e) => setField('wantedValue', e.target.value)}
@@ -308,7 +320,7 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
           </div>
 
           <div className="mt-6 space-y-6">
-            <div ref={refs.aspirationRef}>
+            <div ref={aspirationRef}>
               <label className="block text-sm font-semibold text-text-default">포부</label>
               <textarea
                 value={form.aspiration}
@@ -324,7 +336,7 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
         </section>
 
         {/* 면접 일자 */}
-        <section ref={refs.interviewRef} className="mt-12 pb-10">
+        <section ref={interviewRef} className="mt-12 pb-10">
           <FormSectionHeader title="면접 일자" description="가능한 시간대를 선택해주세요." />
 
           <div className="mt-6 space-y-6">

@@ -8,8 +8,7 @@ export type InterviewOption = {
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
 
-const formatYmd = (d: Date) =>
-  `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const formatYmd = (d: Date) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
 
 const formatKoreanLabel = (d: Date) => {
   const m = pad2(d.getMonth() + 1);
@@ -60,9 +59,7 @@ export const buildInterviewOptionsFromRecruitment = (): InterviewOption[] => {
     options.push({
       id: formatYmd(cur),
       label: formatKoreanLabel(cur),
-      slots: startHour < endHour
-        ? buildHourlySlots(startHour, endHour)
-        : [],
+      slots: startHour < endHour ? buildHourlySlots(startHour, endHour) : [],
     });
 
     cur.setDate(cur.getDate() + 1);
@@ -71,5 +68,4 @@ export const buildInterviewOptionsFromRecruitment = (): InterviewOption[] => {
   return options;
 };
 
-export const INTERVIEW_OPTIONS: InterviewOption[] =
-  buildInterviewOptionsFromRecruitment();
+export const INTERVIEW_OPTIONS: InterviewOption[] = buildInterviewOptionsFromRecruitment();

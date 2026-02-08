@@ -1,5 +1,20 @@
 import axios from 'axios';
 
+export type CreateApplyFormPayload = {
+  applicantName: string;
+  department: string;
+  studentNo: string;
+  grade: number;
+  phone: string;
+  gender: string;
+  introduce: string;
+  wantedValue: string;
+  aspiration: string;
+  codingLevel: string;
+  techStackText: string;
+  interviewTimes: Array<{ date: string; startTime: string; endTime: string }>;
+};
+
 /** 지원서 생성 */
 export const createApplyForm = (payload: unknown) => {
   return axios.post('/api/apply-forms/create', payload);
