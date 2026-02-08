@@ -33,7 +33,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'https://api-dev.soongsilcomputingclub.kr',
         changeOrigin: true,
       },
     },
