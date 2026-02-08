@@ -19,9 +19,9 @@ const CodingExpDescription: React.FC<CodingExpDescriptionProps> = ({ description
   const quotedMatch = firstLine.match(/^"(.+)"$/);
 
   return (
-    <div className="mt-2 space-y-1 text-sm text-gray-600">
+    <div className="space-y-1 text-sm text-text-default">
       {quotedMatch ? (
-        <p className="font-semibold text-gray-800">"{quotedMatch[1]}"</p>
+        <p className="font-semibold text-text-default">"{quotedMatch[1]}"</p>
       ) : (
         <p>{firstLine}</p>
       )}
