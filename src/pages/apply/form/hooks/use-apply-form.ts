@@ -18,12 +18,35 @@ export type FormState = {
   aspiration: string;
 };
 
-const scrollToRef = (ref: React.RefObject<HTMLElement | null>) => {
-  ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+const SCROLL_CENTER_OFFSET = 0; // 필요하면 미세 조정
 
+const scrollToRef = (ref: React.RefObject<HTMLElement | null>) => {
   const el = ref.current;
-  const focusable = el?.querySelector<HTMLElement>('input, textarea, select, button');
-  focusable?.focus?.();
+  if (!el) return;
+
+  // window.scrollTo 기반으로 목표 y를 계산해 부드럽게 이동
+  const rect = el.getBoundingClientRect();
+  const viewportCenter = window.innerHeight / 2;
+  const elementCenter = rect.top + rect.height / 2;
+  const deltaToCenter = elementCenter - viewportCenter;
+  const targetY = window.scrollY + deltaToCenter + SCROLL_CENTER_OFFSET;
+
+  window.scrollTo({
+    top: Math.max(0, targetY),
+    behavior: 'smooth',
+  });
+
+  // 스크롤 시작 후 다음 프레임에 preventScroll 옵션으로 포커스만 이동
+  const focusable = el.querySelector<HTMLElement>('input, textarea, select, button');
+  if (focusable?.focus) {
+    requestAnimationFrame(() => {
+      try {
+        focusable.focus({ preventScroll: true } as any);
+      } catch {
+        focusable.focus();
+      }
+    });
+  }
 };
 
 export const useApplyForm = () => {
