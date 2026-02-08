@@ -128,6 +128,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      actions: read
 
     outputs:
       image_tag: ${{ needs.prepare.outputs.head_sha }}
