@@ -7,7 +7,7 @@ import CodingExpDescription from '../components/coding-exp-description';
 
 import { CODING_EXP_OPTIONS } from '../constants/coding-exp-options';
 
-import { useApplyForm } from '../hooks/use-apply-form';
+import type { UseApplyFormReturn } from '../hooks/use-apply-form';
 
 import { INTERVIEW_OPTIONS } from '../utils/interview-options';
 import { filterDigitsOnly, filterKoreanOnly, formatPhoneNumber } from '../utils/input-filters';
@@ -18,10 +18,11 @@ type BasicInfoProps = {
    * 검증이 성공하면 true를 반환하고,
    * 실패하면 첫 번째로 잘못된 입력 항목으로 자동 스크롤됩니다.
    */
+  applyForm: UseApplyFormReturn;
   registerValidator?: (fn: () => boolean) => void;
 };
 
-export default function BasicInfo({ registerValidator }: BasicInfoProps) {
+export default function BasicInfo({ applyForm, registerValidator }: BasicInfoProps) {
   const {
     form,
     errors,
@@ -31,7 +32,7 @@ export default function BasicInfo({ registerValidator }: BasicInfoProps) {
     setFieldAndTouch,
     validateAllAndScroll,
     refs,
-  } = useApplyForm();
+  } = applyForm;
 
   const [openCodingExp, setOpenCodingExp] = useState<(typeof CODING_EXP_OPTIONS)[number]['value'] | null>(null);
   const [isNameComposing, setIsNameComposing] = useState(false);
@@ -42,7 +43,7 @@ export default function BasicInfo({ registerValidator }: BasicInfoProps) {
 
   const toggleSlot = (key: string) => {
     const nextSelected = form.selectedInterviewKeys.includes(key)
-      ? form.selectedInterviewKeys.filter((k) => k !== key)
+      ? form.selectedInterviewKeys.filter((k: string) => k !== key)
       : [...form.selectedInterviewKeys, key];
 
     setFieldAndTouch('selectedInterviewKeys', nextSelected);

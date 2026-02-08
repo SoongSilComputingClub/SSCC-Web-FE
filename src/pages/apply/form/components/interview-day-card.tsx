@@ -18,8 +18,13 @@ export default function InterviewDayCard({
       <p className="text-base font-bold text-text-default/60">{label}</p>
 
       <div className="mt-5 grid grid-cols-2 gap-x-6 gap-y-4">
-        {slots.map((time, idx) => {
-          const key = `${dayId}-${idx}`;
+        {slots.map((time) => {
+          // time 예: "10:00 - 11:00" → key: "2026-02-08|10:00|11:00"
+          const [startTimeRaw, endTimeRaw] = time.split(' - ');
+          const startTime = (startTimeRaw ?? '').trim();
+          const endTime = (endTimeRaw ?? '').trim();
+          const key = `${dayId}|${startTime}|${endTime}`;
+
           const checked = selectedKeys.includes(key);
           return (
             <label key={key} className="flex items-center gap-2">

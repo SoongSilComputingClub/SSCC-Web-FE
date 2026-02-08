@@ -247,3 +247,5 @@ export const useApplyForm = () => {
     },
   };
 };
+
+export type UseApplyFormReturn = ReturnType<typeof useApplyForm>;
