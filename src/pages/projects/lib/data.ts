@@ -46,7 +46,8 @@ export const PROJECTS: Project[] = [
     category: 'social',
     title: '친목 활동 진행',
     typeLabel: '번개',
-    content: '공간 대여해서 친목 활동 진행하였습니다.\n 동아리원들 간의 친목을 다지는 시간이었습니다. 바쁜 일정에도 모여주신 친구들 감사~ 나는 안감 까비',
+    content:
+      '공간 대여해서 친목 활동 진행하였습니다.\n 동아리원들 간의 친목을 다지는 시간이었습니다. 바쁜 일정에도 모여주신 친구들 감사~ 나는 안감 까비',
     coverImage: '../src/assets/images/home/pic-side3.jpg',
     date: '2025-01-10',
     galleryImages: [],
