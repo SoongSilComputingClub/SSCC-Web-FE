@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 
-export type Gender = 'male' | 'female' | null;
-export type CodingExp = 'A' | 'B' | 'C' | 'D' | 'E' | null;
+export type Gender = 'male' | 'female' | '';
+export type CodingExp = 'A' | 'B' | 'C' | 'D' | 'E' | '';
 
 export type FormState = {
   applicantName: string;
@@ -56,9 +56,9 @@ export const useApplyForm = () => {
     studentNo: '',
     grade: 1,
     phone: '',
-    gender: null,
+    gender: '',
     introduce: '',
-    codingExp: null,
+    codingExp: '',
     techStackText: '',
     selectedInterviewKeys: [],
     wantedValue: '',
