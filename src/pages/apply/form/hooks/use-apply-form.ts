@@ -1,5 +1,7 @@
 import { useRef, useState } from 'react';
 
+import { validateField } from '../utils/validation';
+
 export type Gender = 'male' | 'female' | '';
 export type CodingExp = 'A' | 'B' | 'C' | 'D' | 'E' | '';
 
@@ -80,41 +82,6 @@ export const useApplyForm = () => {
   const wantedValueRef = useRef<HTMLDivElement | null>(null);
   const aspirationRef = useRef<HTMLDivElement | null>(null);
   const interviewRef = useRef<HTMLDivElement | null>(null);
-
-  const validateField = (key: keyof FormState, value: unknown): string => {
-    const v = typeof value === 'string' ? value.trim() : value;
-
-    switch (key) {
-      case 'applicantName':
-        return v ? '' : '이름을 입력해주세요.';
-      case 'department':
-        return v ? '' : '학과를 입력해주세요.';
-      case 'studentNo':
-        return v && typeof v === 'string' && /^\d{8}$/.test(v)
-          ? ''
-          : '학번은 숫자 8자리여야 합니다.';
-      case 'phone':
-        return v && typeof v === 'string' && /^01[0-9]-?\d{3,4}-?\d{4}$/.test(v)
-          ? ''
-          : '전화번호를 정확히 입력해주세요.';
-      case 'gender':
-        return v ? '' : '성별을 선택해주세요.';
-      case 'codingExp':
-        return v ? '' : '코딩 경험을 선택해주세요.';
-      case 'introduce':
-        return typeof v === 'string' && v.length >= 30 ? '' : '자기소개는 30자 이상 작성해주세요.';
-      case 'wantedValue':
-        return typeof v === 'string' && v.length >= 30
-          ? ''
-          : '얻고 싶은 가치를 30자 이상 작성해주세요.';
-      case 'aspiration':
-        return typeof v === 'string' && v.length >= 30 ? '' : '포부를 30자 이상 작성해주세요.';
-      case 'selectedInterviewKeys':
-        return Array.isArray(v) && v.length > 0 ? '' : '면접 가능 시간을 선택해주세요.';
-      default:
-        return '';
-    }
-  };
 
   const setField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
