@@ -13,7 +13,7 @@ type ErrorTextProps = {
 export const ErrorText: React.FC<ErrorTextProps> = ({ show, message }) => {
   if (!show || !message) return null;
 
-  return <p className="mt-2 text-xs font-semibold text-red-500">{message}</p>;
+  return <p className="mt-2 text-xs font-semibold text-text-error">{message}</p>;
 };
 
 export default ErrorText;

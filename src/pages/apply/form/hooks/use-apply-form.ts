@@ -147,40 +147,23 @@ export const useApplyForm = () => {
 
     if (!firstInvalid) return true;
 
-    switch (firstInvalid) {
-      case 'applicantName':
-        scrollToRef(applicantNameRef);
-        break;
-      case 'department':
-        scrollToRef(departmentRef);
-        break;
-      case 'studentNo':
-        scrollToRef(studentNoRef);
-        break;
-      case 'grade':
-        scrollToRef(gradeRef);
-        break;
-      case 'phone':
-        scrollToRef(phoneRef);
-        break;
-      case 'gender':
-        scrollToRef(genderRef);
-        break;
-      case 'codingExp':
-        scrollToRef(codingExpRef);
-        break;
-      case 'introduce':
-        scrollToRef(introduceRef);
-        break;
-      case 'wantedValue':
-        scrollToRef(wantedValueRef);
-        break;
-      case 'aspiration':
-        scrollToRef(aspirationRef);
-        break;
-      case 'selectedInterviewKeys':
-        scrollToRef(interviewRef);
-        break;
+    const refMap: Partial<Record<keyof FormState, React.RefObject<HTMLElement | null>>> = {
+      applicantName: applicantNameRef,
+      department: departmentRef,
+      studentNo: studentNoRef,
+      grade: gradeRef,
+      phone: phoneRef,
+      gender: genderRef,
+      codingExp: codingExpRef,
+      introduce: introduceRef,
+      wantedValue: wantedValueRef,
+      aspiration: aspirationRef,
+      selectedInterviewKeys: interviewRef,
+    };
+
+    const refToScroll = refMap[firstInvalid];
+    if (refToScroll) {
+      scrollToRef(refToScroll);
     }
 
     return false;

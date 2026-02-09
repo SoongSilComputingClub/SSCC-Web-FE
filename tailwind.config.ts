@@ -25,6 +25,7 @@ export default {
           default: '#FFFFFF', // 기본 글자 색
           black: '#000000', //검정색 글자
           placeholder: '#696969', // place holder 글자 색
+          error: '#F44336', // 빨간 색 에러 글자
         },
       },
       fontSize: {

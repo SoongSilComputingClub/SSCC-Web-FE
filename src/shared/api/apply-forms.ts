@@ -16,7 +16,7 @@ export type CreateApplyFormPayload = {
 };
 
 /** 지원서 생성 */
-export const createApplyForm = (payload: unknown) => {
+export const createApplyForm = (payload: CreateApplyFormPayload) => {
   return axios.post('/api/apply-forms/create', payload);
 };
 

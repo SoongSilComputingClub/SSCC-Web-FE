@@ -27,8 +27,7 @@ export default function ApplyPage() {
       return;
     }
 
-    const isBasicInfoValid = basicInfoValidateRef.current ? basicInfoValidateRef.current() : true;
-    if (!isBasicInfoValid) return;
+    if (!applyForm.validateAllAndScroll()) return;
     const { form } = applyForm;
 
     const interviewTimes = form.selectedInterviewKeys
