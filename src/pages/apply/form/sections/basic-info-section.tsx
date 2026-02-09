@@ -132,7 +132,8 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
                   <option value="2">2학년</option>
                   <option value="3">3학년</option>
                   <option value="4">4학년</option>
-                  <option value="5">5학년 이상</option>
+                  <option value="5">휴학</option>
+                  <option value="6">기타(졸업 유예 등)</option>
                 </select>
                 <svg
                   className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2"
