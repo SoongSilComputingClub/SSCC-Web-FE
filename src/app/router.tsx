@@ -6,6 +6,7 @@ import ApplyPage from '@/pages/apply';
 import ApplyFormPage from '@/pages/apply/form';
 import HomePage from '@/pages/home';
 import ProjectsPage from '@/pages/projects';
+import ProjectDetailPage from '@/pages/projects/detail';
 import { AppShell } from '@/shared/layout/app-shell';
 
 export const router = createBrowserRouter([
@@ -15,6 +16,7 @@ export const router = createBrowserRouter([
       { path: '/', element: <HomePage /> },
       { path: '/about', element: <AboutPage /> },
       { path: '/projects', element: <ProjectsPage /> },
+      { path: '/projects/:id', element: <ProjectDetailPage /> },
       { path: '/apply', element: <ApplyPage /> },
       { path: '/apply/form', element: <ApplyFormPage /> },
       { path: '/admin', element: <AdminPage /> },
