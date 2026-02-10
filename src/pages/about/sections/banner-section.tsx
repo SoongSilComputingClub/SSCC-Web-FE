@@ -2,8 +2,8 @@ import logoImg from '@/assets/images/about/logo-image.png';
 
 export default function BannerSection() {
   return (
-    <section className="flex min-h-screen w-full items-center justify-center bg-bg-default pt-20">
-      <div className="aspect-square w-[85%] overflow-hidden rounded-2xl bg-bg-default shadow-lg">
+    <section className="flex min-h-screen w-full items-center justify-center bg-bg-default">
+      <div className="aspect-square w-[85%] max-w-[500px] overflow-hidden rounded-2xl bg-bg-default shadow-lg">
         <div className="relative h-[100%] bg-gradient-to-b from-point via-[#319AAD] to-[#006E93] text-center text-text-default">
           <div className="flex flex-col items-center justify-center pt-[35%]">
             <div className="h-20 w-20 translate-x-[12%] overflow-hidden">
