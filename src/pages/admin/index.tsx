@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
+import { readApplyForms } from '@/shared/api/admin-api';
 import { usePagination } from '@/shared/lib/use-pagination';
 import { Pagination } from '@/shared/ui/pagination';
 
@@ -7,47 +8,102 @@ import { CodingStatsModal, GenderStatsModal, MemberDetailModal } from './modal/i
 import { GridSection } from './section/grid-section';
 import { TableSection } from './section/table-section';
 
+export type ApplyFormItem = {
+  applyFormId: number;
+  username: string;
+
+  applicantName: string;
+  department: string;
+  studentNo: string;
+  grade: number;
+  gender: string;
+
+  phone: string;
+  introduce?: string;
+  codingLevel?: string;
+  techStackText?: string;
+
+  interviewTimes?: Array<{ date: string; startTime: string; endTime: string }>;
+};
+
 export type Row = {
   order: number;
+
   name: string;
   major: string;
   studentId: string;
   grade: number;
   gender: string;
 
-  // 표에는 안 보이지만 서버에서 받는 데이터(예시)
-  codingExp?: string;
-  email?: string;
-  phone?: string;
-  createdAt?: string;
+  phone: string;
+  introduce?: string;
+  codingLevel?: string;
+  techStackText?: string;
+
+  applyFormId?: number;
+  username?: string;
+  interviewTimes?: Array<{ date: string; startTime: string; endTime: string }>;
 };
 
 type SortKey = 'major' | 'grade' | 'studentId';
-
 type ActiveModal = 'none' | 'gender' | 'coding' | 'detail';
 
 export default function IndexPage() {
-  // TODO: 실제로는 fetch로 채우기
-  const CODING_EXPS = ['A', 'B', 'C', 'D', 'E'] as const;
-
-  const [rows] = useState<Row[]>(() =>
-    Array.from({ length: 28 }, (_, i) => ({
-      order: i + 1,
-      name: '김명주',
-      major: i % 2 === 0 ? '컴퓨터학과' : '소프트웨어학부',
-      studentId: String(20231425 + i),
-      grade: (i % 4) + 1,
-      gender: i % 2 === 0 ? '여' : '남',
-      codingExp: CODING_EXPS[i % CODING_EXPS.length],
-      email: `user${i}@example.com`,
-      phone: `010-0000-${String(1000 + i)}`,
-      createdAt: '2026-02-04',
-    })),
-  );
+  const [rows, setRows] = useState<Row[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [activeModal, setActiveModal] = useState<ActiveModal>('none');
   const [selectedRow, setSelectedRow] = useState<Row | null>(null);
+
+  useEffect(() => {
+    const fetchRows = async () => {
+      try {
+        setIsLoading(true);
+        setErrorMessage(null);
+
+        const accessToken = localStorage.getItem('accessToken');
+
+        if (!accessToken) {
+          throw new Error('accessToken이 없습니다. 다시 로그인 해주세요.');
+        }
+
+        const result = await readApplyForms(accessToken);
+        //result.data가 배열
+        const items: ApplyFormItem[] = Array.isArray(result?.data) ? result.data : [];
+
+        const mapped: Row[] = items.map((it, idx) => ({
+          order: idx + 1,
+
+          name: it.applicantName,
+          major: it.department,
+          studentId: it.studentNo,
+          grade: it.grade,
+          gender: it.gender,
+
+          phone: it.phone,
+          introduce: it.introduce,
+          codingLevel: it.codingLevel,
+          techStackText: it.techStackText,
+
+          applyFormId: it.applyFormId,
+          username: it.username,
+          interviewTimes: it.interviewTimes ?? [],
+        }));
+
+        setRows(mapped);
+      } catch (error: unknown) {
+        const msg = error instanceof Error ? error.message : '알 수 없는 오류';
+        setErrorMessage(msg);
+        setRows([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRows();
+  }, []);
 
   // ✅ 정렬된(혹은 원본) 전체 리스트
   const sortedRows = useMemo(() => {
@@ -115,6 +171,30 @@ export default function IndexPage() {
     setActiveModal('none');
     setSelectedRow(null);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center text-sm text-text-default/70">
+        로딩 중...
+      </div>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center text-sm text-text-default/70">
+        조회 실패: {errorMessage}
+      </div>
+    );
+  }
+
+  if (rows.length === 0) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center text-sm text-text-default/70">
+        데이터가 없습니다.
+      </div>
+    );
+  }
 
   if (rows.length === 0) {
     return (
