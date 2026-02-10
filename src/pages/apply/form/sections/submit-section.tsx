@@ -1,10 +1,15 @@
 import { isApplicationOpen } from '@/shared/lib/recruitment';
 type SubmitSectionProps = {
   disabled?: boolean;
+  disabledReason?: 'CONSENT' | 'SUBMITTING';
   onSubmit?: () => void;
 };
 
-export default function SubmitSection({ disabled = false, onSubmit }: SubmitSectionProps) {
+export default function SubmitSection({
+  disabled = false,
+  disabledReason,
+  onSubmit,
+}: SubmitSectionProps) {
   const isOpen = isApplicationOpen();
   const isDisabled = disabled || !isOpen;
   return (
@@ -28,7 +33,11 @@ export default function SubmitSection({ disabled = false, onSubmit }: SubmitSect
           <p className="mt-4 text-center text-sm font-semibold text-text-default/70">
             {!isOpen
               ? '현재는 지원 기간이 아니에요.'
-              : '개인정보 수집 및 이용에 동의해야 제출할 수 있어요.'}
+              : disabledReason === 'CONSENT'
+                ? '개인정보 수집 및 이용에 동의해야 제출할 수 있어요.'
+                : disabledReason === 'SUBMITTING'
+                  ? '제출 중입니다. 잠시만 기다려주세요.'
+                  : ''}
           </p>
         )}
       </div>

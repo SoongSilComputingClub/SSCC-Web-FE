@@ -1,63 +1,65 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import CodingExpDescription from '../components/coding-exp-description';
+import ErrorText from '../components/error-text';
 import FormSectionHeader from '../components/form-section-header';
 import InterviewDayCard from '../components/interview-day-card';
+import { CODING_EXP_OPTIONS } from '../constants/coding-exp-options';
+import { filterDigitsOnly, filterKoreanOnly, formatPhoneNumber } from '../utils/input-filters';
+import { INTERVIEW_OPTIONS } from '../utils/interview-options';
 
-export default function BasicInfo() {
-  const [name, setName] = useState('');
-  const [major, setMajor] = useState('');
-  const [studentId, setStudentId] = useState('');
-  const [grade, setGrade] = useState('1');
-  const [phone, setPhone] = useState('');
-  const [gender, setGender] = useState<'male' | 'female' | null>(null);
-  const [intro, setIntro] = useState('');
+import type { UseApplyFormReturn } from '../hooks/use-apply-form';
 
-  const [codingSkill, setCodingSkill] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
-  const [techStack, setTechStack] = useState('');
-  const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
+type BasicInfoProps = {
+  /**
+   * 부모 컴포넌트가 제출(submit) 시 호출할 검증 함수를 등록하기 위한 프로퍼티입니다.
+   * 검증이 성공하면 true를 반환하고,
+   * 실패하면 첫 번째로 잘못된 입력 항목으로 자동 스크롤됩니다.
+   */
+  applyForm: UseApplyFormReturn;
+  registerValidator?: (fn: () => boolean) => void;
+};
 
-  const interviewOptions = useMemo(
-    () => [
-      {
-        id: '2026-03-05',
-        label: '03월 05일 화요일',
-        slots: [
-          '10:00 - 11:00',
-          '11:00 - 12:00',
-          '12:00 - 13:00',
-          '13:00 - 14:00',
-          '14:00 - 15:00',
-          '15:00 - 16:00',
-          '16:00 - 17:00',
-          '17:00 - 18:00',
-          '18:00 - 19:00',
-          '19:00 - 20:00',
-        ],
-      },
-      {
-        id: '2026-03-06',
-        label: '03월 06일 수요일',
-        slots: [
-          '10:00 - 11:00',
-          '11:00 - 12:00',
-          '12:00 - 13:00',
-          '13:00 - 14:00',
-          '14:00 - 15:00',
-          '15:00 - 16:00',
-          '16:00 - 17:00',
-          '17:00 - 18:00',
-          '18:00 - 19:00',
-          '19:00 - 20:00',
-        ],
-      },
-    ],
-    [],
-  );
+export default function BasicInfo({ applyForm, registerValidator }: BasicInfoProps) {
+  const {
+    form,
+    errors,
+    touched,
+    setField,
+    touchField,
+    setFieldAndTouch,
+    validateAllAndScroll,
+    refs,
+  } = applyForm;
+  const {
+    applicantNameRef,
+    departmentRef,
+    studentNoRef,
+    gradeRef,
+    phoneRef,
+    genderRef,
+    codingExpRef,
+    introduceRef,
+    wantedValueRef,
+    aspirationRef,
+    interviewRef,
+  } = refs;
+
+  const [openCodingExp, setOpenCodingExp] = useState<
+    (typeof CODING_EXP_OPTIONS)[number]['value'] | null
+  >(null);
+  const [isNameComposing, setIsNameComposing] = useState(false);
+
+  useEffect(() => {
+    registerValidator?.(validateAllAndScroll);
+  }, [registerValidator, validateAllAndScroll]);
 
   const toggleSlot = (key: string) => {
-    setSelectedSlots((prev) =>
-      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
-    );
+    const nextSelected = form.selectedInterviewKeys.includes(key)
+      ? form.selectedInterviewKeys.filter((k: string) => k !== key)
+      : [...form.selectedInterviewKeys, key];
+
+    setFieldAndTouch('selectedInterviewKeys', nextSelected);
   };
 
   return (
@@ -68,50 +70,70 @@ export default function BasicInfo() {
           <FormSectionHeader title="기본 정보" />
 
           <div className="mt-6 space-y-6">
-            <div>
+            <div ref={applicantNameRef}>
               <label className="block text-sm font-semibold text-text-default">이름</label>
               <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={form.applicantName}
+                onChange={(e) => {
+                  const next = e.target.value;
+                  if (isNameComposing) {
+                    setField('applicantName', next);
+                    return;
+                  }
+                  setField('applicantName', filterKoreanOnly(next));
+                }}
+                onCompositionStart={() => setIsNameComposing(true)}
+                onCompositionEnd={(e) => {
+                  setIsNameComposing(false);
+                  // When composition ends, normalize the final value.
+                  setField('applicantName', filterKoreanOnly((e.target as HTMLInputElement).value));
+                }}
+                onBlur={() => touchField('applicantName')}
                 className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
                 placeholder="이름을 기입하세요."
               />
+              <ErrorText show={touched.applicantName} message={errors.applicantName} />
             </div>
 
-            <div>
+            <div ref={departmentRef}>
               <label className="block text-sm font-semibold text-text-default">학과</label>
               <input
-                value={major}
-                onChange={(e) => setMajor(e.target.value)}
+                value={form.department}
+                onChange={(e) => setField('department', e.target.value)}
+                onBlur={() => touchField('department')}
                 className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
                 placeholder="정확한 학과명을 기입하세요."
               />
+              <ErrorText show={touched.department} message={errors.department} />
             </div>
 
-            <div>
+            <div ref={studentNoRef}>
               <label className="block text-sm font-semibold text-text-default">학번</label>
               <input
-                value={studentId}
-                onChange={(e) => setStudentId(e.target.value)}
+                value={form.studentNo}
+                onChange={(e) => setField('studentNo', filterDigitsOnly(e.target.value, 8))}
+                onBlur={() => touchField('studentNo')}
                 inputMode="numeric"
                 className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
                 placeholder="20261234"
               />
+              <ErrorText show={touched.studentNo} message={errors.studentNo} />
             </div>
 
-            <div>
+            <div ref={gradeRef}>
               <label className="block text-sm font-semibold text-text-default">학년</label>
               <div className="relative mt-3">
                 <select
-                  value={grade}
-                  onChange={(e) => setGrade(e.target.value)}
+                  value={String(form.grade)}
+                  onChange={(e) => setField('grade', Number(e.target.value))}
                   className="w-full appearance-none rounded-[20px] border border-border-emphasis bg-bg-section p-4 pr-12 text-text-default focus:outline-none focus:ring-2 focus:ring-point/40"
                 >
                   <option value="1">1학년</option>
                   <option value="2">2학년</option>
                   <option value="3">3학년</option>
                   <option value="4">4학년</option>
-                  <option value="5">5학년 이상</option>
+                  <option value="5">휴학</option>
+                  <option value="6">기타(졸업 유예 등)</option>
                 </select>
                 <svg
                   className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2"
@@ -130,20 +152,23 @@ export default function BasicInfo() {
                   />
                 </svg>
               </div>
+              <ErrorText show={touched.grade} message={errors.grade} />
             </div>
 
-            <div>
+            <div ref={phoneRef}>
               <label className="block text-sm font-semibold text-text-default">전화번호</label>
               <input
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                value={form.phone}
+                onChange={(e) => setField('phone', formatPhoneNumber(e.target.value))}
+                onBlur={() => touchField('phone')}
                 inputMode="tel"
                 className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
                 placeholder="010-1234-5678"
               />
+              <ErrorText show={touched.phone} message={errors.phone} />
             </div>
 
-            <div className="flex items-center gap-6">
+            <div ref={genderRef} className="flex items-center gap-6">
               <span className="shrink-0 text-sm font-semibold text-text-default">성별</span>
 
               <div className="flex flex-nowrap items-center gap-6">
@@ -152,8 +177,8 @@ export default function BasicInfo() {
                     type="radio"
                     name="gender"
                     value="male"
-                    checked={gender === 'male'}
-                    onChange={() => setGender('male')}
+                    checked={form.gender === 'male'}
+                    onChange={() => setFieldAndTouch('gender', 'male')}
                     className="size-5 accent-point"
                   />
                   남자
@@ -163,105 +188,170 @@ export default function BasicInfo() {
                     type="radio"
                     name="gender"
                     value="female"
-                    checked={gender === 'female'}
-                    onChange={() => setGender('female')}
+                    checked={form.gender === 'female'}
+                    onChange={() => setFieldAndTouch('gender', 'female')}
                     className="size-5 accent-point"
                   />
                   여자
                 </label>
               </div>
+              <ErrorText show={touched.gender} message={errors.gender} />
             </div>
           </div>
-        </section>
-
-        {/* 자기소개 */}
-        <section className="mt-12">
-          <FormSectionHeader title="자기소개" />
-
-          <textarea
-            value={intro}
-            onChange={(e) => setIntro(e.target.value)}
-            className="mt-6 w-full rounded-[20px] border border-border-emphasis bg-bg-muted p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
-            placeholder="SSCC에 지원하게 된 이유와 간단한 자기소개를 작성해주세요."
-            rows={5}
-          />
         </section>
 
         {/* 기술 스택 */}
         <section className="mt-12">
           <FormSectionHeader title="기술 스택" />
 
-          <div className="mt-6">
-            <div className="flex items-center gap-6">
-              <p className="text-sm font-semibold text-text-default">코딩 실력</p>
+          <div ref={codingExpRef} className="mt-6">
+            <p className="text-sm font-semibold text-text-default">코딩 경험</p>
 
-              <div className="flex items-center gap-6">
-                {(
-                  [
-                    { label: '최하', value: 1 },
-                    { label: '하', value: 2 },
-                    { label: '중', value: 3 },
-                    { label: '상', value: 4 },
-                    { label: '최상', value: 5 },
-                  ] as const
-                ).map((opt) => {
-                  const checked = codingSkill === opt.value;
-                  return (
-                    <label
-                      key={opt.value}
-                      className="flex cursor-pointer select-none flex-col items-center gap-2"
-                    >
+            <div className="mt-4 space-y-4">
+              {CODING_EXP_OPTIONS.map((opt) => {
+                const checked = form.codingExp === opt.value;
+                const isOpen = openCodingExp === opt.value;
+
+                return (
+                  <div
+                    key={opt.value}
+                    className={[
+                      'rounded-[16px] border p-4 transition-colors',
+                      checked ? 'border-point bg-bg-section' : 'border-border-emphasis bg-bg-muted',
+                    ].join(' ')}
+                  >
+                    <div className="flex items-center gap-3">
                       <input
                         type="radio"
                         name="coding-skill"
                         value={opt.value}
                         checked={checked}
-                        onChange={() => setCodingSkill(opt.value)}
-                        className="sr-only"
+                        onChange={() => setFieldAndTouch('codingExp', opt.value)}
+                        className="size-5 accent-point"
                       />
-                      <span
-                        className={[
-                          'flex h-6 w-6 items-center justify-center rounded-full border',
-                          checked ? 'border-point' : 'border-border-emphasis',
-                        ].join(' ')}
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setOpenCodingExp((prev) => (prev === opt.value ? null : opt.value))
+                        }
+                        className="flex flex-1 items-center justify-between text-left"
                       >
-                        {checked ? <span className="size-3 rounded-full bg-point" /> : null}
-                      </span>
-                      <span className="text-sm font-semibold text-text-default/70">
-                        {opt.label}
-                      </span>
-                    </label>
-                  );
-                })}
-              </div>
+                        <span className="text-sm font-semibold text-text-default">{opt.label}</span>
+
+                        <svg
+                          className={[
+                            'transition-transform',
+                            isOpen ? 'rotate-180' : 'rotate-0',
+                          ].join(' ')}
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M6 9L12 15L18 9"
+                            stroke="#B3B3B3"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                    {isOpen ? (
+                      <div className="mt-4 rounded-[12px] bg-bg-section p-4">
+                        <CodingExpDescription description={opt.description} />
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
             </div>
+            <ErrorText show={touched.codingExp} message={errors.codingExp} />
 
             <textarea
-              value={techStack}
-              onChange={(e) => setTechStack(e.target.value)}
+              value={form.techStackText}
+              onChange={(e) => setField('techStackText', e.target.value)}
               className="mt-6 w-full whitespace-pre-line rounded-[20px] border border-border-emphasis bg-bg-muted p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
-              placeholder="보유한 기술 스택을 써주세요. (예 : HTML, CSS, Python...)"
+              placeholder="코딩 경험에 대한 설명과 함께 보유한 기술 스택을 작성해 주세요."
               rows={4}
             />
           </div>
         </section>
 
+        <section className="mt-8">
+          <FormSectionHeader title="자기 소개" />
+
+          <div className="mt-6 space-y-6">
+            <div ref={introduceRef}>
+              <label className="block text-sm font-semibold text-text-default">
+                자기 소개 및 지원 동기
+              </label>
+              <textarea
+                value={form.introduce}
+                onChange={(e) => setField('introduce', e.target.value)}
+                onBlur={() => touchField('introduce')}
+                className="mt-6 w-full rounded-[20px] border border-border-emphasis bg-bg-muted p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
+                placeholder="지원자님이 어떤 사람인지, SSCC에 지원하게 된 계기가 무엇인지 자유롭게 소개해 주세요. "
+                rows={5}
+              />
+              <ErrorText show={touched.introduce} message={errors.introduce} />
+            </div>
+          </div>
+
+          <div className="mt-6 space-y-6">
+            <div ref={wantedValueRef}>
+              <label className="block text-sm font-semibold text-text-default">
+                SSCC를 통해 얻고 싶은 가치
+              </label>
+              <textarea
+                value={form.wantedValue}
+                onChange={(e) => setField('wantedValue', e.target.value)}
+                onBlur={() => touchField('wantedValue')}
+                className="mt-6 w-full rounded-[20px] border border-border-emphasis bg-bg-muted p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
+                placeholder="SSCC 활동을 통해 얻고 싶은 것과 기대하는 성장 방향을 작성해주세요."
+                rows={5}
+              />
+              <ErrorText show={touched.wantedValue} message={errors.wantedValue} />
+            </div>
+          </div>
+
+          <div className="mt-6 space-y-6">
+            <div ref={aspirationRef}>
+              <label className="block text-sm font-semibold text-text-default">포부</label>
+              <textarea
+                value={form.aspiration}
+                onChange={(e) => setField('aspiration', e.target.value)}
+                onBlur={() => touchField('aspiration')}
+                className="mt-6 w-full rounded-[20px] border border-border-emphasis bg-bg-muted p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
+                placeholder="SSCC에 합류하게 된다면 어떤 마음가짐으로 활동할 것인지 포부를 작성해 주세요."
+                rows={5}
+              />
+              <ErrorText show={touched.aspiration} message={errors.aspiration} />
+            </div>
+          </div>
+        </section>
+
         {/* 면접 일자 */}
-        <section className="mt-12 pb-10">
+        <section ref={interviewRef} className="mt-12 pb-10">
           <FormSectionHeader title="면접 일자" description="가능한 시간대를 선택해주세요." />
 
           <div className="mt-6 space-y-6">
-            {interviewOptions.map((day) => (
+            {INTERVIEW_OPTIONS.map((day) => (
               <InterviewDayCard
                 key={day.id}
                 dayId={day.id}
                 label={day.label}
                 slots={day.slots}
-                selectedKeys={selectedSlots}
+                selectedKeys={form.selectedInterviewKeys}
                 onToggle={toggleSlot}
               />
             ))}
           </div>
+          <ErrorText show={touched.selectedInterviewKeys} message={errors.selectedInterviewKeys} />
         </section>
       </div>
     </div>
