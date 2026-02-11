@@ -191,15 +191,7 @@ export default function IndexPage() {
   if (rows.length === 0) {
     return (
       <div className="flex min-h-screen w-full items-center justify-center text-sm text-text-default/70">
-        데이터가 없습니다.
-      </div>
-    );
-  }
-
-  if (rows.length === 0) {
-    return (
-      <div className="flex min-h-screen w-full items-center justify-center text-sm text-text-default/70">
-        데이터가 없습니다.
+        조회 실패: {errorMessage}
       </div>
     );
   }
