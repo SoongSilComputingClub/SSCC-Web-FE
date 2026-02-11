@@ -64,12 +64,12 @@ export default function IndexPage() {
         setErrorMessage(null);
 
         const accessToken = localStorage.getItem('accessToken');
-
         if (!accessToken) {
           throw new Error('accessToken이 없습니다. 다시 로그인 해주세요.');
         }
 
         const result = await readApplyForms(accessToken);
+
         //result.data가 배열
         const items: ApplyFormItem[] = Array.isArray(result?.data) ? result.data : [];
 
