@@ -53,7 +53,7 @@ export default function ApplyPage() {
       introduce: form.introduce,
       wantedValue: form.wantedValue,
       aspiration: form.aspiration,
-      codingLevel: form.codingExp ?? '',
+      codingExp: form.codingExp ?? '',
       techStackText: form.techStackText,
       interviewTimes,
     };
