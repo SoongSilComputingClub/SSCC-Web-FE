@@ -1,5 +1,4 @@
 import path from 'node:path';
-import fs from 'node:fs';
 
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
@@ -32,15 +31,6 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    https:
-      process.env.USE_HTTPS === 'true' &&
-      fs.existsSync('./localhost-key.pem') &&
-      fs.existsSync('./localhost.pem')
-        ? {
-            key: fs.readFileSync('./localhost-key.pem'),
-            cert: fs.readFileSync('./localhost.pem'),
-          }
-        : undefined,
   },
   build: {
     outDir: 'dist',
