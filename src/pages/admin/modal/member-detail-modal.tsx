@@ -20,7 +20,7 @@ export function MemberDetailModal({ isOpen, row, onClose }: MemberDetailModalPro
         <Item label="학년" value={String(row.grade)} />
         <Item label="성별" value={row.gender} />
 
-        {row.codingLevel && <Item label="코딩 경험" value={row.codingLevel} />}
+        {row.codingExp && <Item label="코딩 경험" value={row.codingExp} />}
         {row.email && <Item label="이메일" value={row.email} />}
         {row.phone && <Item label="연락처" value={row.phone} />}
         {row.createdAt && <Item label="등록일" value={row.createdAt} />}

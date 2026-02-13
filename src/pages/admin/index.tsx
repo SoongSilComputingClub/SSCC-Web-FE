@@ -15,8 +15,8 @@ export type Row = {
   grade: number;
   gender: string;
 
-  // ✅ 표에는 안 보이지만 서버에서 받는 데이터(예시)
-  codingLevel?: string;
+  // 표에는 안 보이지만 서버에서 받는 데이터(예시)
+  codingExp?: string;
   email?: string;
   phone?: string;
   createdAt?: string;
@@ -28,7 +28,7 @@ type ActiveModal = 'none' | 'gender' | 'coding' | 'detail';
 
 export default function IndexPage() {
   // TODO: 실제로는 fetch로 채우기
-  const CODING_LEVELS = ['상', '중', '하', '최하', '극상'] as const;
+  const CODING_EXPS = ['A', 'B', 'C', 'D', 'E'] as const;
 
   const [rows] = useState<Row[]>(() =>
     Array.from({ length: 28 }, (_, i) => ({
@@ -38,7 +38,7 @@ export default function IndexPage() {
       studentId: String(20231425 + i),
       grade: (i % 4) + 1,
       gender: i % 2 === 0 ? '여' : '남',
-      codingLevel: CODING_LEVELS[i % CODING_LEVELS.length],
+      codingExp: CODING_EXPS[i % CODING_EXPS.length],
       email: `user${i}@example.com`,
       phone: `010-0000-${String(1000 + i)}`,
       createdAt: '2026-02-04',
