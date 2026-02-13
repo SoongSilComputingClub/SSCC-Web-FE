@@ -1,4 +1,5 @@
 import path from 'node:path';
+import fs from 'node:fs';
 
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
@@ -31,11 +32,9 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    proxy: {
-      '/api': {
-        target: 'https://api-dev.soongsilcomputingclub.kr',
-        changeOrigin: true,
-      },
+    https: {
+      key: fs.readFileSync('./localhost-key.pem'),
+      cert: fs.readFileSync('./localhost.pem'),
     },
   },
   build: {

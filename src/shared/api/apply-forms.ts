@@ -27,11 +27,21 @@ function toQueryString(params?: unknown): string {
   return qs ? `?${qs}` : '';
 }
 
-async function parseJson<T>(res: Response): Promise<T> {
-  // 응답이 비어있는 경우를 대비
+async function parseJson<T>(res: Response): Promise<T | null> {
   const text = await res.text();
-  if (!text) return undefined as unknown as T;
-  return JSON.parse(text) as T;
+
+  // 204 No Content는 body가 없는 것이 정상
+  if (!text) {
+    if (res.status === 204) return null;
+    throw new Error('API 응답 본문이 비어있습니다.');
+  }
+
+  try {
+    return JSON.parse(text) as T;
+  } catch (error) {
+    console.error('JSON 파싱 실패:', text, error);
+    throw new Error('API 응답 파싱에 실패했습니다.');
+  }
 }
 
 export type CreateApplyFormPayload = {
@@ -51,7 +61,7 @@ export type CreateApplyFormPayload = {
 
 /** 지원서 생성 */
 export const createApplyForm = async (payload: CreateApplyFormPayload) => {
-  const res = await fetchWithAccess('/api/apply-forms/create', {
+  const res = await fetchWithAccess('/apply-forms/create', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -63,7 +73,7 @@ export const createApplyForm = async (payload: CreateApplyFormPayload) => {
 /** 지원서 조회 */
 export const readApplyForm = async (params?: unknown) => {
   const qs = toQueryString(params);
-  const res = await fetchWithAccess(`/api/apply-forms/read${qs}`, {
+  const res = await fetchWithAccess(`/apply-forms/read${qs}`, {
     method: 'GET',
   });
 
@@ -72,7 +82,7 @@ export const readApplyForm = async (params?: unknown) => {
 
 /** 지원서 수정 */
 export const updateApplyForm = async (payload: unknown) => {
-  const res = await fetchWithAccess('/api/apply-forms/update', {
+  const res = await fetchWithAccess('/apply-forms/update', {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -83,7 +93,7 @@ export const updateApplyForm = async (payload: unknown) => {
 
 /** 지원서 삭제 (soft delete) */
 export const deleteApplyFormSoft = async (payload: unknown) => {
-  const res = await fetchWithAccess('/api/apply-forms/delete_soft', {
+  const res = await fetchWithAccess('/apply-forms/delete_soft', {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
