@@ -10,38 +10,36 @@ type CodingStatsModalProps = {
   onClose: () => void;
 };
 
-type CodingLevel = '최하' | '하' | '중' | '상' | '극상';
+type CodingExp = 'A' | 'B' | 'C' | 'D' | 'E';
 
-const CODING_LEVELS: CodingLevel[] = ['최하', '하', '중', '상', '극상'];
+const CODING_EXPS: CodingExp[] = ['A', 'B', 'C', 'D', 'E'];
 
-const CODING_COLORS: Record<CodingLevel, string> = {
-  상: '#16c7b3',
-  중: '#3f7cff',
-  하: '#ff4ab0',
-  최하: '#ffa500',
-  극상: '#ffd400',
+const CODING_COLORS: Record<CodingExp, string> = {
+  D: '#16c7b3',
+  C: '#3f7cff',
+  B: '#ff4ab0',
+  A: '#ffa500',
+  E: '#ffd400',
 };
 
 export function CodingStatsModal({ isOpen, rows, onClose }: CodingStatsModalProps) {
   const { items, total, donutBackground } = useMemo(() => {
     const acc: Record<string, number> = {};
-    CODING_LEVELS.forEach((k) => (acc[k] = 0));
+    CODING_EXPS.forEach((k) => (acc[k] = 0));
     acc['미기재'] = 0;
 
     rows.forEach((r) => {
       // ✅ 서버에서 어떤 값이 와도 여기서 5단계로 정규화 (필요시 매핑 확장)
-      const raw = r.codingLevel;
-      const normalized: CodingLevel | '미기재' =
-        raw === '최하' || raw === '하' || raw === '중' || raw === '상' || raw === '극상'
-          ? raw
-          : '미기재';
+      const raw = r.codingExp;
+      const normalized: CodingExp | '미기재' =
+        raw === 'A' || raw === 'B' || raw === 'C' || raw === 'D' || raw === 'E' ? raw : '미기재';
 
       acc[normalized] = (acc[normalized] ?? 0) + 1;
     });
 
     const sum = Object.values(acc).reduce((s, n) => s + n, 0);
 
-    const list = CODING_LEVELS.map((label) => {
+    const list = CODING_EXPS.map((label) => {
       const count = acc[label] ?? 0;
       const percent = sum === 0 ? 0 : +((count / sum) * 100).toFixed(1);
       return { label, count, percent, color: CODING_COLORS[label] };
