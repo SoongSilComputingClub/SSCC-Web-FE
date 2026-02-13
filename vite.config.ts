@@ -32,10 +32,6 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    https: {
-      key: fs.readFileSync('./localhost-key.pem'),
-      cert: fs.readFileSync('./localhost.pem'),
-    },
   },
   build: {
     outDir: 'dist',
