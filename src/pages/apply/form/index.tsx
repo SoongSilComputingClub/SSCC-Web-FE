@@ -1,5 +1,8 @@
 import { useRef, useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+
 import { createApplyForm, type CreateApplyFormPayload } from '@/shared/api/apply-forms';
 
 import { useApplyForm } from './hooks/use-apply-form';
@@ -13,6 +16,8 @@ export default function ApplyPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const consentRef = useRef<HTMLDivElement | null>(null);
   const basicInfoValidateRef = useRef<null | (() => boolean)>(null);
+
+  const navigate = useNavigate();
 
   const applyForm = useApplyForm();
 
@@ -61,10 +66,15 @@ export default function ApplyPage() {
     setIsSubmitting(true);
     try {
       await createApplyForm(payload);
-      alert('지원서가 성공적으로 제출되었습니다.');
+      navigate('/apply', { replace: true });
+      toast.success('신청이 완료되었습니다.', {
+        duration: 2500,
+      });
     } catch (e) {
       console.error(e);
-      alert('지원서 제출 중 오류가 발생했습니다.');
+      toast.error('지원서 제출 중 오류가 발생했습니다.', {
+        duration: 4000,
+      });
     } finally {
       setIsSubmitting(false);
     }

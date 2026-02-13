@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
+import { Toaster } from 'sonner';
 
 import AboutPage from '@/pages/about';
 import AdminPage from '@/pages/admin';
@@ -17,7 +18,17 @@ export const router = createBrowserRouter([
   {
     element: (
       <AuthProvider>
-        <AppShell />
+        <>
+          <Toaster
+            position="top-center"
+            richColors
+            toastOptions={{
+              className:
+                'text-lg px-8 py-6 rounded-2xl shadow-xl bg-neutral-900 text-white border border-neutral-800',
+            }}
+          />
+          <AppShell />
+        </>
       </AuthProvider>
     ),
     children: [
