@@ -13,12 +13,16 @@ export default function CookiePage() {
     if (didRunRef.current) return;
     didRunRef.current = true;
 
-    // 이미 토큰이 저장된 상태면(이중 호출/새로고침 등) 바로 리다이렉트
-    const existingAccess = localStorage.getItem('accessToken');
-    if (existingAccess) {
+    const performRedirect = () => {
       const redirectTo = sessionStorage.getItem('postLoginRedirect') ?? '/apply';
       sessionStorage.removeItem('postLoginRedirect');
       navigate(redirectTo, { replace: true });
+    };
+
+    // 이미 토큰이 저장된 상태면(이중 호출/새로고침 등) 바로 리다이렉트
+    const existingAccess = localStorage.getItem('accessToken');
+    if (existingAccess) {
+      performRedirect();
       return;
     }
 
@@ -46,17 +50,13 @@ export default function CookiePage() {
         login(data.data.accessToken, data.data.refreshToken);
 
         // 로그인 전 사용자가 가려던 경로가 있으면 그쪽으로, 없으면 /apply로 이동
-        const redirectTo = sessionStorage.getItem('postLoginRedirect') ?? '/apply';
-        sessionStorage.removeItem('postLoginRedirect');
-        navigate(redirectTo, { replace: true });
+        performRedirect();
       } catch (err) {
         console.error('토큰 교환 실패:', err);
 
         // 이미 토큰이 있으면(첫 요청 성공 후 추가 요청 실패 등) 실패 알림 없이 진행
         if (localStorage.getItem('accessToken')) {
-          const redirectTo = sessionStorage.getItem('postLoginRedirect') ?? '/apply';
-          sessionStorage.removeItem('postLoginRedirect');
-          navigate(redirectTo, { replace: true });
+          performRedirect();
           return;
         }
 

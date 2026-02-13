@@ -57,6 +57,16 @@ async function getRefreshedAccessTokenOnce(): Promise<string> {
   return refreshPromise;
 }
 
+function buildFinalUrl(url: string): string {
+  // 절대 URL이면 그대로 사용
+  if (/^https?:\/\//i.test(url)) return url;
+
+  // BASE_URL 끝의 슬래시 제거 + path 시작 슬래시 보장
+  const base = String(BASE_URL ?? '').replace(/\/+$/, '');
+  const path = url.startsWith('/') ? url : `/${url}`;
+  return `${base}${path}`;
+}
+
 // 인증 포함 fetch
 export async function fetchWithAccess(url: string, options: RequestInit = {}): Promise<Response> {
   const accessToken = localStorage.getItem('accessToken');
@@ -76,8 +86,8 @@ export async function fetchWithAccess(url: string, options: RequestInit = {}): P
     headers,
   };
 
-  // url이 상대경로로 들어오면(예: /api/user) BASE_URL을 붙여 실수 방지
-  const finalUrl = url.startsWith('/') ? `${BASE_URL}${url}` : url;
+  // B 방식: 상대경로(/apply-forms/..)를 넘기면 BASE_URL을 붙여서 직접 호출
+  const finalUrl = buildFinalUrl(url);
 
   let response = await fetch(finalUrl, mergedOptions);
 
