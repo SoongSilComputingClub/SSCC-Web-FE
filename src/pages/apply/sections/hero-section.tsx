@@ -1,18 +1,13 @@
 import { Link } from 'react-router-dom';
 
+import { useAuth } from '@/shared/auth/use-auth';
 import { APPLICATION_GUARD_COPY } from '@/shared/config/recruitment';
-import { isAuthed } from '@/shared/lib/auth';
 import { getApplicationPhase } from '@/shared/lib/recruitment';
 
 const CTA_BUTTON_CLASS =
   'mt-4 inline-flex items-center justify-center rounded-xl bg-point px-8 py-4 text-lg font-semibold text-black shadow-md transition hover:opacity-90';
 
 const HIGHLIGHT_TOKEN = 'SSCC';
-
-const useAuth = () => ({
-  // 임시: 실제 로그인 구현 전까지 `?authed=1`이면 로그인 상태로 간주
-  isAuthed: isAuthed(),
-});
 
 /**
  * 카피 문자열 안의 "SSCC"만 포인트 컬러로 강조해서 렌더링
@@ -40,24 +35,25 @@ function renderCopyWithHighlight(text: string) {
 type CtaButtonProps = {
   to: string;
   label: string;
+  onClick?: () => void;
 };
 
-function CtaButton({ to, label }: CtaButtonProps) {
+function CtaButton({ to, label, onClick }: CtaButtonProps) {
   return (
-    <Link to={to} className={CTA_BUTTON_CLASS}>
+    <Link to={to} className={CTA_BUTTON_CLASS} onClick={onClick}>
       {label}
     </Link>
   );
 }
 
 export default function HeroSection() {
-  const { isAuthed } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
   const phase = getApplicationPhase();
   const copy = APPLICATION_GUARD_COPY[phase];
   const isOpen = phase === 'open';
 
   return (
-    <section className="flex min-h-[520px] w-full items-center justify-center bg-bg-default px-6 text-text-default">
+    <section className="relative flex min-h-[520px] w-full items-center justify-center bg-bg-default px-6 text-text-default">
       {phase === 'closed' ? (
         <h1 className="whitespace-pre-line text-center text-2xl font-bold leading-snug text-point">
           {copy.title}
@@ -70,11 +66,19 @@ export default function HeroSection() {
 
           {copy.cta &&
             (() => {
-              const ctaDetails = isAuthed ? copy.cta.auth : copy.cta.unauth;
-              const to = isAuthed ? '/apply/form' : '/login';
+              const ctaDetails = isLoggedIn ? copy.cta.auth : copy.cta.unauth;
+              const to = isLoggedIn ? '/apply/form' : '/login';
 
               return isOpen ? (
-                <CtaButton to={to} label={ctaDetails.label} />
+                <CtaButton
+                  to={to}
+                  label={ctaDetails.label}
+                  onClick={() => {
+                    if (!isLoggedIn) {
+                      sessionStorage.setItem('postLoginRedirect', '/apply');
+                    }
+                  }}
+                />
               ) : (
                 <span
                   className={`${CTA_BUTTON_CLASS} cursor-not-allowed opacity-50`}
@@ -84,6 +88,15 @@ export default function HeroSection() {
                 </span>
               );
             })()}
+          {isLoggedIn && (
+            <button
+              type="button"
+              onClick={logout}
+              className="mt-3 rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow"
+            >
+              로그아웃
+            </button>
+          )}
         </div>
       )}
     </section>

@@ -79,7 +79,7 @@ export const APPLICATION_GUARD_COPY = {
     body: '지금 바로 SSCC에 지원하세요',
     cta: {
       unauth: {
-        label: '지원 전 로그인',
+        label: '지원 전 구글 로그인',
         action: 'login' as const,
       },
       auth: {
