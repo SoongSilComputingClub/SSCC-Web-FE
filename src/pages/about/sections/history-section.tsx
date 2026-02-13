@@ -38,7 +38,9 @@ function TimelineRow({
           allVisible ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
         ].join(' ')}
       >
-        <p className="text-sm font-semibold leading-none text-text-default">{item.yearTitle}</p>
+        <p className="pt-3 text-sm font-semibold leading-none text-text-default">
+          {item.yearTitle}
+        </p>
         <p className="mt-2 whitespace-pre-line text-xs text-text-default/30">{item.desc}</p>
       </div>
     </div>
