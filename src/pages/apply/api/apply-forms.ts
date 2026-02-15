@@ -1,11 +1,5 @@
+import type { ApiResponse } from '@/pages/apply/types/api';
 import { fetchWithAccess } from '@/shared/api/fetch-with-access';
-
-type ApiSuccess<T> = {
-  success: boolean;
-  code: string;
-  message: string;
-  data: T;
-};
 
 function toQueryString(params?: unknown): string {
   if (!params || typeof params !== 'object') return '';
@@ -44,6 +38,51 @@ async function parseJson<T>(res: Response): Promise<T | null> {
   }
 }
 
+async function parseApiResponse<T>(
+  res: Response,
+  noContent: { code: string; message: string } = {
+    code: 'NO_CONTENT',
+    message: '응답 본문이 비어있습니다.',
+  },
+): Promise<ApiResponse<T>> {
+  const json = await parseJson<ApiResponse<T>>(res);
+
+  // 204 No Content 등으로 body가 없을 수 있음: ApiFailure로 정규화
+  if (json === null) {
+    return {
+      success: false,
+      code: noContent.code,
+      message: noContent.message,
+      data: null,
+    };
+  }
+
+  return json;
+}
+
+export type InterviewTime = {
+  date: string;
+  startTime: string;
+  endTime: string;
+};
+
+export type ApplyForm = {
+  id?: string;
+  applicantName: string;
+  department: string;
+  studentNo: string;
+  grade: number;
+  phone: string;
+  gender: string;
+  introduce: string;
+  wantedValue: string;
+  aspiration: string;
+  codingExp: string;
+  techStackText: string;
+  interviewTimes: InterviewTime[];
+  updatedAt?: string;
+};
+
 export type CreateApplyFormPayload = {
   applicantName: string;
   department: string;
@@ -56,48 +95,63 @@ export type CreateApplyFormPayload = {
   aspiration: string;
   codingExp: string;
   techStackText: string;
-  interviewTimes: Array<{ date: string; startTime: string; endTime: string }>;
+  interviewTimes: InterviewTime[];
 };
 
 /** 지원서 생성 */
-export const createApplyForm = async (payload: CreateApplyFormPayload) => {
+export const createApplyForm = async (
+  payload: CreateApplyFormPayload,
+): Promise<ApiResponse<ApplyForm>> => {
   const res = await fetchWithAccess('/apply-forms/create', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
 
-  return parseJson<ApiSuccess<unknown>>(res);
+  return parseApiResponse<ApplyForm>(res, {
+    code: 'NO_CONTENT',
+    message: '지원서 생성 응답이 비어있습니다.',
+  });
 };
 
 /** 지원서 조회 */
-export const readApplyForm = async (params?: unknown) => {
+export const readApplyForm = async (params?: unknown): Promise<ApiResponse<ApplyForm>> => {
   const qs = toQueryString(params);
   const res = await fetchWithAccess(`/apply-forms/read${qs}`, {
     method: 'GET',
   });
 
-  return parseJson<ApiSuccess<unknown>>(res);
+  return parseApiResponse<ApplyForm>(res, {
+    code: 'NO_CONTENT',
+    message: '작성된 지원서를 찾을 수 없습니다.',
+  });
 };
 
 /** 지원서 수정 */
-export const updateApplyForm = async (payload: unknown) => {
+export const updateApplyForm = async (
+  payload: CreateApplyFormPayload,
+): Promise<ApiResponse<ApplyForm>> => {
   const res = await fetchWithAccess('/apply-forms/update', {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
 
-  return parseJson<ApiSuccess<unknown>>(res);
+  return parseApiResponse<ApplyForm>(res, {
+    code: 'NO_CONTENT',
+    message: '지원서 수정 응답이 비어있습니다.',
+  });
 };
 
 /** 지원서 삭제 (soft delete) */
-export const deleteApplyFormSoft = async (payload: unknown) => {
+export const deleteApplyFormSoft = async (payload: { id: string }): Promise<ApiResponse<null>> => {
   const res = await fetchWithAccess('/apply-forms/delete_soft', {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
-
-  return parseJson<ApiSuccess<unknown>>(res);
+  return parseApiResponse<null>(res, {
+    code: 'NO_CONTENT',
+    message: '지원서 삭제 응답이 비어있습니다.',
+  });
 };

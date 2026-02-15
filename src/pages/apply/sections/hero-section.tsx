@@ -46,11 +46,40 @@ function CtaButton({ to, label, onClick }: CtaButtonProps) {
   );
 }
 
-export default function HeroSection() {
+type CtaDetails = {
+  label: string;
+  action: string;
+  title?: string;
+  body?: string;
+};
+
+function getCtaDetails(
+  copy: (typeof APPLICATION_GUARD_COPY)[keyof typeof APPLICATION_GUARD_COPY],
+  isLoggedIn: boolean,
+  hasApplication: boolean | null,
+): CtaDetails | null {
+  if (!copy.cta) return null;
+
+  if (isLoggedIn && hasApplication === null) return null;
+
+  if (!isLoggedIn) return copy.cta.unauth as CtaDetails;
+
+  return hasApplication
+    ? (copy.cta.auth.existing as CtaDetails)
+    : (copy.cta.auth.new as CtaDetails);
+}
+
+export default function HeroSection({ hasApplication }: { hasApplication: boolean | null }) {
   const { isLoggedIn, logout } = useAuth();
   const phase = getApplicationPhase();
   const copy = APPLICATION_GUARD_COPY[phase];
   const isOpen = phase === 'open';
+
+  // CTA에 title/body 오버라이드가 있으면 우선 적용
+  const ctaDetails = getCtaDetails(copy, isLoggedIn, hasApplication);
+
+  const titleText: string = ctaDetails?.title ?? copy.title;
+  const bodyText: string | undefined = ctaDetails?.body ?? copy.body;
 
   return (
     <section className="relative flex min-h-[520px] w-full items-center justify-center bg-bg-default px-6 text-text-default">
@@ -60,14 +89,28 @@ export default function HeroSection() {
         </h1>
       ) : (
         <div className="flex flex-col items-center text-center">
-          <h1 className="text-xl font-bold leading-snug">{renderCopyWithHighlight(copy.title)}</h1>
+          <h1 className="text-xl font-bold leading-snug">{renderCopyWithHighlight(titleText)}</h1>
 
-          {copy.body && <p className="text-lg font-bold">{renderCopyWithHighlight(copy.body)}</p>}
+          {bodyText && <p className="text-lg font-bold">{renderCopyWithHighlight(bodyText)}</p>}
 
           {copy.cta &&
             (() => {
-              const ctaDetails = isLoggedIn ? copy.cta.auth : copy.cta.unauth;
-              const to = isLoggedIn ? '/apply/form' : '/login';
+              const to = !isLoggedIn
+                ? '/login'
+                : hasApplication === true
+                  ? '/apply/form?mode=edit'
+                  : '/apply/form?mode=new';
+              // 로딩 중(hasApplication === null)에는 CTA를 숨기지 말고 비활성 상태로 보여준다
+              if (!ctaDetails) {
+                return (
+                  <span
+                    className={`${CTA_BUTTON_CLASS} cursor-not-allowed opacity-50`}
+                    aria-disabled={true}
+                  >
+                    불러오는 중...
+                  </span>
+                );
+              }
 
               return isOpen ? (
                 <CtaButton

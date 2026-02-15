@@ -106,6 +106,21 @@ export const useApplyForm = () => {
     setErrors((prev) => ({ ...prev, [key]: msg || undefined }));
   };
 
+  /**
+   * 여러 필드를 한 번에 병합해서 세팅합니다.
+   * prefill(수정 진입 시 기존 데이터 주입) 용도로 사용합니다.
+   * - touched/validation을 건드리지 않음
+   */
+  const patchForm = (next: Partial<FormState>) => {
+    setForm((prev) => ({ ...prev, ...next }));
+  };
+
+  /** prefill 직후 검증 UI가 뜨지 않도록 touched/errors를 초기화합니다. */
+  const resetValidation = () => {
+    setErrors({});
+    setTouched({});
+  };
+
   const validateAllAndScroll = () => {
     setTouched({
       applicantName: true,
@@ -176,6 +191,8 @@ export const useApplyForm = () => {
     setField,
     touchField,
     setFieldAndTouch,
+    patchForm,
+    resetValidation,
     validateAllAndScroll,
 
     refs: {

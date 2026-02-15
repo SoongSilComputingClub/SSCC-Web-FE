@@ -1,7 +1,7 @@
 import { isApplicationOpen } from '@/shared/lib/recruitment';
 type SubmitSectionProps = {
   disabled?: boolean;
-  disabledReason?: 'CONSENT' | 'SUBMITTING';
+  disabledReason?: 'CONSENT' | 'SUBMITTING' | 'LOADING';
   onSubmit?: () => void;
 };
 
