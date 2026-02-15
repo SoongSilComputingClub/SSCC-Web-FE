@@ -82,24 +82,30 @@ export function useApplyFormPrefill<TForm extends PrefillShape & Record<string, 
     // 아래에서 patchForm/setForm/setState 중 하나로 실제 주입이 성공하면 key를 저장
     // useApplyForm 구현에 따라 patchForm/resetValidation 등을 사용
 
-    if (typeof applyForm.patchForm === 'function') {
-      applyForm.patchForm(next as Partial<TForm>);
-      if (typeof applyForm.resetValidation === 'function') applyForm.resetValidation();
-      lastPrefillKeyRef.current = key;
-      return;
-    }
+    const partial = next as Partial<TForm>;
 
-    if (typeof applyForm.setForm === 'function') {
-      applyForm.setForm((prev) => ({ ...prev, ...(next as Partial<TForm>) }) as TForm);
-      if (typeof applyForm.resetValidation === 'function') applyForm.resetValidation();
-      lastPrefillKeyRef.current = key;
-      return;
-    }
+    const didUpdate = (() => {
+      if (typeof applyForm.patchForm === 'function') {
+        applyForm.patchForm(partial);
+        return true;
+      }
 
-    if (typeof applyForm.setState === 'function') {
-      applyForm.setState((prev) => ({ ...prev, ...(next as Partial<TForm>) }) as TForm);
-      if (typeof applyForm.resetValidation === 'function') applyForm.resetValidation();
-      lastPrefillKeyRef.current = key;
-    }
+      if (typeof applyForm.setForm === 'function') {
+        applyForm.setForm((prev) => ({ ...prev, ...partial }) as TForm);
+        return true;
+      }
+
+      if (typeof applyForm.setState === 'function') {
+        applyForm.setState((prev) => ({ ...prev, ...partial }) as TForm);
+        return true;
+      }
+
+      return false;
+    })();
+
+    if (!didUpdate) return;
+
+    if (typeof applyForm.resetValidation === 'function') applyForm.resetValidation();
+    lastPrefillKeyRef.current = key;
   }, [existingApplyForm, applyForm]);
 }

@@ -85,19 +85,17 @@ export default function ApplyPage() {
     try {
       if (isEdit) {
         await updateApplyForm(payload);
-        await queryClient.invalidateQueries({ queryKey: ['apply-forms', 'read'] });
-        navigate('/apply', { replace: true });
-        toast.success('지원서가 수정되었습니다.', {
-          duration: 2500,
-        });
       } else {
         await createApplyForm(payload);
-        await queryClient.invalidateQueries({ queryKey: ['apply-forms', 'read'] });
-        navigate('/apply', { replace: true });
-        toast.success('신청이 완료되었습니다.', {
-          duration: 2500,
-        });
       }
+
+      await queryClient.invalidateQueries({ queryKey: ['apply-forms', 'read'] });
+      navigate('/apply', { replace: true });
+
+      const successMessage = isEdit ? '지원서가 수정되었습니다.' : '신청이 완료되었습니다.';
+      toast.success(successMessage, {
+        duration: 2500,
+      });
     } catch (e) {
       console.error(e);
       toast.error(

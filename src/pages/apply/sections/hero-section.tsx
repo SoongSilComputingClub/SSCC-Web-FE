@@ -53,6 +53,22 @@ type CtaDetails = {
   body?: string;
 };
 
+function getCtaDetails(
+  copy: (typeof APPLICATION_GUARD_COPY)[keyof typeof APPLICATION_GUARD_COPY],
+  isLoggedIn: boolean,
+  hasApplication: boolean | null,
+): CtaDetails | null {
+  if (!copy.cta) return null;
+
+  if (isLoggedIn && hasApplication === null) return null;
+
+  if (!isLoggedIn) return copy.cta.unauth as CtaDetails;
+
+  return hasApplication
+    ? (copy.cta.auth.existing as CtaDetails)
+    : (copy.cta.auth.new as CtaDetails);
+}
+
 export default function HeroSection({ hasApplication }: { hasApplication: boolean | null }) {
   const { isLoggedIn, logout } = useAuth();
   const phase = getApplicationPhase();
@@ -60,15 +76,7 @@ export default function HeroSection({ hasApplication }: { hasApplication: boolea
   const isOpen = phase === 'open';
 
   // CTA에 title/body 오버라이드가 있으면 우선 적용
-  const ctaDetails: CtaDetails | null = copy.cta
-    ? isLoggedIn
-      ? hasApplication === null
-        ? null
-        : hasApplication
-          ? (copy.cta.auth.existing as unknown as CtaDetails)
-          : (copy.cta.auth.new as unknown as CtaDetails)
-      : (copy.cta.unauth as unknown as CtaDetails)
-    : null;
+  const ctaDetails = getCtaDetails(copy, isLoggedIn, hasApplication);
 
   const titleText: string = ctaDetails?.title ?? copy.title;
   const bodyText: string | undefined = ctaDetails?.body ?? copy.body;
