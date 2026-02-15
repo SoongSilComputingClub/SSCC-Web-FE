@@ -83,8 +83,19 @@ export const APPLICATION_GUARD_COPY = {
         action: 'login' as const,
       },
       auth: {
-        label: '신청서 작성하기',
-        action: 'apply' as const,
+        /* 로그인 후 제출된 지원서 없는 경우 */
+        new: {
+          label: '신청서 작성하기',
+          action: 'apply' as const,
+        },
+
+        /* 제출된 지원서 존재하는 경우 */
+        existing: {
+          title: '아직 수정할 내용이 남았나요?',
+          body: '버튼을 눌러 수정하세요!',
+          label: '지원서 수정하기',
+          action: 'edit' as const,
+        },
       },
     },
   },
@@ -98,4 +109,6 @@ export const APPLICATION_GUARD_COPY = {
 } as const;
 
 export type ApplicationPhase = keyof typeof APPLICATION_GUARD_COPY;
-export type ApplicationCtaAction = 'login' | 'apply';
+export type ApplicationCtaAction = 'login' | 'apply' | 'edit';
+export type ApplicationAuthCtaKey = 'new' | 'existing';
+export type ApplicationCtaKey = 'unauth' | 'auth';
