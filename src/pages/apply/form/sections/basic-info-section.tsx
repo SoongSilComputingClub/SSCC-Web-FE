@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import CodingExpDescription from '../components/coding-exp-description';
 import ErrorText from '../components/error-text';
@@ -11,26 +11,11 @@ import { INTERVIEW_OPTIONS } from '../utils/interview-options';
 import type { UseApplyFormReturn } from '../hooks/use-apply-form';
 
 type BasicInfoProps = {
-  /**
-   * 부모 컴포넌트가 제출(submit) 시 호출할 검증 함수를 등록하기 위한 프로퍼티입니다.
-   * 검증이 성공하면 true를 반환하고,
-   * 실패하면 첫 번째로 잘못된 입력 항목으로 자동 스크롤됩니다.
-   */
   applyForm: UseApplyFormReturn;
-  registerValidator?: (fn: () => boolean) => void;
 };
 
-export default function BasicInfo({ applyForm, registerValidator }: BasicInfoProps) {
-  const {
-    form,
-    errors,
-    touched,
-    setField,
-    touchField,
-    setFieldAndTouch,
-    validateAllAndScroll,
-    refs,
-  } = applyForm;
+export default function BasicInfo({ applyForm }: BasicInfoProps) {
+  const { form, errors, touched, setField, touchField, setFieldAndTouch, refs } = applyForm;
   const {
     applicantNameRef,
     departmentRef,
@@ -49,10 +34,6 @@ export default function BasicInfo({ applyForm, registerValidator }: BasicInfoPro
     (typeof CODING_EXP_OPTIONS)[number]['value'] | null
   >(null);
   const [isNameComposing, setIsNameComposing] = useState(false);
-
-  useEffect(() => {
-    registerValidator?.(validateAllAndScroll);
-  }, [registerValidator, validateAllAndScroll]);
 
   const toggleSlot = (key: string) => {
     const nextSelected = form.selectedInterviewKeys.includes(key)
