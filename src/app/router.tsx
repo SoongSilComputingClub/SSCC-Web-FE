@@ -2,14 +2,14 @@ import { createBrowserRouter } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
 import AboutPage from '@/pages/about';
+import ActivitiesPage from '@/pages/activities';
+import ActivityDetailPage from '@/pages/activities/detail';
 import AdminPage from '@/pages/admin';
 import ApplyPage from '@/pages/apply';
 import ApplyFormPage from '@/pages/apply/form';
 import HomePage from '@/pages/home';
 import LoginPage from '@/pages/login';
 import CookiePage from '@/pages/login/cookie';
-import ActivitiesPage from '@/pages/activities';
-import ActivityDetailPage from '@/pages/activities/detail';
 import { AuthProvider } from '@/shared/auth/auth-provider';
 import { RequireAuth } from '@/shared/auth/require-auth';
 import { AppShell } from '@/shared/layout/app-shell';
