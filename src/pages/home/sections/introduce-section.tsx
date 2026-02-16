@@ -31,7 +31,7 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
 
   return (
     <section className={`w-full bg-bg-white text-text-default ${className}`}>
-      <div className="mx-auto max-w-6xl px-4 py-16">
+      <div className="mx-auto max-w-3xl px-4 py-16">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-2">
           {data.map((it) => {
             const Wrapper = 'div';
@@ -65,7 +65,7 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
                   <div
                     className={[
                       'absolute left-1/2 mt-2 -translate-x-1/2',
-                      'text-center text-xs font-extrabold text-text-default',
+                      'text-center text-xs font-extrabold text-text-default sm:text-sm',
                       'w-20 rounded-[10px] border border-bg-white bg-bg-white/50 py-1',
                     ].join(' ')}
                   >
@@ -103,7 +103,7 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
                     >
                       <div
                         className={[
-                          'w-[95%] text-center text-xs text-text-default',
+                          'w-[95%] text-center text-xs text-text-default sm:text-sm',
                           'whitespace-pre-line leading-snug',
                           'transition-all duration-300',
                           'translate-y-3 opacity-0',
