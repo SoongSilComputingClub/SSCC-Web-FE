@@ -1,24 +1,24 @@
-import type { ProjectCategory } from '../lib/types';
+import type { ActivityCategory } from '../lib/types';
 
-type ProjectTabsProps = {
-  category: ProjectCategory;
+type ActivityTabsProps = {
+  category: ActivityCategory;
 
   /* 탭을 클릭했을 때 선택 카테고리를 바꾸기 위한 콜백 */
-  onChange: (next: ProjectCategory) => void;
+  onChange: (next: ActivityCategory) => void;
 };
 
-export function ProjectTabs({ category, onChange }: ProjectTabsProps) {
-  const tabs: Array<{ key: ProjectCategory; label: string }> = [
-    { key: 'news' as ProjectCategory, label: '뉴스' },
-    { key: 'activity' as ProjectCategory, label: '대외활동' },
-    { key: 'social' as ProjectCategory, label: '친목' },
+export function ActivityTabs({ category, onChange }: ActivityTabsProps) {
+  const tabs: Array<{ key: ActivityCategory; label: string }> = [
+    { key: 'news' as ActivityCategory, label: '뉴스' },
+    { key: 'academics' as ActivityCategory, label: '학술' },
+    { key: 'events' as ActivityCategory, label: '행사' },
   ];
 
   return (
     <div className="w-full pt-8">
       <div
         role="tablist"
-        aria-label="프로젝트 카테고리"
+        aria-label="활동 내역 카테고리"
         className="flex w-full justify-center gap-6"
       >
         {tabs.map((tab) => {

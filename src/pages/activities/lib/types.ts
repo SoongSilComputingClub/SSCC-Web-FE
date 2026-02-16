@@ -1,11 +1,11 @@
-export type ProjectCategory = 'news' | 'activity' | 'social';
+export type ActivityCategory = 'news' | 'academics' | 'events';
 
-export type Project = {
-  /* URL에 들어갈 고유 ID (/projects/:id) */
+export type Activity = {
+  /* URL에 들어갈 고유 ID (/activities/:id) */
   id: string;
 
   /* 탭 필터용 카테고리 */
-  category: ProjectCategory;
+  category: ActivityCategory;
 
   /* 카드/상세 제목 */
   title: string;

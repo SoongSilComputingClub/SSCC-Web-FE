@@ -1,13 +1,13 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import { useProjectGallery } from '@/shared/lib/use-project-gallery';
+import { useActivityGallery } from '@/shared/lib/use-activity-gallery';
 
-import { ProjectGallery, type ProjectGallerySlide } from './project-gallery';
+import { ActivityGallery, type ActivityGallerySlide } from './activity-gallery';
 
-import type { Project } from '../lib/types';
+import type { Activity } from '../lib/types';
 
-type ProjectDetailProps = {
-  project: Project;
+type ActivityDetailProps = {
+  activity: Activity;
 };
 
 /**
@@ -16,7 +16,7 @@ type ProjectDetailProps = {
  * - 하단: 갤러리 썸네일 리스트(가로 스크롤)
  * - 본문: 여러 줄 텍스트(개행 유지)
  */
-export function ProjectDetail({ project }: ProjectDetailProps) {
+export function ActivityDetail({ activity }: ActivityDetailProps) {
   const {
     images,
     currentIndex,
@@ -27,16 +27,16 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
     onPointerDown,
     onPointerUp,
     onPointerCancel,
-  } = useProjectGallery({
-    projectId: project.id,
-    coverImage: project.coverImage,
-    galleryImages: project.galleryImages,
+  } = useActivityGallery({
+    activityId: activity.id,
+    coverImage: activity.coverImage,
+    galleryImages: activity.galleryImages,
   });
 
   const prevIndexRef = useRef<number>(currentIndex);
   const prevSrcRef = useRef<string>(currentSrc);
 
-  const [slide, setSlide] = useState<ProjectGallerySlide>(null);
+  const [slide, setSlide] = useState<ActivityGallerySlide>(null);
 
   useLayoutEffect(() => {
     // 같은 이미지면 애니메이션 불필요
@@ -80,7 +80,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
 
   useEffect(() => {
     const img = new Image();
-    img.src = project.coverImage;
+    img.src = activity.coverImage;
 
     img.onload = () => {
       if (img.naturalHeight > 0) {
@@ -92,7 +92,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
       // onload 콜백 정리 (프로젝트 바뀔 때 안전)
       img.onload = null;
     };
-  }, [project.coverImage]);
+  }, [activity.coverImage]);
 
   useEffect(() => {
     const listEl = thumbsListRef.current;
@@ -112,9 +112,9 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
     <section className="flex w-full flex-col items-center bg-bg-default px-6 pb-16 pt-20 text-text-default">
       {/* 대표 이미지 */}
       <div className="relative w-full max-w-[520px]">
-        <ProjectGallery
+        <ActivityGallery
           currentSrc={currentSrc}
-          title={project.title}
+          title={activity.title}
           slide={slide}
           onSlideEnd={() => setSlide(null)}
           onPrev={goPrev}
@@ -133,18 +133,18 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
 
       {/* 제목 */}
       <h1 className="mt-8 text-center text-xl font-semibold tracking-tight text-text-default">
-        {project.title}
+        {activity.title}
       </h1>
-      {project.date && (
-        <time dateTime={project.date} className="mt-2 block text-center text-sm text-text-default">
-          {project.date}
+      {activity.date && (
+        <time dateTime={activity.date} className="mt-2 block text-center text-sm text-text-default">
+          {activity.date}
         </time>
       )}
 
       {/* 갤러리 썸네일 */}
       <ul ref={thumbsListRef} className="mt-5 flex w-full max-w-[640px] gap-3 overflow-x-auto pb-2">
         {images.map((src, idx) => (
-          <li key={`${project.id}-thumb-${idx}`} className="shrink-0" data-thumb-index={idx}>
+          <li key={`${activity.id}-thumb-${idx}`} className="shrink-0" data-thumb-index={idx}>
             <img
               src={src}
               alt=""
@@ -161,7 +161,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
       {/* 본문 */}
       <div className="mt-10 w-full max-w-[680px]">
         <p className="whitespace-pre-line text-sm leading-relaxed text-text-default">
-          {project.content}
+          {activity.content}
         </p>
       </div>
     </section>

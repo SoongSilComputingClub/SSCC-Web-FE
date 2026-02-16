@@ -1,14 +1,14 @@
 import { memo } from 'react';
 import type { PointerEvent } from 'react';
 
-export type ProjectGallerySlide = null | {
+export type ActivityGallerySlide = null | {
   fromSrc: string;
   toSrc: string;
   dir: 'next' | 'prev';
   animate: boolean;
 };
 
-type ProjectGalleryProps = {
+type ActivityGalleryProps = {
   /** 현재 보여줄 이미지 src (slide가 없을 때만 사용) */
   currentSrc: string;
 
@@ -16,7 +16,7 @@ type ProjectGalleryProps = {
   title: string;
 
   /** 애니메이션 상태 */
-  slide: ProjectGallerySlide;
+  slide: ActivityGallerySlide;
 
   /** 이전/다음 버튼 핸들러 */
   onPrev: () => void;
@@ -42,7 +42,7 @@ type ProjectGalleryProps = {
   maxHeight?: string;
 };
 
-export const ProjectGallery = memo(function ProjectGallery({
+export const ActivityGallery = memo(function ActivityGallery({
   currentSrc,
   title,
   slide,
@@ -58,7 +58,7 @@ export const ProjectGallery = memo(function ProjectGallery({
   onSlideEnd,
   aspectRatio,
   maxHeight,
-}: ProjectGalleryProps) {
+}: ActivityGalleryProps) {
   return (
     <div
       className="relative w-full overflow-hidden rounded-sm border border-border-default bg-bg-muted"

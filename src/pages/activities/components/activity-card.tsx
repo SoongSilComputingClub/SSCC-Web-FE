@@ -1,21 +1,21 @@
 import { Link } from 'react-router-dom';
 
-import type { Project } from '../lib/types';
+import type { Activity } from '../lib/types';
 
 type Props = {
-  project: Project;
+  activity: Activity;
 };
 
-export function ProjectCard({ project }: Props) {
+export function ActivityCard({ activity }: Props) {
   return (
-    <Link to={`/projects/${project.id}`} className="block">
+    <Link to={`/activities/${activity.id}`} className="block">
       <article className="group mx-auto flex h-full w-full flex-col overflow-hidden rounded-2xl border border-border-default bg-bg-default shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-1 hover:border-point/70 hover:shadow-[0_0_0_1px_rgba(48,178,200,0.15),0_16px_48px_rgba(0,0,0,0.45),0_0_24px_rgba(48,178,200,0.45)] hover:ring-2 hover:ring-point/40">
         {/* 썸네일 이미지 */}
         <div className="p-4 lg:p-3">
           <div className="aspect-[2] w-full overflow-hidden rounded-2xl lg:aspect-[16/9]">
             <img
-              src={project.coverImage}
-              alt={project.title}
+              src={activity.coverImage}
+              alt={activity.title}
               className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
             />
@@ -26,23 +26,23 @@ export function ProjectCard({ project }: Props) {
         <div className="flex flex-1 flex-col px-3 pb-3 lg:pb-2">
           {/* 프로젝트 제목 */}
           <h3 className="text-sm font-bold leading-snug text-text-default lg:text-base">
-            {project.title}
+            {activity.title}
           </h3>
 
           {/* 타입 라벨 (예: APP / WEB / EVENT 등) */}
           <p className="text-2xs font-medium uppercase tracking-wide text-text-placeholder lg:text-xs">
-            {project.typeLabel}
+            {activity.typeLabel}
           </p>
 
           {/* 짧은 소개 문구 */}
           <p className="mt-3 line-clamp-1 text-xs font-medium leading-relaxed text-text-default lg:mt-1 lg:text-sm">
-            {project.content}
+            {activity.content}
           </p>
 
           {/* 날짜가 있을 때만 표시 */}
-          {project.date && (
+          {activity.date && (
             <time className="mt-auto block text-right text-xs font-medium text-text-placeholder lg:text-sm">
-              {project.date}
+              {activity.date}
             </time>
           )}
         </div>

@@ -1,9 +1,9 @@
 import type React from 'react';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
-type UseProjectGalleryParams = {
-  /** 프로젝트 식별자 (라우트 변경 시 갤러리 인덱스 초기화에 사용) */
-  projectId: string;
+type UseActivityGalleryParams = {
+  /** 활동 내역 식별자 (라우트 변경 시 갤러리 인덱스 초기화에 사용) */
+  activityId: string;
 
   /** 목록/상세 대표 이미지 */
   coverImage: string;
@@ -15,7 +15,7 @@ type UseProjectGalleryParams = {
   swipeThresholdPx?: number;
 };
 
-type UseProjectGalleryResult = {
+type UseActivityGalleryResult = {
   /** 대표 + 갤러리 이미지를 합친 최종 이미지 배열 (0번이 대표) */
   images: string[];
 
@@ -41,12 +41,12 @@ type UseProjectGalleryResult = {
   onPointerCancel: (e: React.PointerEvent) => void;
 };
 
-export function useProjectGallery({
-  projectId,
+export function useActivityGallery({
+  activityId,
   coverImage,
   galleryImages,
   swipeThresholdPx = 50,
-}: UseProjectGalleryParams): UseProjectGalleryResult {
+}: UseActivityGalleryParams): UseActivityGalleryResult {
   // 대표 이미지 + 갤러리 이미지를 합쳐 최종 배열 구성
   const images = useMemo(() => {
     const list = [coverImage, ...(galleryImages ?? [])].filter(Boolean);
@@ -56,9 +56,9 @@ export function useProjectGallery({
 
   const total = images.length;
 
-  // state에 projectId와 index를 같이 저장하여 effect 없이 초기화하기 위함
-  const [state, setState] = useState<{ projectId: string; index: number }>(() => ({
-    projectId,
+  // state에 activityId와 index를 같이 저장하여 effect 없이 초기화하기 위함
+  const [state, setState] = useState<{ activityId: string; index: number }>(() => ({
+    activityId,
     index: 0,
   }));
 
@@ -67,32 +67,32 @@ export function useProjectGallery({
     [total],
   );
 
-  // projectId가 변경되면 index를 0으로 초기화
-  const effectiveIndexRaw = state.projectId === projectId ? state.index : 0;
+  // activityId가 변경되면 index를 0으로 초기화
+  const effectiveIndexRaw = state.activityId === activityId ? state.index : 0;
   const currentIndex = clampIndex(effectiveIndexRaw);
 
   const setIndex = useCallback(
     (nextIndex: number) => {
-      setState({ projectId, index: clampIndex(nextIndex) });
+      setState({ activityId, index: clampIndex(nextIndex) });
     },
-    [clampIndex, projectId],
+    [clampIndex, activityId],
   );
 
   const goPrev = useCallback(() => {
-    setState(({ projectId: stateProjectId, index }) => {
-      const baseIndex = stateProjectId === projectId ? index : 0;
+    setState(({ activityId: stateActivityId, index }) => {
+      const baseIndex = stateActivityId === activityId ? index : 0;
       const nextIndex = Math.max(baseIndex - 1, 0);
-      return { projectId, index: nextIndex };
+      return { activityId, index: nextIndex };
     });
-  }, [projectId]);
+  }, [activityId]);
 
   const goNext = useCallback(() => {
-    setState(({ projectId: stateProjectId, index }) => {
-      const baseIndex = stateProjectId === projectId ? index : 0;
+    setState(({ activityId: stateActivityId, index }) => {
+      const baseIndex = stateActivityId === activityId ? index : 0;
       const nextIndex = Math.min(baseIndex + 1, Math.max(0, total - 1));
-      return { projectId, index: nextIndex };
+      return { activityId, index: nextIndex };
     });
-  }, [projectId, total]);
+  }, [activityId, total]);
 
   const currentSrc = images[currentIndex] ?? images[0] ?? '';
 

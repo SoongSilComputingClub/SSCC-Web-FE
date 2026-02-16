@@ -1,18 +1,18 @@
 import { usePagination } from '@/shared/lib/use-pagination';
 import { Pagination } from '@/shared/ui/pagination';
 
-import { ProjectCard } from './project-card';
-import { PROJECTS } from '../lib/data';
+import { ActivityCard } from './activity-card';
+import { ACTIVITIES } from '../lib/data';
 
-import type { ProjectCategory } from '../lib/types';
+import type { ActivityCategory } from '../lib/types';
 
-type ProjectListProps = {
-  category: ProjectCategory;
+type ActivityListProps = {
+  category: ActivityCategory;
 };
 
-export function ProjectList({ category }: ProjectListProps) {
+export function ActivityList({ category }: ActivityListProps) {
   /* 최신순 정렬 */
-  const filtered = PROJECTS.filter((p) => p.category === category)
+  const filtered = ACTIVITIES.filter((p) => p.category === category)
     .slice()
     .sort((a, b) => {
       if (!a.date) return 1;
@@ -36,9 +36,9 @@ export function ProjectList({ category }: ProjectListProps) {
   return (
     <div className="flex w-full flex-col gap-6">
       <ul className="grid w-full grid-cols-1 justify-items-center gap-3 lg:grid-cols-[repeat(3,minmax(0,420px))] lg:justify-center lg:gap-6">
-        {pageItems.map((project) => (
-          <li key={project.id} className="w-full">
-            <ProjectCard project={project} />
+        {pageItems.map((activity) => (
+          <li key={activity.id} className="w-full">
+            <ActivityCard activity={activity} />
           </li>
         ))}
       </ul>

@@ -1,10 +1,10 @@
-// src/pages/projects/lib/data.ts
-import type { Project } from './types';
+// src/pages/activities/lib/data.ts
+import type { Activity } from './types';
 
-export const PROJECTS: Project[] = [
+export const ACTIVITIES: Activity[] = [
   /* news 카테고리 */
   {
-    id: 'project-1',
+    id: 'activity-1',
     category: 'news',
     title: 'SSCC 홈페이지 리뉴얼',
     typeLabel: 'WEB',
@@ -13,15 +13,15 @@ export const PROJECTS: Project[] = [
     date: '2025-01-10',
     galleryImages: [
       '../src/assets/images/home/pic-scroll6.jpg',
-      '/images/projects/thumb2.png',
-      '/images/projects/thumb3.jpg',
+      '/images/activities/thumb2.png',
+      '/images/activities/thumb3.jpg',
     ],
   },
 
-  /* activity 카테고리 */
+  /* academics 카테고리 */
   {
-    id: 'activity-1',
-    category: 'activity',
+    id: 'academics-1',
+    category: 'academics',
     title: '미래 콘서트',
     typeLabel: '세미나',
     content: '연사님들 모시고 세미나 했습니다.',
@@ -30,8 +30,8 @@ export const PROJECTS: Project[] = [
     galleryImages: ['../src/assets/images/home/pic-scroll6.jpg'],
   },
   {
-    id: 'activity-2',
-    category: 'activity',
+    id: 'academics-2',
+    category: 'academics',
     title: 'C 스터디',
     typeLabel: '스터디',
     content: '학기 중 진행한 스터디입니다.',
@@ -40,10 +40,10 @@ export const PROJECTS: Project[] = [
     galleryImages: [],
   },
 
-  /* social 카테고리 */
+  /* events 카테고리 */
   {
-    id: 'social-1',
-    category: 'social',
+    id: 'events-1',
+    category: 'events',
     title: '친목 활동 진행',
     typeLabel: '번개',
     content:

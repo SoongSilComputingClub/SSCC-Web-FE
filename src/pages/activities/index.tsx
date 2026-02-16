@@ -2,27 +2,27 @@ import { useMemo } from 'react';
 
 import { useSearchParams } from 'react-router-dom';
 
-import { ProjectList } from './components/project-list';
-import { ProjectTabs } from './components/project-tabs';
+import { ActivityList } from './components/activity-list';
+import { ActivityTabs } from './components/activity-tabs';
 
-import type { ProjectCategory } from './lib/types';
+import type { ActivityCategory } from './lib/types';
 
-const CATEGORIES = ['news', 'activity', 'social'] as const;
-const DEFAULT_CATEGORY: ProjectCategory = 'news';
+const CATEGORIES = ['news', 'academics', 'events'] as const;
+const DEFAULT_CATEGORY: ActivityCategory = 'news';
 
-export default function ProjectsPage() {
+export default function ActivitiesPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const category = useMemo<ProjectCategory>(() => {
+  const category = useMemo<ActivityCategory>(() => {
     const tab = searchParams.get('tab');
     if (!tab) return DEFAULT_CATEGORY;
 
     return (CATEGORIES as readonly string[]).includes(tab)
-      ? (tab as ProjectCategory)
+      ? (tab as ActivityCategory)
       : DEFAULT_CATEGORY;
   }, [searchParams]);
 
-  const handleChangeCategory = (next: ProjectCategory) => {
+  const handleChangeCategory = (next: ActivityCategory) => {
     setSearchParams((prev) => {
       const sp = new URLSearchParams(prev);
       sp.set('tab', next);
@@ -33,10 +33,10 @@ export default function ProjectsPage() {
 
   return (
     <section className="w-full px-6 py-8">
-      <ProjectTabs category={category} onChange={handleChangeCategory} />
+      <ActivityTabs category={category} onChange={handleChangeCategory} />
 
       <div className="mt-6">
-        <ProjectList category={category} />
+        <ActivityList category={category} />
       </div>
     </section>
   );
