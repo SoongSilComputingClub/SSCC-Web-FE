@@ -7,7 +7,7 @@ import { ActivityTabs } from './components/activity-tabs';
 
 import type { ActivityCategory } from './lib/types';
 
-const CATEGORIES = ['news', 'activity', 'social'] as const;
+const CATEGORIES = ['news', 'academics', 'events'] as const;
 const DEFAULT_CATEGORY: ActivityCategory = 'news';
 
 export default function ActivitiesPage() {

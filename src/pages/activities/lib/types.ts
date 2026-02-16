@@ -1,4 +1,4 @@
-export type ActivityCategory = 'news' | 'activity' | 'social';
+export type ActivityCategory = 'news' | 'academics' | 'events';
 
 export type Activity = {
   /* URL에 들어갈 고유 ID (/activities/:id) */

@@ -10,15 +10,15 @@ type ActivityTabsProps = {
 export function ActivityTabs({ category, onChange }: ActivityTabsProps) {
   const tabs: Array<{ key: ActivityCategory; label: string }> = [
     { key: 'news' as ActivityCategory, label: '뉴스' },
-    { key: 'activity' as ActivityCategory, label: '대외활동' },
-    { key: 'social' as ActivityCategory, label: '친목' },
+    { key: 'academics' as ActivityCategory, label: '학술' },
+    { key: 'events' as ActivityCategory, label: '행사' },
   ];
 
   return (
     <div className="w-full pt-8">
       <div
         role="tablist"
-        aria-label="프로젝트 카테고리"
+        aria-label="활동 내역 카테고리"
         className="flex w-full justify-center gap-6"
       >
         {tabs.map((tab) => {

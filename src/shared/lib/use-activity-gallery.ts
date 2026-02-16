@@ -2,7 +2,7 @@ import type React from 'react';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 type UseActivityGalleryParams = {
-  /** 프로젝트 식별자 (라우트 변경 시 갤러리 인덱스 초기화에 사용) */
+  /** 활동 내역 식별자 (라우트 변경 시 갤러리 인덱스 초기화에 사용) */
   activityId: string;
 
   /** 목록/상세 대표 이미지 */
