@@ -5,6 +5,11 @@ function openExternalInKakao(url: string) {
   window.location.href = externalUrl;
 }
 
+function buildGoogleOauthUrl(baseUrl?: string) {
+  const base = String(baseUrl ?? '').replace(/\/+$/, '');
+  return base ? `${base}/oauth2/authorization/google` : '';
+}
+
 export default function LoginPage() {
   const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_API_BASE_URL as string | undefined;
 
@@ -18,11 +23,7 @@ export default function LoginPage() {
   // 인앱 브라우저의 경우 버튼 클릭 유도
   const [showFallback, setShowFallback] = useState<boolean>(() => isInApp);
 
-  const oauthUrl = (() => {
-    const base = String(BACKEND_API_BASE_URL ?? '').replace(/\/+$/, '');
-    if (!base) return '';
-    return `${base}/oauth2/authorization/google`;
-  })();
+  const oauthUrl = buildGoogleOauthUrl(BACKEND_API_BASE_URL);
 
   const startLogin = useCallback(() => {
     if (!oauthUrl) return;
@@ -41,13 +42,11 @@ export default function LoginPage() {
 
     if (isInApp) return;
 
+    startLogin();
     if (isIOS) {
-      startLogin();
       const t = window.setTimeout(() => setShowFallback(true), 800);
       return () => window.clearTimeout(t);
     }
-
-    startLogin();
   }, [oauthUrl, isInApp, isIOS, startLogin]);
 
   if (!oauthUrl) {
