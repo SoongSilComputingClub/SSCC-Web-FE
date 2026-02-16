@@ -8,8 +8,8 @@ import ApplyFormPage from '@/pages/apply/form';
 import HomePage from '@/pages/home';
 import LoginPage from '@/pages/login';
 import CookiePage from '@/pages/login/cookie';
-import ProjectsPage from '@/pages/projects';
-import ProjectDetailPage from '@/pages/projects/detail';
+import ActivitiesPage from '@/pages/activities';
+import ActivityDetailPage from '@/pages/activities/detail';
 import { AuthProvider } from '@/shared/auth/auth-provider';
 import { RequireAuth } from '@/shared/auth/require-auth';
 import { AppShell } from '@/shared/layout/app-shell';
@@ -34,8 +34,8 @@ export const router = createBrowserRouter([
     children: [
       { path: '/', element: <HomePage /> },
       { path: '/about', element: <AboutPage /> },
-      { path: '/projects', element: <ProjectsPage /> },
-      { path: '/projects/:id', element: <ProjectDetailPage /> },
+      { path: '/activities', element: <ActivitiesPage /> },
+      { path: '/activities/:id', element: <ActivityDetailPage /> },
       { path: '/apply', element: <ApplyPage /> },
       {
         path: '/apply/form',
