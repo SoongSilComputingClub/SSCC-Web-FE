@@ -2,7 +2,7 @@ import { usePagination } from '@/shared/lib/use-pagination';
 import { Pagination } from '@/shared/ui/pagination';
 
 import { ActivityCard } from './activity-card';
-import { PROJECTS } from '../lib/data';
+import { ACTIVITIES } from '../lib/data';
 
 import type { ActivityCategory } from '../lib/types';
 
@@ -12,7 +12,7 @@ type ActivityListProps = {
 
 export function ActivityList({ category }: ActivityListProps) {
   /* 최신순 정렬 */
-  const filtered = PROJECTS.filter((p) => p.category === category)
+  const filtered = ACTIVITIES.filter((p) => p.category === category)
     .slice()
     .sort((a, b) => {
       if (!a.date) return 1;

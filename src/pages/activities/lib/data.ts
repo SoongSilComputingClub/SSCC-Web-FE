@@ -1,7 +1,7 @@
 // src/pages/activities/lib/data.ts
 import type { Activity } from './types';
 
-export const PROJECTS: Activity[] = [
+export const ACTIVITIES: Activity[] = [
   /* news 카테고리 */
   {
     id: 'activity-1',
@@ -18,10 +18,10 @@ export const PROJECTS: Activity[] = [
     ],
   },
 
-  /* activity 카테고리 */
+  /* academics 카테고리 */
   {
-    id: 'activity-1',
-    category: 'activity',
+    id: 'academics-1',
+    category: 'academics',
     title: '미래 콘서트',
     typeLabel: '세미나',
     content: '연사님들 모시고 세미나 했습니다.',
@@ -30,8 +30,8 @@ export const PROJECTS: Activity[] = [
     galleryImages: ['../src/assets/images/home/pic-scroll6.jpg'],
   },
   {
-    id: 'activity-2',
-    category: 'activity',
+    id: 'academics-2',
+    category: 'academics',
     title: 'C 스터디',
     typeLabel: '스터디',
     content: '학기 중 진행한 스터디입니다.',
@@ -40,10 +40,10 @@ export const PROJECTS: Activity[] = [
     galleryImages: [],
   },
 
-  /* social 카테고리 */
+  /* events 카테고리 */
   {
-    id: 'social-1',
-    category: 'social',
+    id: 'events-1',
+    category: 'events',
     title: '친목 활동 진행',
     typeLabel: '번개',
     content:
