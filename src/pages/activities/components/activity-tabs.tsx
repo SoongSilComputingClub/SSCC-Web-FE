@@ -15,7 +15,7 @@ export function ActivityTabs({ category, onChange }: ActivityTabsProps) {
   ];
 
   return (
-    <div className="w-full pt-8">
+    <div className="w-full">
       <div
         role="tablist"
         aria-label="활동 내역 카테고리"
