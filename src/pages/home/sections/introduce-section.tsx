@@ -31,7 +31,7 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
 
   return (
     <section className={`w-full bg-bg-white text-text-default ${className}`}>
-      <div className="mx-auto max-w-6xl px-4 py-16">
+      <div className="mx-auto max-w-3xl px-4 py-16">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-2">
           {data.map((it) => {
             const Wrapper = 'div';
@@ -65,7 +65,7 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
                   <div
                     className={[
                       'absolute left-1/2 mt-2 -translate-x-1/2',
-                      'text-center text-xs font-extrabold text-text-default',
+                      'text-center text-xs font-extrabold text-text-default sm:text-sm',
                       'w-20 rounded-[10px] border border-bg-white bg-bg-white/50 py-1',
                     ].join(' ')}
                   >
@@ -103,7 +103,7 @@ function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionPro
                     >
                       <div
                         className={[
-                          'w-[95%] text-center text-xs text-text-default',
+                          'w-[95%] text-center text-xs text-text-default sm:text-sm',
                           'whitespace-pre-line leading-snug',
                           'transition-all duration-300',
                           'translate-y-3 opacity-0',
@@ -320,12 +320,9 @@ export default function IntroSection() {
         <div className="absolute inset-0 bg-gradient-to-b from-black to-white" />
 
         {/* ✅ 이미지: 맨 아래, 가로 꽉 */}
-        <img
-          src={logoGradi}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-x-0 bottom-48 z-10 block h-auto w-full"
-        />
+        <div className="absolute inset-x-0 bottom-48 z-10 h-[60vh] w-full">
+          <img src={logoGradi} alt="" aria-hidden="true" className="h-full w-full object-contain" />
+        </div>
       </div>
       <div className="relative flex flex-col items-center bg-bg-white">
         <div className="mt-10 text-xl font-semibold text-text-black">

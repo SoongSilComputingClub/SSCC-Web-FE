@@ -146,7 +146,7 @@ export default function ScrollSnapSlides() {
                 s.className ?? ''
               }`}
             >
-              <div className="relative mx-auto my-7 flex h-[65%] w-[70%] justify-center overflow-hidden">
+              <div className="relative mx-auto my-7 flex h-[65%] w-[70%] justify-center overflow-hidden lg:h-[80%] lg:w-[60%]">
                 <img
                   src={s.bgSrc}
                   alt=""
@@ -155,10 +155,10 @@ export default function ScrollSnapSlides() {
                 />
               </div>
 
-              <div className="absolute z-10 max-w-sm text-text-default drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
-                <div className="pb-4 text-xs">{s.subtitle}</div>
-                <div className="text-xl font-bold">{s.title}</div>
-                <div className="pl-8 text-xl font-bold leading-tight">{s.title2}</div>
+              <div className="absolute z-10 max-w-sm whitespace-nowrap text-text-default drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)] sm:pl-12 lg:pl-40">
+                <div className="pb-4 text-xs sm:text-sm lg:text-md">{s.subtitle}</div>
+                <div className="text-xl font-bold lg:text-2xl">{s.title}</div>
+                <div className="pl-8 text-xl font-bold leading-tight lg:text-2xl">{s.title2}</div>
               </div>
             </section>
           ))}
