@@ -132,11 +132,11 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
       </div>
 
       {/* 제목 */}
-      <h1 className="mt-8 text-center text-xl font-semibold tracking-tight text-text-default">
+      <h1 className="mt-8 text-center text-[20px] font-semibold tracking-tight text-text-default lg:text-lg">
         {activity.title}
       </h1>
       {activity.date && (
-        <time dateTime={activity.date} className="mt-2 block text-center text-sm text-text-default">
+        <time dateTime={activity.date} className="mt-2 block text-center text-sm text-gray-400">
           {activity.date}
         </time>
       )}
@@ -160,7 +160,7 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
 
       {/* 본문 */}
       <div className="mt-10 w-full max-w-[680px]">
-        <p className="whitespace-pre-line text-base leading-relaxed text-text-default">
+        <p className="whitespace-pre-line text-base leading-relaxed text-text-default lg-text-md">
           {activity.content}
         </p>
       </div>

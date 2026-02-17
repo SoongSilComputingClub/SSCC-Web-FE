@@ -25,26 +25,25 @@ export function ActivityCard({ activity }: Props) {
         {/* 텍스트 영역 */}
         <div className="flex flex-1 flex-col px-3 pb-3 lg:pb-2">
           {/* 프로젝트 제목 */}
-          <h3 className="text-sm font-bold leading-snug text-text-default lg:text-base">
+          <h3 className="text-sm font-medium leading-snug text-text-default lg:text-md">
             {activity.title}
           </h3>
 
-          {/* 타입 라벨 (예: APP / WEB / EVENT 등) */}
-          <p className="text-2xs font-medium uppercase tracking-wide text-text-placeholder lg:text-xs">
-            {activity.typeLabel}
-          </p>
-
           {/* 짧은 소개 문구 */}
-          <p className="mt-3 line-clamp-1 text-xs font-medium leading-relaxed text-text-default lg:mt-1 lg:text-sm">
+          <p className="mt-1 pt-1 line-clamp-1 text-xs-sm font-normal leading-relaxed text-zinc-300 lg:mt-1 lg:text-sm">
             {activity.content}
           </p>
 
-          {/* 날짜가 있을 때만 표시 */}
-          {activity.date && (
-            <time className="mt-auto block text-right text-xs font-medium text-text-placeholder lg:text-sm">
-              {activity.date}
-            </time>
-          )}
+          {/* 타입 라벨 | 날짜 */}
+          <div className="mt-auto pt-1 flex justify-end text-xs leading-normal font-normal uppercase tracking-wide text-zinc-400 lg:text-xs-sm">
+            <span>{activity.typeLabel}</span>
+            {activity.date && (
+              <>
+                <span className="mx-1">|</span>
+                <time>{activity.date}</time>
+              </>
+            )}
+          </div>
         </div>
       </article>
     </Link>
