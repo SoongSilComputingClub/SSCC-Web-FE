@@ -31,7 +31,7 @@ export default {
       fontSize: {
         '2xs': ['8px', { lineHeight: '12px' }],
         xs: ['10px', { lineHeight: '14px' }],
-        'xs-sm': ['13px', { lineHeight: '18px'}],
+        'xs-sm': ['13px', { lineHeight: '18px' }],
         sm: ['15px', { lineHeight: '22px' }],
         md: ['18px', { lineHeight: '26px' }],
         lg: ['22px', { lineHeight: '30px' }],

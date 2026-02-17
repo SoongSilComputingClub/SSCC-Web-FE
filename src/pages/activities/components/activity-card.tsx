@@ -30,12 +30,12 @@ export function ActivityCard({ activity }: Props) {
           </h3>
 
           {/* 짧은 소개 문구 */}
-          <p className="mt-1 pt-1 line-clamp-1 text-xs-sm font-normal leading-relaxed text-zinc-300 lg:mt-1 lg:text-sm">
+          <p className="mt-1 line-clamp-1 pt-1 text-xs-sm font-normal leading-relaxed text-zinc-300 lg:mt-1 lg:text-sm">
             {activity.content}
           </p>
 
           {/* 타입 라벨 | 날짜 */}
-          <div className="mt-auto pt-1 flex justify-end text-xs leading-normal font-normal uppercase tracking-wide text-zinc-400 lg:text-xs-sm">
+          <div className="mt-auto flex justify-end pt-1 text-xs font-normal uppercase leading-normal tracking-wide text-zinc-400 lg:text-xs-sm">
             <span>{activity.typeLabel}</span>
             {activity.date && (
               <>

@@ -160,7 +160,7 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
 
       {/* 본문 */}
       <div className="mt-10 w-full max-w-[680px]">
-        <p className="whitespace-pre-line text-base leading-relaxed text-text-default lg-text-md">
+        <p className="whitespace-pre-line text-base leading-relaxed text-text-default lg:text-md">
           {activity.content}
         </p>
       </div>

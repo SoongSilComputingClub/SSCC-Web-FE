@@ -13,7 +13,10 @@ export function Header() {
           <NavLink to="/about" className="shrink-0 text-[11px] font-semibold text-text-default">
             소개
           </NavLink>
-          <NavLink to="/activities" className="shrink-0 text-[11px] font-semibold text-text-default">
+          <NavLink
+            to="/activities"
+            className="shrink-0 text-[11px] font-semibold text-text-default"
+          >
             주요 활동
           </NavLink>
 
