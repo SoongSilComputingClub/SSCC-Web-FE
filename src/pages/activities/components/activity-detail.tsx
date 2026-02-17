@@ -111,7 +111,7 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
   return (
     <section className="flex w-full flex-col items-center bg-bg-default px-6 pb-16 pt-20 text-text-default">
       {/* 대표 이미지 */}
-      <div className="relative w-full max-w-[520px]">
+      <div className="relative w-full max-w-[420px] md:max-w-[380px]">
         <ActivityGallery
           currentSrc={currentSrc}
           title={activity.title}
@@ -124,7 +124,7 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
           index={currentIndex}
           total={images.length}
           aspectRatio={coverAspect ?? '4 / 5'}
-          maxHeight="70vh"
+          maxHeight="55vh"
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerCancel}
@@ -160,7 +160,7 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
 
       {/* 본문 */}
       <div className="mt-10 w-full max-w-[680px]">
-        <p className="whitespace-pre-line text-sm leading-relaxed text-text-default">
+        <p className="whitespace-pre-line text-base leading-relaxed text-text-default">
           {activity.content}
         </p>
       </div>
