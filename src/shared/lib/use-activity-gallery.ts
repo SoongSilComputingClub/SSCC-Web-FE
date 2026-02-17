@@ -47,11 +47,15 @@ export function useActivityGallery({
   galleryImages,
   swipeThresholdPx = 50,
 }: UseActivityGalleryParams): UseActivityGalleryResult {
-  // 대표 이미지 + 갤러리 이미지를 합쳐 최종 배열 구성
+  // 갤러리 이미지만 사용, 비어있으면 대표 이미지 fallback
   const images = useMemo(() => {
-    const list = [coverImage, ...(galleryImages ?? [])].filter(Boolean);
-    // 안전장치: 최소 1장 보장
-    return list.length > 0 ? list : [''];
+    const gallery = (galleryImages ?? []).filter(Boolean);
+
+    // 갤러리 이미지가 있으면 그것만 사용
+    if (gallery.length > 0) return gallery;
+
+    // 갤러리가 비어있을 때만 대표 이미지 fallback
+    return coverImage ? [coverImage] : [''];
   }, [coverImage, galleryImages]);
 
   const total = images.length;
