@@ -39,7 +39,7 @@ function TimelineRow({
 
       {/* line */}
       {showLine ? (
-        <div className="absolute -left-1 top-3 h-[calc(100%+2rem)] w-px bg-point" />
+        <div className="absolute -left-1 top-3 h-[calc(100%+1.25rem)] w-px bg-point" />
       ) : null}
 
       {/* ✅ 텍스트만 한 번에 등장 */}
@@ -49,7 +49,7 @@ function TimelineRow({
           allVisible ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
         ].join(' ')}
       >
-        <p className="pt-1 text-sm font-semibold leading-none text-text-default sm:text-md">
+        <p className="pt-3 text-sm font-semibold leading-none text-text-default sm:text-md">
           {item.yearTitle}
         </p>
         <p className="mt-2 whitespace-pre-line text-xs text-text-default/30 sm:text-md">
