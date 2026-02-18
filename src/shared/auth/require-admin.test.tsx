@@ -2,7 +2,12 @@ import { render, screen, cleanup } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
-import { decodeJwtPayload, getRoleFromAccessToken, isAccessTokenExpired } from './jwt';
+import {
+  decodeJwtPayload,
+  getRoleFromAccessToken,
+  isAccessTokenExpired,
+  STORAGE_KEYS,
+} from './jwt';
 import RequireAdmin from './require-admin';
 
 /**
@@ -11,7 +16,7 @@ import RequireAdmin from './require-admin';
  */
 function base64UrlEncode(obj: unknown) {
   const json = JSON.stringify(obj);
-  const b64 = btoa(json); // jsdom 환경 가정
+  const b64 = btoa(unescape(encodeURIComponent(json))); // jsdom 환경 가정
 
   return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
 }
@@ -23,7 +28,7 @@ function createMockJwt(payload: Record<string, unknown>) {
 
 describe('auth: jwt.ts + RequireAdmin', () => {
   beforeEach(() => {
-    sessionStorage.clear();
+    localStorage.clear();
     vi.restoreAllMocks();
   });
 
@@ -106,7 +111,7 @@ describe('auth: jwt.ts + RequireAdmin', () => {
     const nowSec = Math.floor(Date.now() / 1000);
     const token = createMockJwt({ role: 'ROLE_ADMIN', exp: nowSec + 60 });
 
-    sessionStorage.setItem('accessToken', token);
+    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
 
     renderAdminRoute();
     expect(screen.getByText('ADMIN')).toBeTruthy();
@@ -116,7 +121,7 @@ describe('auth: jwt.ts + RequireAdmin', () => {
     const nowSec = Math.floor(Date.now() / 1000);
     const token = createMockJwt({ role: 'ROLE_PREUSER', exp: nowSec + 60 });
 
-    sessionStorage.setItem('accessToken', token);
+    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
 
     renderAdminRoute();
     expect(screen.getByText('HOME')).toBeTruthy();
@@ -126,15 +131,15 @@ describe('auth: jwt.ts + RequireAdmin', () => {
     const nowSec = Math.floor(Date.now() / 1000);
     const token = createMockJwt({ role: 'ROLE_ADMIN', exp: nowSec - 1 });
 
-    sessionStorage.setItem('accessToken', token);
-    sessionStorage.setItem('refreshToken', 'dummy-refresh');
+    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
+    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, 'dummy-refresh');
 
-    const removeSpy = vi.spyOn(sessionStorage.__proto__, 'removeItem');
+    const removeSpy = vi.spyOn(localStorage.__proto__, 'removeItem');
 
     renderAdminRoute();
 
     expect(screen.getAllByText('LOGIN').length).toBeGreaterThan(0);
-    expect(removeSpy).toHaveBeenCalledWith('accessToken');
-    expect(removeSpy).toHaveBeenCalledWith('refreshToken');
+    expect(removeSpy).toHaveBeenCalledWith(STORAGE_KEYS.ACCESS_TOKEN);
+    expect(removeSpy).toHaveBeenCalledWith(STORAGE_KEYS.REFRESH_TOKEN);
   });
 });

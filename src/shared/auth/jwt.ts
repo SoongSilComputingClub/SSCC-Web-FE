@@ -1,7 +1,22 @@
+/* sessionStorage key 상수 (매직 스트링 방지) */
+export const STORAGE_KEYS = {
+  ACCESS_TOKEN: 'accessToken',
+  REFRESH_TOKEN: 'refreshToken',
+} as const;
+
+/* role 상수 (매직 스트링 방지) */
+export const ROLES = {
+  ADMIN: 'ROLE_ADMIN',
+  USER: 'ROLE_USER',
+  PREUSER: 'ROLE_PREUSER',
+} as const;
+
+export type Role = (typeof ROLES)[keyof typeof ROLES];
+
 /* JWT Payload 타입 정의 */
 export interface JwtPayload {
   sub?: string;
-  role?: 'ROLE_ADMIN' | 'ROLE_USER' | 'ROLE_PREUSER';
+  role?: Role;
   type?: 'access' | 'refresh';
   exp?: number; // expiration time (seconds)
   iat?: number; // issued at (seconds)
@@ -33,8 +48,30 @@ export function decodeJwtPayload(token: string): JwtPayload | null {
   }
 }
 
+/* accessToken 통합 파싱 유틸 (role + 만료 여부 + payload 반환) */
+export function parseAccessToken(token: string): {
+  role: JwtPayload['role'] | null;
+  isExpired: boolean;
+  payload: JwtPayload | null;
+} {
+  const payload = decodeJwtPayload(token);
+
+  if (!payload) {
+    return { role: null, isExpired: true, payload: null };
+  }
+
+  const now = Math.floor(Date.now() / 1000);
+  const isExpired = !payload.exp || payload.exp < now;
+
+  return {
+    role: payload.role ?? null,
+    isExpired,
+    payload,
+  };
+}
+
 /* accessToken에서 role 값 추출 */
-export function getRoleFromAccessToken(token: string): string | null {
+export function getRoleFromAccessToken(token: string): Role | null {
   const payload = decodeJwtPayload(token);
   return payload?.role ?? null;
 }
