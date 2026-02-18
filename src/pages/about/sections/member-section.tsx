@@ -15,23 +15,23 @@ function MemberCard({ member, size }: { member: Member; size: CardSize }) {
   const isLg = size === 'lg';
   const isMd = size === 'md';
 
-  const cardSizeClass = isLg ? 'h-[250px]' : isMd ? 'h-[180px]' : 'h-[140px]';
+  const cardSizeClass = isLg ? 'h-[250px]' : isMd ? 'h-[200px]' : 'h-[140px]';
 
   const avatarSizeClass = isLg
-    ? 'h-[100px] w-[100px]'
+    ? 'h-[105px] w-[105px]'
     : isMd
-      ? 'h-[66px] w-[50px]'
-      : 'h-[62px] w-[62px]';
+      ? 'h-[66px] w-[66px]'
+      : 'h-[45px] w-[45px]';
 
-  const roleTextClass = isLg ? 'text-sm' : isMd ? 'text-2xs' : 'text-2xs';
+  const roleTextClass = isLg ? 'text-sm' : isMd ? 'text-2xs' : 'text-[6px]';
   const nameTextClass = isLg ? 'text-lg' : isMd ? 'text-sm' : 'text-[12px]';
-  const metaTextClass = isLg ? 'text-xs' : isMd ? 'text-2xs' : 'text-[9px]';
+  const metaTextClass = isLg ? 'text-xs' : isMd ? 'text-2xs' : 'text-[6px]';
 
   const quoteClass = isLg
     ? 'mt-2 mb-3 rounded-xl py-2 text-xs'
     : isMd
       ? 'mt-2 mb-3 rounded-[10px] py-2 text-2xs'
-      : 'mt-3 mb-3 rounded-lg px-3 py-2 text-[9px]';
+      : 'mt-1 mb-1 rounded-lg py-1 text-[6px]';
 
   return (
     <div className={['relative w-full overflow-hidden rounded-[5px]', cardSizeClass].join(' ')}>
@@ -39,11 +39,11 @@ function MemberCard({ member, size }: { member: Member; size: CardSize }) {
       <div className="absolute inset-0 rounded-t-[999px] bg-bg-muted" />
 
       {/* 내용 */}
-      <div className="relative flex h-full flex-col items-center justify-start px-4 pt-7 text-text-default">
+      <div className="relative flex h-full flex-col items-center justify-start px-3 pt-7 text-text-default">
         {/* 프로필 원 */}
         <div
           className={[
-            'overflow-hidden rounded-full bg-bg-white/20',
+            'overflow-hidden rounded-full bg-bg-white/40',
             'shadow-[0_8px_18px_rgba(0,0,0,0.25)]',
             avatarSizeClass,
           ].join(' ')}
@@ -183,16 +183,16 @@ export default function MemberSection() {
         </div>
 
         {/* 3개 중간 카드 */}
-        <div className="mt-10 grid grid-cols-3 gap-5">
+        <div className="mt-10 grid grid-cols-3 gap-4">
           {second.map((m) => (
             <MemberCard key={m.id} member={m} size="md" />
           ))}
         </div>
 
         {/* 4개 작은 카드 */}
-        <div className="mt-10 grid grid-cols-3 gap-5">
+        <div className="mt-10 grid grid-cols-4 gap-3">
           {third.map((m) => (
-            <MemberCard key={m.id} member={m} size="md" />
+            <MemberCard key={m.id} member={m} size="sm" />
           ))}
         </div>
       </div>
