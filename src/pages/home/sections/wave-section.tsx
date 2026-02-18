@@ -78,9 +78,9 @@ export const WaveSection = () => {
       {/* Overlay UI */}
       <div className="absolute inset-0 z-10 flex select-none flex-col justify-center px-4 pt-72 text-left sm:px-8 lg:px-28">
         {/* Title */}
-        <h1 className="text-2xl font-bold leading-none tracking-tight text-text-default">
+        <h1 className="text-2xl font-bold tracking-tight text-text-default">
           SSCC, <br />
-          Where Coding Begins.
+          꿈을 향한 첫걸음.
         </h1>
         <NavLink
           to="/apply"
