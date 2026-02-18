@@ -61,11 +61,10 @@ export const ActivityGallery = memo(function ActivityGallery({
 }: ActivityGalleryProps) {
   return (
     <div
-      className="relative w-full overflow-hidden rounded-sm border border-border-default bg-bg-muted"
-      onPointerDown={onPointerDown}
+      className="relative w-full overflow-hidden bg-bg-default overscroll-x-contain"      onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
-      style={{ aspectRatio, maxHeight }}
+      style={{ aspectRatio, maxHeight, touchAction: 'pan-y' }}
     >
       {/* 메인 이미지 영역 */}
       <div className="relative h-full w-full">
@@ -74,6 +73,7 @@ export const ActivityGallery = memo(function ActivityGallery({
             src={currentSrc}
             alt={title}
             className="absolute inset-0 h-full w-full object-contain"
+            draggable={false}
           />
         ) : (
           <div
@@ -96,13 +96,13 @@ export const ActivityGallery = memo(function ActivityGallery({
           >
             {slide.dir === 'next' ? (
               <>
-                <img src={slide.fromSrc} alt={title} className="h-full w-1/2 object-contain" />
-                <img src={slide.toSrc} alt={title} className="h-full w-1/2 object-contain" />
+                <img src={slide.fromSrc} alt={title} className="h-full w-1/2 object-contain" draggable={false} />
+                <img src={slide.toSrc} alt={title} className="h-full w-1/2 object-contain" draggable={false} />
               </>
             ) : (
               <>
-                <img src={slide.toSrc} alt={title} className="h-full w-1/2 object-contain" />
-                <img src={slide.fromSrc} alt={title} className="h-full w-1/2 object-contain" />
+                <img src={slide.toSrc} alt={title} className="h-full w-1/2 object-contain" draggable={false} />
+                <img src={slide.fromSrc} alt={title} className="h-full w-1/2 object-contain" draggable={false} />
               </>
             )}
           </div>
