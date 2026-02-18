@@ -1,9 +1,12 @@
+import imgSrc from '@/assets/images/about/logo-image.png';
+
 type Member = {
   id: string;
   role: string;
   name: string;
   meta: string; // 예: "43기 컴퓨터학부"
   quote: string; // 예: "한줄로, 이야기 합니다."
+  avatarSrc?: string;
 };
 
 type CardSize = 'lg' | 'md' | 'sm';
@@ -12,32 +15,26 @@ function MemberCard({ member, size }: { member: Member; size: CardSize }) {
   const isLg = size === 'lg';
   const isMd = size === 'md';
 
-  const cardSizeClass = isLg ? 'h-[240px]' : isMd ? 'h-[180px]' : 'h-[140px]';
+  const cardSizeClass = isLg ? 'h-[250px]' : isMd ? 'h-[180px]' : 'h-[140px]';
 
   const avatarSizeClass = isLg
-    ? 'h-[100px] w-[90px]'
+    ? 'h-[100px] w-[100px]'
     : isMd
-      ? 'h-[66px] w-[55px]'
+      ? 'h-[66px] w-[50px]'
       : 'h-[62px] w-[62px]';
 
-  const roleTextClass = isLg ? 'text-sm' : isMd ? 'text-xs' : 'text-xs';
+  const roleTextClass = isLg ? 'text-sm' : isMd ? 'text-2xs' : 'text-2xs';
   const nameTextClass = isLg ? 'text-lg' : isMd ? 'text-sm' : 'text-[12px]';
-  const metaTextClass = isLg ? 'text-2xs' : isMd ? 'text-[6px]' : 'text-[9px]';
+  const metaTextClass = isLg ? 'text-xs' : isMd ? 'text-2xs' : 'text-[9px]';
 
   const quoteClass = isLg
-    ? 'mt-3 mb-3 rounded-xl px-4 py-3 text-2xs'
+    ? 'mt-2 mb-3 rounded-xl py-2 text-xs'
     : isMd
-      ? 'mt-3 mb-3 rounded-[10px] px-1 py-2 text-[6px]'
+      ? 'mt-2 mb-3 rounded-[10px] py-2 text-2xs'
       : 'mt-3 mb-3 rounded-lg px-3 py-2 text-[9px]';
 
   return (
-    <div
-      className={[
-        'relative w-full overflow-hidden rounded-[5px]',
-        'bg-bg-muted/40 shadow-[0_16px_30px_rgba(0,0,0,0.35)]',
-        cardSizeClass,
-      ].join(' ')}
-    >
+    <div className={['relative w-full overflow-hidden rounded-[5px]', cardSizeClass].join(' ')}>
       {/* 아치형 상단 느낌(배경) */}
       <div className="absolute inset-0 rounded-t-[999px] bg-bg-muted" />
 
@@ -46,12 +43,22 @@ function MemberCard({ member, size }: { member: Member; size: CardSize }) {
         {/* 프로필 원 */}
         <div
           className={[
-            'rounded-full bg-bg-white',
+            'overflow-hidden rounded-full bg-bg-white/20',
             'shadow-[0_8px_18px_rgba(0,0,0,0.25)]',
             avatarSizeClass,
           ].join(' ')}
-        />
-
+        >
+          {member.avatarSrc ? (
+            <img
+              src={member.avatarSrc}
+              alt={`${member.name} 프로필 사진`}
+              className="h-full w-full object-cover object-center" // ✅ 꽉 채우고 비율 유지
+              loading="lazy"
+            />
+          ) : (
+            <div className="h-full w-full" />
+          )}
+        </div>
         {/* 텍스트 */}
         <div className="mt-4 text-center leading-none">
           <div className={['font-semibold text-text-default', roleTextClass].join(' ')}>
@@ -85,65 +92,81 @@ export default function MemberSection() {
   const first: Member[] = [
     {
       id: 'b1',
-      role: '부회장',
-      name: '000',
-      meta: '43기 컴퓨터학부',
-      quote: '한줄로, 이야기 합니다.',
+      role: '회장',
+      name: '이민우',
+      meta: 'SSCC 40기',
+      quote: 'AI융합학부 22학번',
+      avatarSrc: imgSrc,
     },
     {
       id: 'b2',
       role: '부회장',
-      name: '000',
-      meta: '43기 컴퓨터학부',
-      quote: '한줄로, 이야기 합니다.',
+      name: '최나영',
+      meta: 'SSCC 43기',
+      quote: '정보보호학과 24학번',
+      avatarSrc: imgSrc,
     },
   ];
 
   const second: Member[] = [
     {
       id: 'm1',
-      role: '부회장',
-      name: '000',
-      meta: '43기 컴퓨터학부',
-      quote: '한줄로, 이야기 합니다.',
+      role: '행정국장',
+      name: '원영진',
+      meta: 'SSCC 40기',
+      quote: 'AI융합학부 22학번',
+      avatarSrc: imgSrc,
     },
     {
       id: 'm2',
-      role: '부회장',
-      name: '000',
-      meta: '43기 컴퓨터학부',
-      quote: '한줄로, 이야기 합니다.',
+      role: '학술국장',
+      name: '최지우',
+      meta: 'SSCC 43기',
+      quote: 'AI융합학부 24학번',
+      avatarSrc: imgSrc,
     },
     {
       id: 'm3',
-      role: '부회장',
-      name: '000',
-      meta: '43기 컴퓨터학부',
-      quote: '한줄로, 이야기 합니다.',
+      role: '홍보국장',
+      name: '임채은',
+      meta: 'SSCC 43기',
+      quote: 'AI융합학부 24학번',
+      avatarSrc: imgSrc,
     },
   ];
 
   const third: Member[] = [
     {
       id: 's1',
-      role: '부회장',
-      name: '000',
-      meta: '43기 컴퓨터학부',
-      quote: '한줄로, 이야기 합니다.',
+      role: '행정국원',
+      name: '최재웅',
+      meta: 'SSCC 44기',
+      quote: '정보보호학과 24학번',
+      avatarSrc: imgSrc,
     },
     {
       id: 's2',
-      role: '부회장',
-      name: '000',
-      meta: '43기 컴퓨터학부',
-      quote: '한줄로, 이야기 합니다.',
+      role: '행정국원',
+      name: '김예현',
+      meta: 'SSCC 43기',
+      quote: '컴퓨터학부 24학번',
+      avatarSrc: imgSrc,
     },
     {
       id: 's3',
-      role: '부회장',
-      name: '000',
-      meta: '43기 컴퓨터학부',
-      quote: '한줄로, 이야기 합니다.',
+      role: '학술국원',
+      name: '정현민',
+      meta: 'SSCC 43기',
+      quote: '컴퓨터학부 22학번',
+      avatarSrc: imgSrc,
+    },
+    {
+      id: 's4',
+      role: '홍보국원',
+      name: '권나현',
+      meta: 'SSCC 41기',
+      quote: 'AI융합학부 23학번',
+      avatarSrc: imgSrc,
     },
   ];
 
