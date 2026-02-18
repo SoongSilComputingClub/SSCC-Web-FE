@@ -4,21 +4,21 @@ export default function ValueSection() {
   const items = [
     {
       id: '1',
-      title: '행동',
-      desc: '생각에 머무르지 않고,\n직접 만들고 부딪히며\n성장하는 것을 선택합니다.',
+      title: '도전',
+      desc: '당장 모르는 기술 앞에서도 \n주저하지 않고 부딪혀보며, \n성장통마저 배움의 즐거움으로 \n삼을 수 있는 사람',
       pos: 'translate-x-[60%]',
     },
     {
       id: '2',
       title: '공동체',
-      desc: '혼자 잘하는 사람이 아니라,\n함께 배우고\n서로를 끌어올리는 공동체를 지향합니다.',
-      pos: 'translate-x-[35%]',
+      desc: '혼자보다는 "함께" 배우며 시너지를 내고, \n다양한 사람들과 따뜻한 네트워크를 \n만들어가고 싶은 사람',
+      pos: 'translate-x-[33%] lg:translate-x-[40%]',
     },
     {
       id: '3',
-      title: '책임',
-      desc: '우리가 만든 코드와 선택에 끝까지 책임지는\n개발자가 되고자 합니다.',
-      pos: 'translate-x-[15%]',
+      title: '몰입',
+      desc: '일상의 작은 불편함에도 "왜?"라는 질문을 던지며, \n문제를 해결하기 위해 끈기 있게 몰입할 수 있는 분',
+      pos: 'translate-x-[13%]',
     },
   ] as const;
 
@@ -95,10 +95,10 @@ export default function ValueSection() {
             headerVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
           ].join(' ')}
         >
-          <div className="text-sm text-text-default/50">SSCC의</div>
-          <div className="mb-4 text-xl font-bold">핵심 가치</div>
-          <div className="text-sm text-text-default/70">
-            45기 SSCC가 같이 나아가고 싶은 방향입니다.
+          <div className="text-sm text-text-default/50 sm:text-md">SSCC의</div>
+          <div className="mb-4 text-xl font-bold sm:text-2xl">핵심 가치</div>
+          <div className="text-sm text-text-default/70 sm:text-md">
+            미래 SSCC 44기와 함께 나아가고 싶은 사람
           </div>
         </div>
 
@@ -123,11 +123,11 @@ export default function ValueSection() {
                   ].join(' ')}
                 >
                   <div className="p-5">
-                    <div className="text-xl font-bold">
+                    <div className="text-xl font-bold sm:text-2xl">
                       {it.id}. {it.title}
                     </div>
                     <div className="mt-2 h-px w-full bg-text-default/80" />
-                    <div className="mt-2 whitespace-pre-line text-xs font-bold text-text-default/50">
+                    <div className="mt-2 whitespace-pre-line text-xs font-bold text-text-default/50 sm:text-sm">
                       {it.desc}
                     </div>
                   </div>
