@@ -34,7 +34,7 @@ export function ActivityCard({ activity }: Props) {
             {activity.content}
           </p>
           */}
-          
+
           {/* 타입 라벨 | 날짜 */}
           <div className="mt-auto flex justify-end pt-1 text-xs font-normal uppercase leading-normal tracking-wide text-zinc-400 lg:text-xs-sm">
             <span>{activity.typeLabel}</span>

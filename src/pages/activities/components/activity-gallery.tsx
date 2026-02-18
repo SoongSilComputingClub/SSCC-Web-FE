@@ -61,7 +61,8 @@ export const ActivityGallery = memo(function ActivityGallery({
 }: ActivityGalleryProps) {
   return (
     <div
-      className="relative w-full overflow-hidden bg-bg-default overscroll-x-contain"      onPointerDown={onPointerDown}
+      className="relative w-full overflow-hidden overscroll-x-contain bg-bg-default"
+      onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
       style={{ aspectRatio, maxHeight, touchAction: 'pan-y' }}
@@ -96,13 +97,33 @@ export const ActivityGallery = memo(function ActivityGallery({
           >
             {slide.dir === 'next' ? (
               <>
-                <img src={slide.fromSrc} alt={title} className="h-full w-1/2 object-contain" draggable={false} />
-                <img src={slide.toSrc} alt={title} className="h-full w-1/2 object-contain" draggable={false} />
+                <img
+                  src={slide.fromSrc}
+                  alt={title}
+                  className="h-full w-1/2 object-contain"
+                  draggable={false}
+                />
+                <img
+                  src={slide.toSrc}
+                  alt={title}
+                  className="h-full w-1/2 object-contain"
+                  draggable={false}
+                />
               </>
             ) : (
               <>
-                <img src={slide.toSrc} alt={title} className="h-full w-1/2 object-contain" draggable={false} />
-                <img src={slide.fromSrc} alt={title} className="h-full w-1/2 object-contain" draggable={false} />
+                <img
+                  src={slide.toSrc}
+                  alt={title}
+                  className="h-full w-1/2 object-contain"
+                  draggable={false}
+                />
+                <img
+                  src={slide.fromSrc}
+                  alt={title}
+                  className="h-full w-1/2 object-contain"
+                  draggable={false}
+                />
               </>
             )}
           </div>

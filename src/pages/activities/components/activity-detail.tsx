@@ -156,10 +156,7 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
         </h1>
 
         {activity.date && (
-          <time
-            dateTime={activity.date}
-            className="mt-2 block text-center text-sm text-gray-300"
-          >
+          <time dateTime={activity.date} className="mt-2 block text-center text-sm text-gray-300">
             {activity.date}
           </time>
         )}
