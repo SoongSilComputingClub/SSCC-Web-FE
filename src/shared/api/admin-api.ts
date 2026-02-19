@@ -1,5 +1,24 @@
 import { fetchWithAccess } from '@/shared/api/fetch-with-access';
 
+export type ApplyFormItem = {
+  applyFormId: number;
+  username: string;
+
+  applicantName: string;
+  department: string;
+  studentNo: string;
+  grade: number;
+  gender: string;
+
+  phone: string;
+  introduce?: string;
+  codingExp?: string;
+  techStackText?: string;
+  wantedValue?: string;
+  aspiration?: string;
+  interviewTimes?: Array<{ date: string; startTime: string; endTime: string }>;
+};
+
 export type GenderDistributionData = {
   maleCount: number;
   femaleCount: number;
@@ -26,9 +45,9 @@ type ApiResponse<T> = {
   data: T;
 };
 
-export async function readApplyForms() {
+export async function readApplyForms(): Promise<ApiResponse<ApplyFormItem[]>> {
   const res = await fetchWithAccess('/admin/apply-forms');
-  const json: ApiResponse<unknown[]> = await res.json();
+  const json: ApiResponse<ApplyFormItem[]> = await res.json();
 
   if (!json.success) throw new Error(json.message);
   return json;

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import type { ApplyFormItem } from '@/shared/api/admin-api';
 import { readApplyForms } from '@/shared/api/admin-api';
 import { usePagination } from '@/shared/lib/use-pagination';
 import { Pagination } from '@/shared/ui/pagination';
@@ -7,25 +8,6 @@ import { Pagination } from '@/shared/ui/pagination';
 import { CodingStatsModal, GenderStatsModal, MemberDetailModal } from './modal/index';
 import { GridSection } from './section/grid-section';
 import { TableSection } from './section/table-section';
-
-export type ApplyFormItem = {
-  applyFormId: number;
-  username: string;
-
-  applicantName: string;
-  department: string;
-  studentNo: string;
-  grade: number;
-  gender: string;
-
-  phone: string;
-  introduce?: string;
-  codingExp?: string;
-  techStackText?: string;
-  wantedValue?: string;
-  aspiration?: string;
-  interviewTimes?: Array<{ date: string; startTime: string; endTime: string }>;
-};
 
 export type Row = {
   order: number;
