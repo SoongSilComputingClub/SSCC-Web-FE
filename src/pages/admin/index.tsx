@@ -1,5 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
+import type { ApplyFormItem } from '@/shared/api/admin-api';
+import { readApplyForms } from '@/shared/api/admin-api';
 import { usePagination } from '@/shared/lib/use-pagination';
 import { Pagination } from '@/shared/ui/pagination';
 
@@ -9,45 +11,84 @@ import { TableSection } from './section/table-section';
 
 export type Row = {
   order: number;
+
   name: string;
   major: string;
   studentId: string;
   grade: number;
   gender: string;
 
-  // 표에는 안 보이지만 서버에서 받는 데이터(예시)
+  phone: string;
+  introduce?: string;
   codingExp?: string;
-  email?: string;
-  phone?: string;
-  createdAt?: string;
+  techStackText?: string;
+
+  applyFormId?: number;
+  username?: string;
+  wantedValue?: string;
+  aspiration?: string;
+  interviewTimes?: Array<{ date: string; startTime: string; endTime: string }>;
 };
 
 type SortKey = 'major' | 'grade' | 'studentId';
-
 type ActiveModal = 'none' | 'gender' | 'coding' | 'detail';
 
 export default function IndexPage() {
-  // TODO: 실제로는 fetch로 채우기
-  const CODING_EXPS = ['A', 'B', 'C', 'D', 'E'] as const;
-
-  const [rows] = useState<Row[]>(() =>
-    Array.from({ length: 28 }, (_, i) => ({
-      order: i + 1,
-      name: '김명주',
-      major: i % 2 === 0 ? '컴퓨터학과' : '소프트웨어학부',
-      studentId: String(20231425 + i),
-      grade: (i % 4) + 1,
-      gender: i % 2 === 0 ? '여' : '남',
-      codingExp: CODING_EXPS[i % CODING_EXPS.length],
-      email: `user${i}@example.com`,
-      phone: `010-0000-${String(1000 + i)}`,
-      createdAt: '2026-02-04',
-    })),
-  );
+  const [rows, setRows] = useState<Row[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
   const [activeModal, setActiveModal] = useState<ActiveModal>('none');
   const [selectedRow, setSelectedRow] = useState<Row | null>(null);
+
+  useEffect(() => {
+    const fetchRows = async () => {
+      try {
+        setIsLoading(true);
+        setErrorMessage(null);
+
+        const result = await readApplyForms();
+
+        //result.data가 배열
+        const items: ApplyFormItem[] = Array.isArray(result?.data)
+          ? (result.data as ApplyFormItem[])
+          : [];
+
+        const mapped: Row[] = items.map((it, idx) => ({
+          order: idx + 1,
+
+          name: it.applicantName,
+          major: it.department,
+          studentId: it.studentNo,
+          grade: it.grade,
+          gender: it.gender,
+
+          phone: it.phone,
+          introduce: it.introduce,
+          codingExp: it.codingExp,
+          techStackText: it.techStackText,
+
+          wantedValue: it.wantedValue,
+          aspiration: it.aspiration,
+
+          applyFormId: it.applyFormId,
+          username: it.username,
+          interviewTimes: it.interviewTimes ?? [],
+        }));
+
+        setRows(mapped);
+      } catch (error: unknown) {
+        const msg = error instanceof Error ? error.message : '알 수 없는 오류';
+        setErrorMessage(msg);
+        setRows([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRows();
+  }, []);
 
   // ✅ 정렬된(혹은 원본) 전체 리스트
   const sortedRows = useMemo(() => {
@@ -77,10 +118,56 @@ export default function IndexPage() {
 
   // ✅ CSV 내보내기: (전체 데이터 기준)
   const exportCsv = () => {
-    const header = ['순서', '이름', '학과', '학번', '학년', '성별'];
+    const header = [
+      '순서',
+      '이름',
+      '학과',
+      '학번',
+      '학년',
+      '성별',
+      '전화번호',
+      '자기소개',
+      '코딩경험',
+      '기술스택',
+      '원하는 가치',
+      '포부',
+      '면접 가능 시간',
+    ];
+
+    const formatInterviewTimes = (
+      times?: { date: string; startTime: string; endTime: string }[],
+    ) => {
+      if (!times || times.length === 0) return '';
+
+      // date별로 시간 묶기
+      const grouped = times.reduce<Record<string, string[]>>((acc, t) => {
+        const date = t.date;
+        const time = `${t.startTime} ~ ${t.endTime}`;
+        (acc[date] ??= []).push(time);
+        return acc;
+      }, {});
+
+      // 날짜 오름차순
+      const dates = Object.keys(grouped).sort();
+      return dates.map((date) => [date, ...grouped[date]].join('\n')).join('\n\n'); // 날짜 블록 사이 한 줄 띄움
+    };
 
     const lines = rows.map((r) =>
-      [r.order, r.name, r.major, r.studentId, r.grade, r.gender]
+      [
+        r.order,
+        r.name,
+        r.major,
+        r.studentId,
+        r.grade,
+        r.gender,
+        r.phone,
+        r.introduce,
+        r.codingExp,
+        r.techStackText,
+        r.wantedValue,
+        r.aspiration,
+        formatInterviewTimes(r.interviewTimes),
+      ]
         .map((v) => {
           const s = String(v);
           const sanitized = /^[=+\-@]/.test(s) ? "'" + s : s;
@@ -116,10 +203,26 @@ export default function IndexPage() {
     setSelectedRow(null);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center text-sm text-text-default/70">
+        로딩 중...
+      </div>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center text-sm text-text-default/70">
+        조회 실패: {errorMessage}
+      </div>
+    );
+  }
+
   if (rows.length === 0) {
     return (
       <div className="flex min-h-screen w-full items-center justify-center text-sm text-text-default/70">
-        데이터가 없습니다.
+        지원서 데이터가 없습니다.
       </div>
     );
   }
@@ -151,8 +254,8 @@ export default function IndexPage() {
       />
 
       {/* ✅ 분포 모달: 전체 rows 기준으로 집계(원하면 sortedRows로 바꿔도 됨) */}
-      <GenderStatsModal isOpen={activeModal === 'gender'} rows={rows} onClose={closeModal} />
-      <CodingStatsModal isOpen={activeModal === 'coding'} rows={rows} onClose={closeModal} />
+      <GenderStatsModal isOpen={activeModal === 'gender'} onClose={closeModal} />
+      <CodingStatsModal isOpen={activeModal === 'coding'} onClose={closeModal} />
 
       {/* ✅ 상세 모달 */}
       <MemberDetailModal isOpen={activeModal === 'detail'} row={selectedRow} onClose={closeModal} />
