@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { AuthContext } from './auth-context';
 
 import type { AuthContextType } from './auth-context';
+import { STORAGE_KEYS } from './jwt';
 
 type Props = {
   children: ReactNode;
@@ -14,7 +15,7 @@ export function AuthProvider({ children }: Props) {
 
   // 앱 시작 시 sessionStorage에서 토큰 읽기
   useEffect(() => {
-    const storedToken = sessionStorage.getItem('accessToken');
+    const storedToken = sessionStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
     if (storedToken) {
       setAccessToken(storedToken);
     }
