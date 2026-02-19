@@ -44,7 +44,7 @@ export default function RecordSection() {
     if (!el) return;
 
     const clearTimers = () => {
-      timersRef.current.forEach((id) => window.clearTimeout(id));
+      timersRef.current.forEach((id) => globalThis.clearTimeout(id));
       timersRef.current = [];
     };
 
@@ -64,7 +64,7 @@ export default function RecordSection() {
         for (let s = 1; s <= STEPS; s++) {
           const delay = Math.round((durationMs * s) / STEPS);
 
-          const timerId = window.setTimeout(() => {
+          const timerId = globalThis.setTimeout(() => {
             const t = s / STEPS;
             const eased = easeOutQuint(t);
             const nextValue = Math.round(targetValue * eased);
