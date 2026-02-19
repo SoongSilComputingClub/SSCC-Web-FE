@@ -27,11 +27,11 @@ function TimelineRow({
   item,
   showLine,
   allVisible,
-}: {
+}: Readonly<{
   item: TimelineItem;
   showLine: boolean;
   allVisible: boolean;
-}) {
+}>) {
   return (
     <div className="relative pl-2">
       {/* dot */}
