@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { AuthContext } from './auth-context';
 
 import type { AuthContextType } from './auth-context';
+import { STORAGE_KEYS } from './jwt';
 
 type Props = {
   children: ReactNode;
@@ -12,9 +13,9 @@ type Props = {
 export function AuthProvider({ children }: Props) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  // 앱 시작 시 localStorage에서 토큰 읽기
+  // 앱 시작 시 sessionStorage에서 토큰 읽기
   useEffect(() => {
-    const storedToken = localStorage.getItem('accessToken');
+    const storedToken = sessionStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
     if (storedToken) {
       setAccessToken(storedToken);
     }
@@ -23,7 +24,7 @@ export function AuthProvider({ children }: Props) {
   // 같은 탭에서 토큰 변경 시 상태 동기화
   useEffect(() => {
     const syncAuth = () => {
-      const storedToken = localStorage.getItem('accessToken');
+      const storedToken = sessionStorage.getItem('accessToken');
       setAccessToken(storedToken);
     };
 
@@ -35,15 +36,15 @@ export function AuthProvider({ children }: Props) {
 
   // 로그인 처리
   const login = (newAccessToken: string, newRefreshToken: string) => {
-    localStorage.setItem('accessToken', newAccessToken);
-    localStorage.setItem('refreshToken', newRefreshToken);
+    sessionStorage.setItem('accessToken', newAccessToken);
+    sessionStorage.setItem('refreshToken', newRefreshToken);
     setAccessToken(newAccessToken);
     window.dispatchEvent(new Event('auth-changed'));
   };
 
   // 로그아웃 처리
   const logout = async () => {
-    const refreshToken = localStorage.getItem('refreshToken');
+    const refreshToken = sessionStorage.getItem('refreshToken');
 
     try {
       if (refreshToken) {
@@ -56,8 +57,8 @@ export function AuthProvider({ children }: Props) {
     } catch (err) {
       console.error('로그아웃 요청 실패:', err);
     } finally {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      sessionStorage.removeItem('accessToken');
+      sessionStorage.removeItem('refreshToken');
       setAccessToken(null);
       window.dispatchEvent(new Event('auth-changed'));
       // 로그아웃 후에는 현재 페이지를 유지 (필요하면 각 페이지에서 별도 처리)

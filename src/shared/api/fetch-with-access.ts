@@ -1,3 +1,5 @@
+import { STORAGE_KEYS } from "../auth/jwt";
+
 const BASE_URL = import.meta.env.VITE_BACKEND_API_BASE_URL;
 
 // 동시에 여러 요청이 401을 맞아도 refresh는 1번만 실행되도록 잠금(락) 역할
@@ -10,14 +12,14 @@ function toHeaders(init: RequestInit['headers']): Headers {
 }
 
 function redirectToLoginAndClearTokens() {
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
+  sessionStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+  sessionStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
   window.location.href = '/login';
 }
 
 // AccessToken 재발급
 async function refreshAccessToken(): Promise<string> {
-  const refreshToken = localStorage.getItem('refreshToken');
+  const refreshToken = sessionStorage.getItem('refreshToken');
 
   if (!refreshToken) {
     throw new Error('RefreshToken 없음');
@@ -35,8 +37,9 @@ async function refreshAccessToken(): Promise<string> {
 
   const data = await response.json();
 
-  localStorage.setItem('accessToken', data.data.accessToken);
-  localStorage.setItem('refreshToken', data.data.refreshToken);
+  sessionStorage.setItem('accessToken', data.data.accessToken);
+  sessionStorage.setItem('refreshToken', data.data.refreshToken);
+  window.dispatchEvent(new Event('auth-changed'));
 
   return data.data.accessToken;
 }
@@ -58,18 +61,28 @@ async function getRefreshedAccessTokenOnce(): Promise<string> {
 }
 
 function buildFinalUrl(url: string): string {
-  // 절대 URL이면 그대로 사용
-  if (/^https?:\/\//i.test(url)) return url;
+  const raw = String(url ?? '').trim();
+
+  // 외부 도메인으로의 요청에 Authorization 헤더가 붙어 토큰이 유출되는 것을 방지
+  // - protocol-relative: //attacker.com
+  // - absolute URL: https://attacker.com, http://..., custom schemes
+  if (raw.startsWith('//') || /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(raw)) {
+    throw new Error('fetchWithAccess는 상대 경로만 허용합니다.');
+  }
 
   // BASE_URL 끝의 슬래시 제거 + path 시작 슬래시 보장
   const base = String(BASE_URL ?? '').replace(/\/+$/, '');
-  const path = url.startsWith('/') ? url : `/${url}`;
+  if (!base) {
+    throw new Error('VITE_BACKEND_API_BASE_URL이 설정되지 않았습니다.');
+  }
+
+  const path = raw.startsWith('/') ? raw : `/${raw}`;
   return `${base}${path}`;
 }
 
 // 인증 포함 fetch
 export async function fetchWithAccess(url: string, options: RequestInit = {}): Promise<Response> {
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = sessionStorage.getItem('accessToken');
 
   // 토큰이 없으면 보호 API 호출 자체가 의미 없으므로 로그인으로
   if (!accessToken) {

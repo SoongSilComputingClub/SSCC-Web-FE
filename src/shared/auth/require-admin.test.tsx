@@ -28,7 +28,7 @@ function createMockJwt(payload: Record<string, unknown>) {
 
 describe('auth: jwt.ts + RequireAdmin', () => {
   beforeEach(() => {
-    localStorage.clear();
+    sessionStorage.clear();
     vi.restoreAllMocks();
   });
 
@@ -111,7 +111,7 @@ describe('auth: jwt.ts + RequireAdmin', () => {
     const nowSec = Math.floor(Date.now() / 1000);
     const token = createMockJwt({ role: 'ROLE_ADMIN', exp: nowSec + 60 });
 
-    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
+    sessionStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
 
     renderAdminRoute();
     expect(screen.getByText('ADMIN')).toBeTruthy();
@@ -121,7 +121,7 @@ describe('auth: jwt.ts + RequireAdmin', () => {
     const nowSec = Math.floor(Date.now() / 1000);
     const token = createMockJwt({ role: 'ROLE_PREUSER', exp: nowSec + 60 });
 
-    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
+    sessionStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
 
     renderAdminRoute();
     expect(screen.getByText('HOME')).toBeTruthy();
@@ -131,10 +131,10 @@ describe('auth: jwt.ts + RequireAdmin', () => {
     const nowSec = Math.floor(Date.now() / 1000);
     const token = createMockJwt({ role: 'ROLE_ADMIN', exp: nowSec - 1 });
 
-    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
-    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, 'dummy-refresh');
+    sessionStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
+    sessionStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, 'dummy-refresh');
 
-    const removeSpy = vi.spyOn(localStorage.__proto__, 'removeItem');
+    const removeSpy = vi.spyOn(sessionStorage.__proto__, 'removeItem');
 
     renderAdminRoute();
 
