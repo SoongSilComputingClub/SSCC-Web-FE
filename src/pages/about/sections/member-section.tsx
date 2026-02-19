@@ -15,7 +15,13 @@ function MemberCard({ member, size }: { member: Member; size: CardSize }) {
   const isLg = size === 'lg';
   const isMd = size === 'md';
 
-  const cardSizeClass = isLg ? 'h-[250px]' : isMd ? 'h-[200px]' : 'h-[140px]';
+  const cardWidthClass = isLg
+    ? 'max-w-none' // lg는 꽉 차도 괜찮다면
+    : isMd
+      ? 'max-w-[130px]' // md는 폭이 너무 커지지 않게
+      : 'max-w-[120px]'; // sm도 동일하게 제한
+
+  const cardSizeClass = isLg ? 'h-[250px]' : isMd ? 'h-[200px]' : 'h-[150px]';
 
   const avatarSizeClass = isLg
     ? 'h-[105px] w-[105px]'
@@ -34,7 +40,14 @@ function MemberCard({ member, size }: { member: Member; size: CardSize }) {
       : 'mt-1 mb-1 rounded-lg py-1 text-[6px]';
 
   return (
-    <div className={['relative w-full overflow-hidden rounded-[5px]', cardSizeClass].join(' ')}>
+    <div
+      className={[
+        'relative w-full overflow-hidden rounded-[5px]',
+        cardSizeClass,
+        cardWidthClass,
+        'mx-auto',
+      ].join(' ')}
+    >
       {/* 아치형 상단 느낌(배경) */}
       <div className="absolute inset-0 rounded-t-[999px] bg-bg-muted" />
 
@@ -60,7 +73,7 @@ function MemberCard({ member, size }: { member: Member; size: CardSize }) {
           )}
         </div>
         {/* 텍스트 */}
-        <div className="mt-4 text-center leading-none">
+        <div className="mt-2 whitespace-nowrap text-center leading-none">
           <div className={['font-semibold text-text-default', roleTextClass].join(' ')}>
             {member.role}{' '}
             <span className={['font-bold text-text-default', nameTextClass].join(' ')}>
@@ -169,7 +182,6 @@ export default function MemberSection() {
       avatarSrc: imgSrc,
     },
   ];
-
   return (
     <section className="w-full bg-bg-default px-6 py-14">
       <div className="mx-auto w-full max-w-[420px]">
@@ -183,14 +195,14 @@ export default function MemberSection() {
         </div>
 
         {/* 3개 중간 카드 */}
-        <div className="mt-10 grid grid-cols-3 gap-4">
+        <div className="mt-10 grid grid-cols-3 gap-2">
           {second.map((m) => (
             <MemberCard key={m.id} member={m} size="md" />
           ))}
         </div>
 
-        {/* 4개 작은 카드 */}
-        <div className="mt-10 grid grid-cols-4 gap-3">
+        {/* 4개 중간 카드 */}
+        <div className="mt-10 grid grid-cols-4 gap-1">
           {third.map((m) => (
             <MemberCard key={m.id} member={m} size="sm" />
           ))}
