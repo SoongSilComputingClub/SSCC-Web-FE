@@ -20,9 +20,10 @@ export type ApplyFormItem = {
 
   phone: string;
   introduce?: string;
-  codingLevel?: string;
+  codingExp?: string;
   techStackText?: string;
-
+  wantedValue?: string;
+  aspiration?: string;
   interviewTimes?: Array<{ date: string; startTime: string; endTime: string }>;
 };
 
@@ -37,11 +38,13 @@ export type Row = {
 
   phone: string;
   introduce?: string;
-  codingLevel?: string;
+  codingExp?: string;
   techStackText?: string;
 
   applyFormId?: number;
   username?: string;
+  wantedValue?: string;
+  aspiration?: string;
   interviewTimes?: Array<{ date: string; startTime: string; endTime: string }>;
 };
 
@@ -63,15 +66,12 @@ export default function IndexPage() {
         setIsLoading(true);
         setErrorMessage(null);
 
-        const accessToken = localStorage.getItem('accessToken');
-        if (!accessToken) {
-          throw new Error('accessToken이 없습니다. 다시 로그인 해주세요.');
-        }
-
-        const result = await readApplyForms(accessToken);
+        const result = await readApplyForms();
 
         //result.data가 배열
-        const items: ApplyFormItem[] = Array.isArray(result?.data) ? result.data : [];
+        const items: ApplyFormItem[] = Array.isArray(result?.data)
+          ? (result.data as ApplyFormItem[])
+          : [];
 
         const mapped: Row[] = items.map((it, idx) => ({
           order: idx + 1,
@@ -84,8 +84,11 @@ export default function IndexPage() {
 
           phone: it.phone,
           introduce: it.introduce,
-          codingLevel: it.codingLevel,
+          codingExp: it.codingExp,
           techStackText: it.techStackText,
+
+          wantedValue: it.wantedValue,
+          aspiration: it.aspiration,
 
           applyFormId: it.applyFormId,
           username: it.username,
@@ -223,8 +226,8 @@ export default function IndexPage() {
       />
 
       {/* ✅ 분포 모달: 전체 rows 기준으로 집계(원하면 sortedRows로 바꿔도 됨) */}
-      <GenderStatsModal isOpen={activeModal === 'gender'} rows={rows} onClose={closeModal} />
-      <CodingStatsModal isOpen={activeModal === 'coding'} rows={rows} onClose={closeModal} />
+      <GenderStatsModal isOpen={activeModal === 'gender'} onClose={closeModal} />
+      <CodingStatsModal isOpen={activeModal === 'coding'} onClose={closeModal} />
 
       {/* ✅ 상세 모달 */}
       <MemberDetailModal isOpen={activeModal === 'detail'} row={selectedRow} onClose={closeModal} />
