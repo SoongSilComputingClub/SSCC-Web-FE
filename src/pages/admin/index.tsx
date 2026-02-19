@@ -138,8 +138,18 @@ export default function IndexPage() {
       times?: { date: string; startTime: string; endTime: string }[],
     ) => {
       if (!times || times.length === 0) return '';
-      // ✅ 날짜 줄 + 시간 줄 (슬롯마다 2줄)
-      return times.map((t) => `${t.date}\n${t.startTime} ~ ${t.endTime}`).join('\n\n'); // 슬롯 간 한 줄 띄우기(원하면 '\n'로 바꿔도 됨)
+
+      // date별로 시간 묶기
+      const grouped = times.reduce<Record<string, string[]>>((acc, t) => {
+        const date = t.date;
+        const time = `${t.startTime} ~ ${t.endTime}`;
+        (acc[date] ??= []).push(time);
+        return acc;
+      }, {});
+
+      // 날짜 오름차순
+      const dates = Object.keys(grouped).sort();
+      return dates.map((date) => [date, ...grouped[date]].join('\n')).join('\n\n'); // 날짜 블록 사이 한 줄 띄움
     };
 
     const lines = rows.map((r) =>

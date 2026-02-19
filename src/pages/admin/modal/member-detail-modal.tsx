@@ -45,13 +45,32 @@ export function MemberDetailModal({ isOpen, row, onClose }: MemberDetailModalPro
         {row.interviewTimes && row.interviewTimes.length > 0 && (
           <div className="mt-2 rounded-2xl bg-bg-white/5 px-4 py-3">
             <span className="text-text-default/60">면접 가능 시간</span>
-            <div className="mt-2 grid gap-1">
-              {row.interviewTimes.map((t, i) => (
-                <div key={i} className="text-xs text-text-default/70">
-                  📅 {t.date} &nbsp; {t.startTime} ~ {t.endTime}
+
+            {(() => {
+              const grouped = row.interviewTimes.reduce<Record<string, string[]>>((acc, t) => {
+                const key = t.date;
+                const time = `${t.startTime} ~ ${t.endTime}`;
+                (acc[key] ??= []).push(time);
+                return acc;
+              }, {});
+
+              const dates = Object.keys(grouped).sort();
+
+              return (
+                <div className="mt-2 grid gap-3">
+                  {dates.map((date) => (
+                    <div key={date} className="text-sm text-text-default">
+                      <div>📅 {date}</div>
+                      <div className="mt-1 grid gap-1 pl-5">
+                        {grouped[date].map((time, i) => (
+                          <div key={`${date}-${i}`}> {time}</div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              );
+            })()}
           </div>
         )}
       </div>
