@@ -113,24 +113,24 @@ export default function RecordSection() {
         '[contain:layout_paint] [overflow-anchor:none]',
       ].join(' ')}
     >
-      <div className="flex w-full max-w-[420px] flex-col gap-4 py-20 text-center text-text-default">
-        <div className="text-sm font-bold">43기 활동 레코드</div>
+      <div className="flex w-full max-w-[420px] flex-col gap-4 py-20 text-center text-text-default sm:max-w-[800px] sm:gap-12">
+        <div className="text-sm font-bold sm:text-xl">43기 활동 레코드</div>
 
         <div className="flex flex-row items-center justify-center gap-4">
           {records.map((it, idx) => (
             <div
               key={it.id}
               className={[
-                'flex aspect-square w-28 flex-col items-center justify-center rounded-2xl bg-bg-muted text-text-default',
+                'flex aspect-square w-28 flex-col items-center justify-center rounded-2xl bg-bg-muted text-text-default sm:w-80',
                 idx === 0 ? 'bg-bg-muted/80' : '',
               ].join(' ')}
             >
-              <div className="translate-y-[-70%] text-xs font-semibold leading-none text-text-default/60">
+              <div className="translate-y-[-70%] text-xs font-semibold leading-none text-text-default/60 sm:text-lg">
                 {it.title}
               </div>
 
               {/* ✅ 숫자만 카운트업, 단위는 고정 */}
-              <div className="mt-2 whitespace-nowrap text-sm tabular-nums leading-snug">
+              <div className="mt-2 whitespace-nowrap text-sm tabular-nums leading-snug sm:text-2xl">
                 <span className="inline-block min-w-[4ch] text-center">{values[idx]}</span>
                 <span className="text-text-default/80">{it.unit}</span>
               </div>
