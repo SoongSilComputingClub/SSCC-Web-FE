@@ -20,7 +20,7 @@ export default function CookiePage() {
     };
 
     // 이미 토큰이 저장된 상태면(이중 호출/새로고침 등) 바로 리다이렉트
-    const existingAccess = localStorage.getItem('accessToken');
+    const existingAccess = sessionStorage.getItem('accessToken');
     if (existingAccess) {
       performRedirect();
       return;
@@ -55,7 +55,7 @@ export default function CookiePage() {
         console.error('토큰 교환 실패:', err);
 
         // 이미 토큰이 있으면(첫 요청 성공 후 추가 요청 실패 등) 실패 알림 없이 진행
-        if (localStorage.getItem('accessToken')) {
+        if (sessionStorage.getItem('accessToken')) {
           performRedirect();
           return;
         }

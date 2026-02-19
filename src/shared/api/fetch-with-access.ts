@@ -10,14 +10,14 @@ function toHeaders(init: RequestInit['headers']): Headers {
 }
 
 function redirectToLoginAndClearTokens() {
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
+  sessionStorage.removeItem('accessToken');
+  sessionStorage.removeItem('refreshToken');
   window.location.href = '/login';
 }
 
 // AccessToken 재발급
 async function refreshAccessToken(): Promise<string> {
-  const refreshToken = localStorage.getItem('refreshToken');
+  const refreshToken = sessionStorage.getItem('refreshToken');
 
   if (!refreshToken) {
     throw new Error('RefreshToken 없음');
@@ -35,8 +35,8 @@ async function refreshAccessToken(): Promise<string> {
 
   const data = await response.json();
 
-  localStorage.setItem('accessToken', data.data.accessToken);
-  localStorage.setItem('refreshToken', data.data.refreshToken);
+  sessionStorage.setItem('accessToken', data.data.accessToken);
+  sessionStorage.setItem('refreshToken', data.data.refreshToken);
 
   return data.data.accessToken;
 }
@@ -69,7 +69,7 @@ function buildFinalUrl(url: string): string {
 
 // 인증 포함 fetch
 export async function fetchWithAccess(url: string, options: RequestInit = {}): Promise<Response> {
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = sessionStorage.getItem('accessToken');
 
   // 토큰이 없으면 보호 API 호출 자체가 의미 없으므로 로그인으로
   if (!accessToken) {

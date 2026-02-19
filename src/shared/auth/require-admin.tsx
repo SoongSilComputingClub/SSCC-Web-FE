@@ -9,7 +9,7 @@ interface RequireAdminProps {
 }
 
 export default function RequireAdmin({ children }: RequireAdminProps) {
-  const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
+  const token = sessionStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
 
   // 토큰 없으면 로그인 페이지로
   if (!token) {
@@ -20,8 +20,8 @@ export default function RequireAdmin({ children }: RequireAdminProps) {
 
   // 토큰 만료되었으면 로그인 페이지로
   if (isExpired) {
-    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+    sessionStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+    sessionStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
     return <Navigate to="/login" replace />;
   }
 
