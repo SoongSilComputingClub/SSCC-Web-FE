@@ -11,6 +11,7 @@ import HomePage from '@/pages/home';
 import LoginPage from '@/pages/login';
 import CookiePage from '@/pages/login/cookie';
 import { AuthProvider } from '@/shared/auth/auth-provider';
+import RequireAdmin from '@/shared/auth/require-admin';
 import { RequireAuth } from '@/shared/auth/require-auth';
 import { AppShell } from '@/shared/layout/app-shell';
 
@@ -45,7 +46,14 @@ export const router = createBrowserRouter([
           </RequireAuth>
         ),
       },
-      { path: '/admin', element: <AdminPage /> },
+      {
+        path: '/admin',
+        element: (
+          <RequireAdmin>
+            <AdminPage />
+          </RequireAdmin>
+        ),
+      },
       { path: '/login', element: <LoginPage /> },
       { path: '/cookie', element: <CookiePage /> },
     ],
