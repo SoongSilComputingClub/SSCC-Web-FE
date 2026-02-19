@@ -34,7 +34,7 @@ export default function CookiePage() {
     // 이미 토큰이 저장된 상태면(이중 호출/새로고침 등) 바로 리다이렉트
     const existingAccess = sessionStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
     if (existingAccess) {
-      performRedirect(existingAccess ?? undefined);
+      performRedirect(existingAccess);
       return;
     }
 
