@@ -18,26 +18,42 @@ function MemberCard({ member, size }: { member: Member; size: CardSize }) {
   const cardWidthClass = isLg
     ? 'max-w-none' // lg는 꽉 차도 괜찮다면
     : isMd
-      ? 'max-w-[130px]' // md는 폭이 너무 커지지 않게
+      ? 'max-w-[130px] sm:max-w-[170px]' // md는 폭이 너무 커지지 않게
       : 'max-w-[120px]'; // sm도 동일하게 제한
 
-  const cardSizeClass = isLg ? 'h-[250px]' : isMd ? 'h-[200px]' : 'h-[150px]';
+  const cardSizeClass = isLg
+    ? 'h-[250px] sm:h-[350px]'
+    : isMd
+      ? 'h-[200px] sm:h-[250px]'
+      : 'h-[150px] sm:h-[200px]';
 
   const avatarSizeClass = isLg
-    ? 'h-[105px] w-[105px]'
+    ? 'h-[105px] w-[105px] sm:h-[170px] sm:w-[170px]'
     : isMd
-      ? 'h-[66px] w-[66px]'
-      : 'h-[45px] w-[45px]';
+      ? 'h-[66px] w-[66px] sm:h-[110px] sm:w-[110px]'
+      : 'h-[45px] w-[45px] sm:h-[75px] sm:w-[75px]';
 
-  const roleTextClass = isLg ? 'text-sm' : isMd ? 'text-2xs' : 'text-[6px]';
-  const nameTextClass = isLg ? 'text-lg' : isMd ? 'text-sm' : 'text-[12px]';
-  const metaTextClass = isLg ? 'text-xs' : isMd ? 'text-2xs' : 'text-[6px]';
+  const roleTextClass = isLg
+    ? 'text-sm sm:text-md'
+    : isMd
+      ? 'text-2xs sm:text-sm'
+      : 'text-[6px] sm:text-xs';
+  const nameTextClass = isLg
+    ? 'text-lg sm:text-2xl'
+    : isMd
+      ? 'text-sm sm:text-lg'
+      : 'text-[12px] sm:text-sm';
+  const metaTextClass = isLg
+    ? 'text-xs sm:text-sm'
+    : isMd
+      ? 'text-2xs sm:text-xs'
+      : 'text-[6px] sm:text-xs';
 
   const quoteClass = isLg
-    ? 'mt-2 mb-3 rounded-xl py-2 text-xs'
+    ? 'mt-2 mb-3 rounded-xl py-2 text-xs sm:text-sm'
     : isMd
-      ? 'mt-2 mb-3 rounded-[10px] py-2 text-2xs'
-      : 'mt-1 mb-1 rounded-lg py-1 text-[6px]';
+      ? 'mt-2 mb-3 rounded-[10px] py-2 text-2xs sm:text-xs'
+      : 'mt-1 mb-1 rounded-lg py-1 text-[6px] sm:text-xs';
 
   return (
     <div
@@ -184,7 +200,7 @@ export default function MemberSection() {
   ];
   return (
     <section className="w-full bg-bg-default px-6 py-14">
-      <div className="mx-auto w-full max-w-[420px]">
+      <div className="mx-auto w-full max-w-[420px] sm:max-w-[550px]">
         <h2 className="text-center text-xl font-bold text-text-default">44기 운영진</h2>
 
         {/* 2개 큰 카드 */}
