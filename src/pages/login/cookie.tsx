@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { parseAccessToken, ROLES, STORAGE_KEYS } from '@/shared/auth/jwt';
-
 import { useAuth } from '@/shared/auth/use-auth';
 
 export default function CookiePage() {
