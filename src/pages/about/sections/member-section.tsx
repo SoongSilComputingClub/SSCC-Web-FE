@@ -57,7 +57,7 @@ const MEMBER_CARD_STYLE: Record<
   },
 };
 
-function MemberCard({ member, size }: MemberCardProps) {
+function MemberCard({ member, size }: Readonly<MemberCardProps>) {
   const styles = MEMBER_CARD_STYLE[size];
 
   const containerClassName = [
