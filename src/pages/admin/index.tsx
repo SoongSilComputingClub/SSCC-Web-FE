@@ -136,10 +136,46 @@ export default function IndexPage() {
 
   // ✅ CSV 내보내기: (전체 데이터 기준)
   const exportCsv = () => {
-    const header = ['순서', '이름', '학과', '학번', '학년', '성별'];
+    const header = [
+      '순서',
+      '이름',
+      '학과',
+      '학번',
+      '학년',
+      '성별',
+      '전화번호',
+      '자기소개',
+      '코딩경험',
+      '기술스택',
+      '원하는 가치',
+      '포부',
+      '면접 가능 시간',
+    ];
+
+    const formatInterviewTimes = (
+      times?: { date: string; startTime: string; endTime: string }[],
+    ) => {
+      if (!times || times.length === 0) return '';
+      // ✅ 날짜 줄 + 시간 줄 (슬롯마다 2줄)
+      return times.map((t) => `${t.date}\n${t.startTime} ~ ${t.endTime}`).join('\n\n'); // 슬롯 간 한 줄 띄우기(원하면 '\n'로 바꿔도 됨)
+    };
 
     const lines = rows.map((r) =>
-      [r.order, r.name, r.major, r.studentId, r.grade, r.gender]
+      [
+        r.order,
+        r.name,
+        r.major,
+        r.studentId,
+        r.grade,
+        r.gender,
+        r.phone,
+        r.introduce,
+        r.codingExp,
+        r.techStackText,
+        r.wantedValue,
+        r.aspiration,
+        formatInterviewTimes(r.interviewTimes),
+      ]
         .map((v) => {
           const s = String(v);
           const sanitized = /^[=+\-@]/.test(s) ? "'" + s : s;
