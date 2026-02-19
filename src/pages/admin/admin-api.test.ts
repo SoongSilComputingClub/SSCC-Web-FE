@@ -1,57 +1,156 @@
-import axios from 'axios';
-import { afterEach, describe, expect, test, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { readApplyForms } from '@/shared/api/admin-api';
+// ✅ fetchWithAccess를 mock
+vi.mock('@/shared/api/fetch-with-access', () => ({
+  fetchWithAccess: vi.fn(),
+}));
 
-vi.mock('axios');
+import {
+  readApplyForms,
+  readCodingExpDistribution,
+  readGenderDistribution,
+  type CodingExpDistributionData,
+  type GenderDistributionData,
+} from '@/shared/api/admin-api';
+import { fetchWithAccess } from '@/shared/api/fetch-with-access';
 
-describe('API 테스트: readApplyForms', () => {
-  const TEST_TOKEN = 'test-access-token';
+type ApiResponse<T> = {
+  success: boolean;
+  code: string;
+  message: string;
+  data: T;
+};
 
-  afterEach(() => {
+// ✅ Response 모의 객체 생성 (admin-api.ts는 res.json()만 씀)
+function mockResponse<T>(payload: ApiResponse<T>) {
+  return { json: vi.fn().mockResolvedValue(payload) } as unknown as Response;
+}
+
+describe('admin-api', () => {
+  beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  test('[성공] 토큰을 헤더에 싣고, 성공 데이터를 반환해야 한다', async () => {
-    const mockSuccessResponse = {
+  it('readApplyForms: 성공 시 응답을 반환하고 endpoint를 정확히 호출한다', async () => {
+    const payload: ApiResponse<unknown[]> = {
       success: true,
-      data: [{ applicantName: '홍길동', department: '컴공' }],
-      message: '조회 성공',
+      code: 'OK',
+      message: 'ok',
+      data: [{ gender: 'male' }, { gender: 'female' }],
     };
 
-    vi.mocked(axios.get).mockResolvedValue({ data: mockSuccessResponse });
-
-    const result = await readApplyForms(TEST_TOKEN);
-
-    expect(result).toEqual(mockSuccessResponse);
-
-    expect(axios.get).toHaveBeenCalledWith(
-      'api/apply-forms/read',
-      expect.objectContaining({
-        headers: {
-          accept: '*/*',
-          Authorization: `Bearer ${TEST_TOKEN}`,
-        },
-        validateStatus: expect.any(Function),
-      }),
+    (fetchWithAccess as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
+      mockResponse(payload),
     );
+
+    const res = await readApplyForms();
+
+    expect(fetchWithAccess).toHaveBeenCalledWith('/admin/apply-forms');
+    expect(res).toEqual(payload);
   });
 
-  test('[실패 - 로직] success가 false면 에러를 던져야 한다 (404 등 포함)', async () => {
-    const mockFailResponse = {
+  it('readApplyForms: success=false면 message로 Error를 throw한다', async () => {
+    const payload: ApiResponse<unknown[]> = {
       success: false,
-      message: '작성된 지원서를 찾을 수 없습니다.',
-      data: null,
+      code: 'ERR',
+      message: 'fail',
+      data: [],
     };
 
-    vi.mocked(axios.get).mockResolvedValue({ data: mockFailResponse });
+    (fetchWithAccess as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
+      mockResponse(payload),
+    );
 
-    await expect(readApplyForms(TEST_TOKEN)).rejects.toThrow('작성된 지원서를 찾을 수 없습니다.');
+    await expect(readApplyForms()).rejects.toThrow('fail');
   });
 
-  test('[실패 - 네트워크] 아예 통신이 안 되면 에러를 던져야 한다', async () => {
-    vi.mocked(axios.get).mockRejectedValue(new Error('Network Error'));
+  it('readGenderDistribution: 성공 시 응답을 반환한다', async () => {
+    const payload: ApiResponse<GenderDistributionData> = {
+      success: true,
+      code: 'OK',
+      message: 'ok',
+      data: {
+        maleCount: 10,
+        femaleCount: 5,
+        malePercentage: 66.6,
+        femalePercentage: 33.4,
+      },
+    };
 
-    await expect(readApplyForms(TEST_TOKEN)).rejects.toThrow('Network Error');
+    (fetchWithAccess as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
+      mockResponse(payload),
+    );
+
+    const res = await readGenderDistribution();
+
+    expect(fetchWithAccess).toHaveBeenCalledWith('/admin/apply-forms/gender-distribution');
+    expect(res).toEqual(payload);
+  });
+
+  it('readGenderDistribution: success=false면 Error를 throw한다', async () => {
+    const payload: ApiResponse<GenderDistributionData> = {
+      success: false,
+      code: 'ERR',
+      message: '권한 없음',
+      data: {
+        maleCount: 0,
+        femaleCount: 0,
+        malePercentage: 0,
+        femalePercentage: 0,
+      },
+    };
+
+    (fetchWithAccess as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
+      mockResponse(payload),
+    );
+
+    await expect(readGenderDistribution()).rejects.toThrow('권한 없음');
+  });
+
+  it('readCodingExpDistribution: 성공 시 응답을 반환한다', async () => {
+    const payload: ApiResponse<CodingExpDistributionData> = {
+      success: true,
+      code: 'OK',
+      message: 'ok',
+      data: {
+        totalCount: 3,
+        distributions: [
+          { level: 'NONE', description: '없음', count: 1, percentage: 33.3 },
+          { level: 'BASIC', description: '기초', count: 2, percentage: 66.7 },
+        ],
+      },
+    };
+
+    (fetchWithAccess as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
+      mockResponse(payload),
+    );
+
+    const res = await readCodingExpDistribution();
+
+    expect(fetchWithAccess).toHaveBeenCalledWith('/admin/apply-forms/coding-exp-distribution');
+    expect(res).toEqual(payload);
+  });
+
+  it('readCodingExpDistribution: success=false면 Error를 throw한다', async () => {
+    const payload: ApiResponse<CodingExpDistributionData> = {
+      success: false,
+      code: 'ERR',
+      message: 'fail',
+      data: { totalCount: 0, distributions: [] },
+    };
+
+    (fetchWithAccess as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
+      mockResponse(payload),
+    );
+
+    await expect(readCodingExpDistribution()).rejects.toThrow('fail');
+  });
+
+  it('공통: fetchWithAccess가 reject되면 그대로 throw된다', async () => {
+    (fetchWithAccess as unknown as ReturnType<typeof vi.fn>).mockRejectedValue(
+      new Error('network error'),
+    );
+
+    await expect(readApplyForms()).rejects.toThrow('network error');
   });
 });
