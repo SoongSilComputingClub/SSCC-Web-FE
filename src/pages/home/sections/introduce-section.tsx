@@ -326,7 +326,7 @@ export default function IntroSection() {
       </div>
       <div className="relative flex flex-col items-center bg-bg-white">
         <div className="mt-10 text-xl font-semibold text-text-black">
-          SSCC는 이런 활동을 진행합니다.
+          매 기수 진행되는 정기 활동
         </div>
         <TwoByTwoCardsSection
           items={[
@@ -334,28 +334,28 @@ export default function IntroSection() {
               id: 'c1',
               title: '세미나',
               subtitle: 'seminar',
-              desc: 'SSCC 출신 선배가 직접 \n전하는 생생한 업계 현황과 \n핵심 기술을 배우며 \n실무 감각을 깨우는 시간',
+              desc: 'SSCC 출신 선배들이 직접 전하는 \n생생한 경험과 핵심 기술을 배우며 \n실무 감각을 익혀요.',
               imageSrc: picIntro1,
             },
             {
               id: 'c2',
               title: '프로젝트',
               subtitle: 'project',
-              desc: '아이디어를 서비스로 구현하는 \n협업의 여정. 팀원과 소통하며 \n완성도 높은 결과물을 일굽니다',
+              desc: '아이디어를 서비스로 직접 구현하며 \n협업의 과정을 경험해요. \n팀원들과 소통하며 \n완성도 높은 결과물을 만들어가요.',
               imageSrc: picIntro2,
             },
             {
               id: 'c3',
               title: '스터디',
               subtitle: 'study',
-              desc: '기초부터 심화까지 함께하는 \n몰입의 시간. 함께 지식을 나누며 \n기본기를 다지는 과정',
+              desc: '기초부터 심화까지 함께 몰입하며 \n공부해요. 서로 지식을 나누며 \n탄탄한 개발 기본기를 다져가요.',
               imageSrc: picIntro3,
             },
             {
               id: 'c4',
               title: '행사',
               subtitle: 'event',
-              desc: '선후배가 어우러지는 소통의 장',
+              desc: '학업 스트레스에서 벗어나 선후배가 \n다 함께 어우러지며 끈끈한 네트워크와 \n즐거운 추억을 쌓아요.',
               imageSrc: picIntro4,
             },
           ]}
