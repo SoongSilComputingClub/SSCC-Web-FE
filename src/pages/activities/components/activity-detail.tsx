@@ -111,7 +111,7 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
   return (
     <section className="flex w-full flex-col items-center bg-bg-default px-6 pb-16 pt-20 text-text-default">
       {/* 대표 이미지 */}
-      <div className="relative w-full max-w-[520px]">
+      <div className="relative w-full max-w-[420px] md:max-w-[480px]">
         <ActivityGallery
           currentSrc={currentSrc}
           title={activity.title}
@@ -124,22 +124,12 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
           index={currentIndex}
           total={images.length}
           aspectRatio={coverAspect ?? '4 / 5'}
-          maxHeight="70vh"
+          maxHeight="55vh"
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerCancel}
         />
       </div>
-
-      {/* 제목 */}
-      <h1 className="mt-8 text-center text-xl font-semibold tracking-tight text-text-default">
-        {activity.title}
-      </h1>
-      {activity.date && (
-        <time dateTime={activity.date} className="mt-2 block text-center text-sm text-text-default">
-          {activity.date}
-        </time>
-      )}
 
       {/* 갤러리 썸네일 */}
       <ul ref={thumbsListRef} className="mt-5 flex w-full max-w-[640px] gap-3 overflow-x-auto pb-2">
@@ -158,11 +148,26 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
         ))}
       </ul>
 
-      {/* 본문 */}
-      <div className="mt-10 w-full max-w-[680px]">
-        <p className="whitespace-pre-line text-sm leading-relaxed text-text-default">
-          {activity.content}
-        </p>
+      {/* 제목 + 본문 영역 */}
+      <div className="mt-6 w-full max-w-[720px] px-0 py-0 md:rounded-lg md:bg-white/5 md:px-6 md:py-8 md:shadow-lg">
+        {/* 제목 */}
+        <h1 className="text-center text-[20px] font-semibold tracking-tight text-white lg:text-lg">
+          {activity.title}
+        </h1>
+
+        {activity.date && (
+          <time dateTime={activity.date} className="mt-2 block text-center text-sm text-gray-300">
+            {activity.date}
+          </time>
+        )}
+        <div className="mt-6 h-px w-full bg-white/20" />
+
+        {/* 본문 */}
+        <div className="mt-6">
+          <p className="whitespace-pre-line text-base leading-relaxed text-gray-100 lg:text-md">
+            {activity.content}
+          </p>
+        </div>
       </div>
     </section>
   );
