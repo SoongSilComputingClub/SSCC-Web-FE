@@ -1,18 +1,51 @@
-import axios from 'axios';
+import { fetchWithAccess } from '@/shared/api/fetch-with-access';
 
-export async function readApplyForms(accessToken: string) {
-  const res = await axios.get(`api/apply-forms/read`, {
-    headers: {
-      accept: '*/*',
-      Authorization: `Bearer ${accessToken}`,
-    },
-    validateStatus: (status) => {
-      return status < 500;
-    },
-  });
+export type GenderDistributionData = {
+  maleCount: number;
+  femaleCount: number;
+  malePercentage: number;
+  femalePercentage: number;
+};
 
-  if (!res.data.success) {
-    throw new Error(res.data.message);
-  }
-  return res.data;
+export type ExpLevelDistribution = {
+  level: string;
+  description: string;
+  count: number;
+  percentage: number;
+};
+
+export type CodingExpDistributionData = {
+  totalCount: number;
+  distributions: ExpLevelDistribution[];
+};
+
+type ApiResponse<T> = {
+  success: boolean;
+  code: string;
+  message: string;
+  data: T;
+};
+
+export async function readApplyForms() {
+  const res = await fetchWithAccess('/admin/apply-forms');
+  const json: ApiResponse<unknown[]> = await res.json();
+
+  if (!json.success) throw new Error(json.message);
+  return json;
+}
+
+export async function readGenderDistribution() {
+  const res = await fetchWithAccess('/admin/apply-forms/gender-distribution');
+  const json: ApiResponse<GenderDistributionData> = await res.json();
+
+  if (!json.success) throw new Error(json.message);
+  return json;
+}
+
+export async function readCodingExpDistribution() {
+  const res = await fetchWithAccess('/admin/apply-forms/coding-exp-distribution');
+  const json: ApiResponse<CodingExpDistributionData> = await res.json();
+
+  if (!json.success) throw new Error(json.message);
+  return json;
 }
