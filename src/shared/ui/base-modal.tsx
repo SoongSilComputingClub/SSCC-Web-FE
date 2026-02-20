@@ -7,7 +7,7 @@ type BaseModalProps = {
   children: React.ReactNode;
 };
 
-export function BaseModal({ isOpen, title, onClose, children }: BaseModalProps) {
+export function BaseModal({ isOpen, title, onClose, children }: Readonly<BaseModalProps>) {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
   // ✅ React state(isOpen) <-> dialog.showModal()/close() 동기화

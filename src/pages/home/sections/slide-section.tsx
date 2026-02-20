@@ -21,11 +21,11 @@ function SlideIndicator({
   activeIndex,
   total,
   progress,
-}: {
+}: Readonly<{
   activeIndex: number;
   total: number;
   progress: number; // 0~1
-}) {
+}>) {
   const current = activeIndex + 1;
 
   return (

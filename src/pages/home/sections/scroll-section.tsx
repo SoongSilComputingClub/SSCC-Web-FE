@@ -105,7 +105,7 @@ function Parallax4Split({
   textOffsetYPx = -24,
   smoothFactor = 0.08,
   enableIntersectionGate = true,
-}: Parallax4SplitProps) {
+}: Readonly<Parallax4SplitProps>) {
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
   // [col][idx]
