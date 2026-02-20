@@ -25,11 +25,12 @@ export const successToast = (message: string, options?: ExternalToast) => {
   const baseClassName =
     'bg-[#DFEDED] text-[#00A7CB] rounded-2xl px-6 py-4 font-semibold text-sm flex items-center gap-3 shadow-sm';
 
-  const className = [baseClassName, options?.className].filter(Boolean).join(' ');
+  const { className: extraClassName, ...restOptions } = options || {};
+  const combinedClassName = [baseClassName, extraClassName].filter(Boolean).join(' ');
 
   toast.custom(
     () => (
-      <div className={className}>
+      <div className={combinedClassName}>
         {CHECK_ICON}
         <span>{message}</span>
       </div>
@@ -37,7 +38,7 @@ export const successToast = (message: string, options?: ExternalToast) => {
     {
       duration: 3000,
       className: 'bg-transparent p-0 shadow-none border-0',
-      ...options,
+      ...restOptions,
     },
   );
 };
