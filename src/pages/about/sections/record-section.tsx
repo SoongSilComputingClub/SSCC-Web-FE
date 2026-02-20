@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 type RecordItem = {
   id: string;
@@ -10,6 +10,47 @@ type RecordItem = {
 
 function easeOutQuint(t: number) {
   return 1 - Math.pow(1 - t, 5);
+}
+
+const STEPS = 120;
+
+function calcDelay(durationMs: number, step: number, steps: number) {
+  return Math.round((durationMs * step) / steps);
+}
+
+function calcNextValue(targetValue: number, step: number, steps: number) {
+  const t = step / steps;
+  const eased = easeOutQuint(t);
+  return Math.round(targetValue * eased);
+}
+
+function clearTimers(timersRef: React.MutableRefObject<number[]>) {
+  timersRef.current.forEach((id) => globalThis.clearTimeout(id));
+  timersRef.current = [];
+}
+
+function scheduleCountUpForRecord(params: {
+  record: RecordItem;
+  recordIndex: number;
+  steps: number;
+  pushTimer: (id: number) => void;
+  updateValueAtIndex: (index: number, nextValue: number) => void;
+}) {
+  const { record, recordIndex, steps, pushTimer, updateValueAtIndex } = params;
+
+  const durationMs = record.durationMs ?? 900;
+  const targetValue = record.value;
+
+  for (let step = 1; step <= steps; step += 1) {
+    const delay = calcDelay(durationMs, step, steps);
+
+    const timerId = globalThis.setTimeout(() => {
+      const nextValue = calcNextValue(targetValue, step, steps);
+      updateValueAtIndex(recordIndex, nextValue);
+    }, delay);
+
+    pushTimer(timerId);
+  }
 }
 
 export default function RecordSection() {
@@ -31,15 +72,32 @@ export default function RecordSection() {
   // ✅ setTimeout id들 정리용
   const timersRef = useRef<number[]>([]);
 
-  // ✅ 중첩 줄이기: 값 업데이트 로직만 밖으로 분리
-  const updateValueAtIndex = (index: number, nextValue: number) => {
+  // ✅ useCallback으로 참조 안정화 (deps 깔끔)
+  const updateValueAtIndex = useCallback((index: number, nextValue: number) => {
     setValues((prev) => {
       if (prev[index] === nextValue) return prev;
       const next = [...prev];
       next[index] = nextValue;
       return next;
     });
-  };
+  }, []);
+
+  const startCountUpOnce = useCallback(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+
+    clearTimers(timersRef);
+
+    records.forEach((record, recordIndex) => {
+      scheduleCountUpForRecord({
+        record,
+        recordIndex,
+        steps: STEPS,
+        updateValueAtIndex,
+        pushTimer: (id) => timersRef.current.push(id),
+      });
+    });
+  }, [records, updateValueAtIndex]);
 
   useEffect(() => {
     const onFirstScroll = () => setArmed(true);
@@ -53,44 +111,10 @@ export default function RecordSection() {
     const el = sectionRef.current;
     if (!el) return;
 
-    const clearTimers = () => {
-      timersRef.current.forEach((id) => globalThis.clearTimeout(id));
-      timersRef.current = [];
-    };
-
-    const startCountUp = () => {
-      if (startedRef.current) return;
-      startedRef.current = true;
-
-      clearTimers();
-
-      // ✅ 업데이트 횟수 제한(모바일 튐 완화)
-      const STEPS = 120; // 12~18 추천
-
-      records.forEach((rec, i) => {
-        const durationMs = rec.durationMs ?? 900;
-        const targetValue = rec.value;
-
-        for (let s = 1; s <= STEPS; s += 1) {
-          const delay = Math.round((durationMs * s) / STEPS);
-
-          const timerId = globalThis.setTimeout(() => {
-            const t = s / STEPS;
-            const eased = easeOutQuint(t);
-            const nextValue = Math.round(targetValue * eased);
-
-            updateValueAtIndex(i, nextValue);
-          }, delay);
-
-          timersRef.current.push(timerId);
-        }
-      });
-    };
-
     const io = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
-        startCountUp();
+        startCountUpOnce();
         io.disconnect(); // ✅ 한 번만
       },
       {
@@ -103,9 +127,9 @@ export default function RecordSection() {
 
     return () => {
       io.disconnect();
-      clearTimers();
+      clearTimers(timersRef);
     };
-  }, [armed, records]);
+  }, [armed, startCountUpOnce]);
 
   return (
     <section
