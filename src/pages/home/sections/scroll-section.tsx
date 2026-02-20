@@ -57,7 +57,7 @@ function easeOutCubic(t: number) {
 }
 
 /** col 지정된 아이템은 고정 배치, col 미지정 아이템은 남는 슬롯에 라운드로빈 분배 */
-function arrangeColumns(items: ParallaxColumnItem[]) {
+function arrangeColumns(items: Readonly<ParallaxColumnItem[]>) {
   const cols: ParallaxColumnItem[][] = [[], [], [], []];
 
   const fixed = items.filter((it) => it.col !== undefined) as Array<
