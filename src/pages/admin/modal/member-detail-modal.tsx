@@ -16,7 +16,7 @@ const CODING_EXP_LABEL: Record<string, string> = {
   E: 'E (전문가 수준)',
 };
 
-export function MemberDetailModal({ isOpen, row, onClose }: MemberDetailModalProps) {
+export function MemberDetailModal({ isOpen, row, onClose }: Readonly<MemberDetailModalProps>) {
   if (!isOpen || !row) return null;
 
   return (

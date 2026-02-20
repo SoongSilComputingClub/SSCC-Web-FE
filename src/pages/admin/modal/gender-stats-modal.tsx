@@ -15,7 +15,7 @@ const GENDER_COLORS: Record<GenderShownKey, string> = {
   여성: '#ffd400',
 };
 
-export function GenderStatsModal({ isOpen, onClose }: GenderStatsModalProps) {
+export function GenderStatsModal({ isOpen, onClose }: Readonly<GenderStatsModalProps>) {
   const [data, setData] = useState<GenderDistributionData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
