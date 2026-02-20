@@ -8,12 +8,28 @@ const FAQS = [
     a: '네, 휴학생도 지원 및 활동이 가능합니다. 활동 일정에 성실히 참여할 수 있다면 학적과 무관하게 지원할 수 있습니다.',
   },
   {
+    q: 'SSCC 활동 기간은 얼마나 되나요?',
+    a: '기본 활동 기간은 1학기(6개월)이며, 이후에도 본인의 의사에 따라 계속해서 활동을 이어나가실 수 있습니다.',
+  },
+  {
     q: '개발 경험이 없어도 괜찮나요?',
-    a: '물론입니다. 기초부터 함께 학습하며 성장하는 것을 목표로 하고 있어 초보자도 환영합니다.',
+    a: '물론입니다! 현재의 개발 실력 보다는 함께 학습하고 성장하고자 하는 열정과 활동 의지를 더욱 중요하게 평가합니다.',
+  },
+  {
+    q: 'IT 관련 전공생만 지원 가능한가요?',
+    a: '아닙니다. 전공과 무관하게 프로그래밍과 IT 기술에 관심이 있는 학생이라면 누구나 환영합니다.',
   },
   {
     q: '면접은 어떤 방식으로 진행되나요?',
-    a: '면접은 대면으로 진행되며, 지원 동기와 활동 의지를 중심으로 간단한 대화를 나눕니다.',
+    a: '면접은 대면으로 진행됩니다. 제출해주신 지원서를 바탕으로 지원 동기, 활동 의지, 협업 태도 등을 중심으로 진행될 예정입니다.',
+  },
+  {
+    q: '회비는 얼마인가요?',
+    a: '회비는 학기당 35,000원입니다.',
+  },
+  {
+    q: '기타 문의사항이 있을 경우 어디로 연락하면 되나요?',
+    a: 'SSCC 카카오톡 채널로 문의해주세요! https://open.kakao.com/o/spMLQKai',
   },
 ] as const;
 
@@ -38,7 +54,7 @@ export default function FAQSection() {
                   {/* Question */}
                   <div className="flex items-center gap-2">
                     <span className="text-point">Q.</span>
-                    <span className="text-md text-text-default">{item.q}</span>
+                    <span className="text-base font-medium text-text-default">{item.q}</span>
                   </div>
 
                   {/* 펼침/접힘 아이콘 */}
@@ -68,7 +84,7 @@ export default function FAQSection() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <p className="text-base leading-relaxed text-text-default">{item.a}</p>
+                    <p className="text-sm leading-relaxed text-text-default">{item.a}</p>
                   </div>
                 </div>
               </div>

@@ -64,7 +64,7 @@ export const RECRUITMENT_SCHEDULE: RecruitmentScheduleItem[] = [
     title: '결과 발표',
     range: {
       startIso: '2026-03-08T00:00:00+09:00',
-      endIso: '2026-03-10T23:59:59+09:00',
+      endIso: '2026-03-09T23:59:59+09:00',
     },
   },
 ];
