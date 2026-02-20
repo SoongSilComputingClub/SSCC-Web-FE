@@ -11,6 +11,8 @@ import picScroll8 from '@/assets/images/home/pic-scroll8.jpg';
 
 type ColIndex = 0 | 1 | 2 | 3;
 
+const COL_KEYS = ['col-0', 'col-1', 'col-2', 'col-3'] as const;
+
 export type ParallaxColumnItem = {
   id: string;
   imageSrc: string;
@@ -346,12 +348,14 @@ function Parallax4Split({
                   const preset = presets[colI] ?? presets[0];
 
                   return (
-                    <div key={`col-${colI}`} className="relative h-full overflow-hidden">
+                    <div
+                      key={COL_KEYS[colI] ?? `col-${colI}`}
+                      className="relative h-full overflow-hidden"
+                    >
                       {colItems.map((it, itemI) => {
                         const startY =
                           it.startYPercent ?? preset.baseStartY + itemI * itemGapPercent;
                         const size = it.sizeClassName ?? 'w-full max-w-[150px] md:max-w-[220px]';
-
                         const scale = it.imageScale ?? 1.12;
 
                         return (
