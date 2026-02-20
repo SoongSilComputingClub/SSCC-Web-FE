@@ -85,15 +85,25 @@ export function useActivityGallery({
   const goPrev = useCallback(() => {
     setState(({ activityId: stateActivityId, index }) => {
       const baseIndex = stateActivityId === activityId ? index : 0;
-      const nextIndex = Math.max(baseIndex - 1, 0);
+
+      // 이미지가 1장 이하라면 이동 없음
+      if (total <= 1) return { activityId, index: 0 };
+
+      // wrap: 0 -> last
+      const nextIndex = baseIndex === 0 ? total - 1 : baseIndex - 1;
       return { activityId, index: nextIndex };
     });
-  }, [activityId]);
+  }, [activityId, total]);
 
   const goNext = useCallback(() => {
     setState(({ activityId: stateActivityId, index }) => {
       const baseIndex = stateActivityId === activityId ? index : 0;
-      const nextIndex = Math.min(baseIndex + 1, Math.max(0, total - 1));
+
+      // 이미지가 1장 이하라면 이동 없음
+      if (total <= 1) return { activityId, index: 0 };
+
+      // wrap: last -> 0
+      const nextIndex = baseIndex === total - 1 ? 0 : baseIndex + 1;
       return { activityId, index: nextIndex };
     });
   }, [activityId, total]);
