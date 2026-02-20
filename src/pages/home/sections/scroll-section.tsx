@@ -129,10 +129,10 @@ function Parallax4Split({
 
   const presets: Preset[] = useMemo(
     () => [
-      { baseStartY: 72, baseSpeed: 1.0 },
-      { baseStartY: 10, baseSpeed: 1.0 },
-      { baseStartY: 58, baseSpeed: 1.0 },
-      { baseStartY: 52, baseSpeed: 1.0 },
+      { baseStartY: 72, baseSpeed: 1 },
+      { baseStartY: 10, baseSpeed: 1 },
+      { baseStartY: 58, baseSpeed: 1 },
+      { baseStartY: 52, baseSpeed: 1 },
     ],
     [],
   );
@@ -447,7 +447,7 @@ export default function ParallaxSection() {
             id: 'p8',
             col: 3,
             startYPercent: 400,
-            speed: 1.0,
+            speed: 1,
             imageSrc: picScroll8,
           },
         ]}
