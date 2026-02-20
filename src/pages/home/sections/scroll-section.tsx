@@ -326,13 +326,13 @@ function Parallax4Split({
               {/* ✅ Dividers overlay (양끝 포함) */}
               {showDividers ? (
                 <div className="pointer-events-none absolute inset-0 z-20">
-                  {Array.from({ length: 5 }).map((_, i) => (
+                  {[0, 25, 50, 75, 100].map((left) => (
                     <div
-                      key={`divider-${i}`}
+                      key={`divider-${left}`}
                       className="absolute top-0 h-full w-[3px]"
                       style={{
-                        left: `${(i * 100) / 4}%`, // 0%, 25%, 50%, 75%, 100%
-                        transform: i === 4 ? 'translateX(-1px)' : undefined, // 100% 라인이 밖으로 밀리는 것 방지(선 두께 보정)
+                        left: `${left}%`,
+                        transform: left === 100 ? 'translateX(-1px)' : undefined,
                         background:
                           'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.18) 20%, rgba(255,255,255,0.18) 80%, rgba(255,255,255,0) 100%)',
                       }}
