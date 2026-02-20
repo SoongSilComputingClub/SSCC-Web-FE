@@ -18,6 +18,7 @@ import ConsentSection from './sections/consent-section';
 import FormHeaderSection from './sections/form-header';
 import SubmitSection from './sections/submit-section';
 import { parseInterviewKeys } from './utils/parse-interview-keys';
+import { successToast } from '@/shared/ui/toast';
 
 export default function ApplyPage() {
   const [consented, setConsented] = useState(false);
@@ -93,9 +94,7 @@ export default function ApplyPage() {
       navigate('/apply', { replace: true });
 
       const successMessage = isEdit ? '지원서가 수정되었습니다.' : '신청이 완료되었습니다.';
-      toast.success(successMessage, {
-        duration: 2500,
-      });
+      successToast(successMessage);
     } catch (e) {
       console.error(e);
       toast.error(
