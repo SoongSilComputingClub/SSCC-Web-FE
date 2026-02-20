@@ -137,12 +137,6 @@ function Parallax4Split({
     [],
   );
 
-  // cols 바뀌면 refs/caches 초기화(인덱스 꼬임 방지)
-  // useEffect(() => {
-  //   imgRefs.current = [[], [], [], []];
-  //   measureCache.current = [[], [], [], []];
-  // }, [cols]);
-
   const scheduleTick = () => {
     if (rafIdRef.current) return;
     rafIdRef.current = globalThis.requestAnimationFrame(tick);
@@ -197,7 +191,6 @@ function Parallax4Split({
     if (r.bottom >= 0) return;
 
     p2GoneLogged.current = true;
-    // console.log('[p2 gone]');
   };
 
   const getItemMotion = (
