@@ -18,9 +18,9 @@ export function BaseModal({ isOpen, title, onClose, children }: Readonly<BaseMod
     if (isOpen) {
       // 이미 open이면 중복 showModal 방지
       if (!dialog.open) dialog.showModal();
-    } else {
+    } else if (dialog.open) {
       // 이미 닫혀있으면 close 생략
-      if (dialog.open) dialog.close();
+      dialog.close();
     }
   }, [isOpen]);
 
