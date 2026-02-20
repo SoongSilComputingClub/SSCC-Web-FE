@@ -77,7 +77,7 @@ export default function ScrollSnapSlides() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [vw, setVw] = useState(() =>
-    typeof globalThis.window === 'undefined' ? 0 : globalThis.window.innerWidth,
+    globalThis.window === undefined ? 0 : globalThis.window.innerWidth,
   );
 
   useEffect(() => {
