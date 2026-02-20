@@ -145,12 +145,12 @@ function Parallax4Split({
 
   const scheduleTick = () => {
     if (rafIdRef.current) return;
-    rafIdRef.current = window.requestAnimationFrame(tick);
+    rafIdRef.current = globalThis.requestAnimationFrame(tick);
   };
 
   const scheduleMeasure = () => {
     if (measureRafRef.current) return;
-    measureRafRef.current = window.requestAnimationFrame(() => {
+    measureRafRef.current = globalThis.requestAnimationFrame(() => {
       measureRafRef.current = 0;
       measureAll();
       scheduleTick();
@@ -184,6 +184,54 @@ function Parallax4Split({
     }
   };
 
+  const applyNodeStyle = (node: HTMLElement, y: number) => {
+    node.style.transform = `translate3d(0, ${y}px, 0)`;
+    node.style.opacity = '1';
+  };
+
+  const checkP2GoneOnce = (itId: string | undefined, node: HTMLElement) => {
+    if (itId !== 'p2') return;
+    if (p2GoneLogged.current) return;
+
+    const r = node.getBoundingClientRect();
+    if (r.bottom >= 0) return;
+
+    p2GoneLogged.current = true;
+    // console.log('[p2 gone]');
+  };
+
+  const getItemMotion = (
+    colI: number,
+    itemI: number,
+    preset: { baseSpeed: number },
+    it: { speed?: number; id?: string } | undefined,
+    s: number,
+  ) => {
+    const speed = Math.max(0, it?.speed ?? preset.baseSpeed);
+    const travel = measureCache.current[colI]?.[itemI]?.travel ?? 0;
+    const y = -s * travel * speed;
+    return { y, speed };
+  };
+
+  const processColumn = (colI: number, s: number) => {
+    const preset = presets[colI] ?? presets[0];
+    const colItems = cols[colI] ?? [];
+
+    for (let itemI = 0; itemI < colItems.length; itemI++) {
+      const node = imgRefs.current[colI]?.[itemI];
+      if (!node) continue;
+
+      const it = colItems[itemI];
+      const { y } = getItemMotion(colI, itemI, preset, it, s);
+
+      applyNodeStyle(node, y);
+      checkP2GoneOnce(it.id, node);
+    }
+  };
+
+  const shouldContinue = (easedTarget: number) =>
+    Math.abs(easedTarget - smoothedRef.current) > 0.0008;
+
   const tick = () => {
     rafIdRef.current = 0;
 
@@ -196,43 +244,14 @@ function Parallax4Split({
 
     const k = clamp(smoothFactor, 0.01, 0.35);
     smoothedRef.current += (easedTarget - smoothedRef.current) * k;
+
     const s = smoothedRef.current;
 
     for (let colI = 0; colI < 4; colI++) {
-      const preset = presets[colI] ?? presets[0];
-      const colItems = cols[colI] ?? [];
-
-      for (let itemI = 0; itemI < colItems.length; itemI++) {
-        const node = imgRefs.current[colI]?.[itemI];
-        if (!node) continue;
-
-        const it = colItems[itemI];
-        const speed = Math.max(0, it.speed ?? preset.baseSpeed);
-
-        const cached = measureCache.current[colI]?.[itemI];
-        const travel = cached?.travel ?? 0;
-
-        const y = -s * travel * speed;
-
-        node.style.transform = `translate3d(0, ${y}px, 0)`;
-        node.style.opacity = '1';
-
-        if (it.id === 'p2' && !p2GoneLogged.current) {
-          const r = node.getBoundingClientRect();
-          const isGone = r.bottom < 0; // 완전히 위로 나감
-
-          if (isGone) {
-            p2GoneLogged.current = true;
-            // console.log('[p2 gone] s =', s, 'target =', target, 'eased =', easedTarget);
-          }
-        }
-      }
+      processColumn(colI, s);
     }
 
-    // 아직 차이가 남아있으면 다음 프레임도 계속(=스크럽 계속 따라가기)
-    if (Math.abs(easedTarget - smoothedRef.current) > 0.0008) {
-      scheduleTick();
-    }
+    if (shouldContinue(easedTarget)) scheduleTick();
   };
 
   // 스크롤/리사이즈는 raf 예약만
