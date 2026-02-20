@@ -135,7 +135,7 @@ export default function HeroSection({ hasApplication }: { hasApplication: boolea
             <button
               type="button"
               onClick={logout}
-              className="mt-3 rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow"
+              className="mt-5 rounded-xl px-8 py-2 text-sm font-semibold text-point border-2 border-point shadow"
             >
               로그아웃
             </button>
