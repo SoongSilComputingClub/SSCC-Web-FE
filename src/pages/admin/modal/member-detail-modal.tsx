@@ -56,7 +56,7 @@ export function MemberDetailModal({ isOpen, row, onClose }: Readonly<MemberDetai
                 return acc;
               }, {});
 
-              const dates = Object.keys(grouped).sort();
+              const dates = Object.keys(grouped).sort((a, b) => a.localeCompare(b));
 
               return (
                 <div className="mt-2 grid gap-3">
