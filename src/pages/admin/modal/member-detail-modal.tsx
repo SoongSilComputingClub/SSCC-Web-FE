@@ -81,7 +81,7 @@ export function MemberDetailModal({ isOpen, row, onClose }: Readonly<MemberDetai
 }
 
 /** 한 줄 항목 (label - value 가로 배치) */
-function Item({ label, value }: { label: string; value: string }) {
+function Item({ label, value }: Readonly<{ label: string; value: string }>) {
   return (
     <div className="flex items-center justify-between rounded-2xl bg-bg-white/5 px-4 py-3">
       <span className="text-text-default/60">{label}</span>
@@ -91,7 +91,7 @@ function Item({ label, value }: { label: string; value: string }) {
 }
 
 /** 장문 항목 (label 위, value 아래 세로 배치) */
-function LongItem({ label, value }: { label: string; value: string }) {
+function LongItem({ label, value }: Readonly<{ label: string; value: string }>) {
   return (
     <div className="rounded-2xl bg-bg-white/5 px-4 py-3">
       <span className="text-text-default/60">{label}</span>
