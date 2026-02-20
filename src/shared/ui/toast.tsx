@@ -1,7 +1,8 @@
 import { toast } from 'sonner';
+
 import type { ExternalToast } from 'sonner';
 
-const CheckIcon = () => (
+const CHECK_ICON = (
   <svg
     width="18"
     height="18"
@@ -29,7 +30,7 @@ export const successToast = (message: string, options?: ExternalToast) => {
   toast.custom(
     () => (
       <div className={className}>
-        <CheckIcon />
+        {CHECK_ICON}
         <span>{message}</span>
       </div>
     ),
@@ -37,6 +38,6 @@ export const successToast = (message: string, options?: ExternalToast) => {
       duration: 3000,
       className: 'bg-transparent p-0 shadow-none border-0',
       ...options,
-    }
+    },
   );
 };

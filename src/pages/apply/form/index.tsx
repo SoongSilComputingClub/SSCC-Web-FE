@@ -10,6 +10,7 @@ import {
   type CreateApplyFormPayload,
 } from '@/pages/apply/api/apply-forms';
 import { useApplyFormRead } from '@/pages/apply/hooks/use-apply-form-read';
+import { successToast } from '@/shared/ui/toast';
 
 import { useApplyForm } from './hooks/use-apply-form';
 import { useApplyFormPrefill } from './hooks/use-apply-form-prefill';
@@ -18,7 +19,6 @@ import ConsentSection from './sections/consent-section';
 import FormHeaderSection from './sections/form-header';
 import SubmitSection from './sections/submit-section';
 import { parseInterviewKeys } from './utils/parse-interview-keys';
-import { successToast } from '@/shared/ui/toast';
 
 export default function ApplyPage() {
   const [consented, setConsented] = useState(false);

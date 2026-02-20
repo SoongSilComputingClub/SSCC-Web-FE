@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
-import { useAuth } from '@/shared/auth/use-auth';
 import { ROLES } from '@/shared/auth/jwt';
+import { useAuth } from '@/shared/auth/use-auth';
 import { APPLICATION_GUARD_COPY } from '@/shared/config/recruitment';
 import { getApplicationPhase } from '@/shared/lib/recruitment';
 
@@ -140,7 +140,7 @@ export default function HeroSection({ hasApplication }: { hasApplication: boolea
             <button
               type="button"
               onClick={logout}
-              className="mt-5 rounded-xl px-8 py-2 text-sm font-semibold text-point border-2 border-point shadow"
+              className="mt-5 rounded-xl border-2 border-point px-8 py-2 text-sm font-semibold text-point shadow"
             >
               로그아웃
             </button>
