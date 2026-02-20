@@ -119,8 +119,6 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
           onSlideEnd={() => setSlide(null)}
           onPrev={goPrev}
           onNext={goNext}
-          canPrev={currentIndex > 0}
-          canNext={currentIndex < images.length - 1}
           index={currentIndex}
           total={images.length}
           aspectRatio={coverAspect ?? '4 / 5'}

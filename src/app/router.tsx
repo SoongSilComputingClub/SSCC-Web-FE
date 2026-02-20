@@ -23,6 +23,7 @@ export const router = createBrowserRouter([
           <Toaster
             position="top-center"
             richColors
+            offset="70px"
             toastOptions={{
               className:
                 'text-lg px-8 py-6 rounded-2xl shadow-xl bg-neutral-900 text-white border border-neutral-800',

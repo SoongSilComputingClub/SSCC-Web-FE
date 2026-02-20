@@ -10,6 +10,7 @@ import {
   type CreateApplyFormPayload,
 } from '@/pages/apply/api/apply-forms';
 import { useApplyFormRead } from '@/pages/apply/hooks/use-apply-form-read';
+import { successToast } from '@/shared/ui/toast';
 
 import { useApplyForm } from './hooks/use-apply-form';
 import { useApplyFormPrefill } from './hooks/use-apply-form-prefill';
@@ -93,9 +94,7 @@ export default function ApplyPage() {
       navigate('/apply', { replace: true });
 
       const successMessage = isEdit ? '지원서가 수정되었습니다.' : '신청이 완료되었습니다.';
-      toast.success(successMessage, {
-        duration: 2500,
-      });
+      successToast(successMessage);
     } catch (e) {
       console.error(e);
       toast.error(

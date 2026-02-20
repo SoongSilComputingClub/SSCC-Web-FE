@@ -27,10 +27,6 @@ type ActivityGalleryProps = {
   onPointerUp: (e: PointerEvent) => void;
   onPointerCancel: (e: PointerEvent) => void;
 
-  /** 버튼 활성/비활성 */
-  canPrev: boolean;
-  canNext: boolean;
-
   /** 인덱스 배지 */
   index: number;
   total: number;
@@ -51,8 +47,6 @@ export const ActivityGallery = memo(function ActivityGallery({
   onPointerDown,
   onPointerUp,
   onPointerCancel,
-  canPrev,
-  canNext,
   index,
   total,
   onSlideEnd,
@@ -138,8 +132,7 @@ export const ActivityGallery = memo(function ActivityGallery({
         <button
           type="button"
           onClick={onPrev}
-          disabled={!canPrev}
-          className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/35 px-3 py-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
+          className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/35 px-3 py-2 text-white"
           aria-label="이전 이미지"
         >
           ‹
@@ -147,8 +140,7 @@ export const ActivityGallery = memo(function ActivityGallery({
         <button
           type="button"
           onClick={onNext}
-          disabled={!canNext}
-          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/35 px-3 py-2 text-white disabled:cursor-not-allowed disabled:opacity-40"
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/35 px-3 py-2 text-white"
           aria-label="다음 이미지"
         >
           ›

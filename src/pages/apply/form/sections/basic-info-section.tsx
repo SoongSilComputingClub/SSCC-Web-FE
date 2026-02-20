@@ -52,7 +52,9 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
 
           <div className="mt-6 space-y-6">
             <div ref={applicantNameRef}>
-              <label className="block text-sm font-semibold text-text-default">이름</label>
+              <label className="block text-sm font-semibold text-text-default">
+                이름<span className="ml-1 text-point">*</span>
+              </label>
               <input
                 value={form.applicantName}
                 onChange={(e) => {
@@ -77,7 +79,9 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
             </div>
 
             <div ref={departmentRef}>
-              <label className="block text-sm font-semibold text-text-default">학과</label>
+              <label className="block text-sm font-semibold text-text-default">
+                학과<span className="ml-1 text-point">*</span>
+              </label>
               <input
                 value={form.department}
                 onChange={(e) => setField('department', e.target.value)}
@@ -89,7 +93,9 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
             </div>
 
             <div ref={studentNoRef}>
-              <label className="block text-sm font-semibold text-text-default">학번</label>
+              <label className="block text-sm font-semibold text-text-default">
+                학번<span className="ml-1 text-point">*</span>
+              </label>
               <input
                 value={form.studentNo}
                 onChange={(e) => setField('studentNo', filterDigitsOnly(e.target.value, 8))}
@@ -102,7 +108,9 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
             </div>
 
             <div ref={gradeRef}>
-              <label className="block text-sm font-semibold text-text-default">학년</label>
+              <label className="block text-sm font-semibold text-text-default">
+                학년<span className="ml-1 text-point">*</span>
+              </label>
               <div className="relative mt-3">
                 <select
                   value={String(form.grade)}
@@ -137,7 +145,9 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
             </div>
 
             <div ref={phoneRef}>
-              <label className="block text-sm font-semibold text-text-default">전화번호</label>
+              <label className="block text-sm font-semibold text-text-default">
+                전화번호<span className="ml-1 text-point">*</span>
+              </label>
               <input
                 value={form.phone}
                 onChange={(e) => setField('phone', formatPhoneNumber(e.target.value))}
@@ -150,7 +160,9 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
             </div>
 
             <div ref={genderRef} className="flex items-center gap-6">
-              <span className="shrink-0 text-sm font-semibold text-text-default">성별</span>
+              <span className="shrink-0 text-sm font-semibold text-text-default">
+                성별<span className="ml-1 text-point">*</span>
+              </span>
 
               <div className="flex flex-nowrap items-center gap-6">
                 <label className="flex items-center gap-3 text-base font-semibold text-text-default">
@@ -186,7 +198,9 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
           <FormSectionHeader title="기술 스택" />
 
           <div ref={codingExpRef} className="mt-6">
-            <p className="text-sm font-semibold text-text-default">코딩 경험</p>
+            <p className="text-sm font-semibold text-text-default">
+              코딩 경험<span className="ml-1 text-point">*</span>
+            </p>
 
             <div className="mt-4 space-y-4">
               {CODING_EXP_OPTIONS.map((opt) => {
@@ -269,7 +283,7 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
           <div className="mt-6 space-y-6">
             <div ref={introduceRef}>
               <label className="block text-sm font-semibold text-text-default">
-                자기 소개 및 지원 동기
+                자기 소개 및 지원 동기<span className="ml-1 text-point">*</span>
               </label>
               <textarea
                 value={form.introduce}
@@ -286,7 +300,7 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
           <div className="mt-6 space-y-6">
             <div ref={wantedValueRef}>
               <label className="block text-sm font-semibold text-text-default">
-                SSCC를 통해 얻고 싶은 가치
+                SSCC를 통해 얻고 싶은 가치<span className="ml-1 text-point">*</span>
               </label>
               <textarea
                 value={form.wantedValue}
@@ -302,7 +316,9 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
 
           <div className="mt-6 space-y-6">
             <div ref={aspirationRef}>
-              <label className="block text-sm font-semibold text-text-default">포부</label>
+              <label className="block text-sm font-semibold text-text-default">
+                포부<span className="ml-1 text-point">*</span>
+              </label>
               <textarea
                 value={form.aspiration}
                 onChange={(e) => setField('aspiration', e.target.value)}
@@ -318,7 +334,7 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
 
         {/* 면접 일자 */}
         <section ref={interviewRef} className="mt-12 pb-10">
-          <FormSectionHeader title="면접 일자" description="가능한 시간대를 선택해주세요." />
+          <FormSectionHeader title="면접 일자 *" description="가능한 시간대를 선택해주세요." />
 
           <div className="mt-6 space-y-6">
             {INTERVIEW_OPTIONS.map((day) => (

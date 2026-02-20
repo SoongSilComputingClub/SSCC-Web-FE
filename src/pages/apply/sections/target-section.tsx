@@ -16,11 +16,11 @@ export default function TargetSection() {
           <div className="flex flex-col items-center gap-6 text-center">
             <img
               src={targetPassion}
-              alt="배움에 열정이 넘치는 학생"
+              alt="IT 프로젝트에 관심 있는 숭실대학교 학생"
               className="h-auto w-full max-w-[320px] select-none"
               draggable={false}
             />
-            <p className="text-sm text-text-default">배움에 열정이 넘치는 숭실대학교 학생</p>
+            <p className="text-sm text-text-default">IT 프로젝트에 관심 있는 숭실대학교 학생</p>
           </div>
 
           <div className="flex flex-col items-center gap-6 text-center">
