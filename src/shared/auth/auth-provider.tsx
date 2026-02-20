@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 
 import { AuthContext } from './auth-context';
-import { STORAGE_KEYS } from './jwt';
+import { STORAGE_KEYS, parseAccessToken } from './jwt';
 
 import type { AuthContextType } from './auth-context';
 
@@ -66,9 +66,13 @@ export function AuthProvider({ children }: Props) {
     }
   };
 
+  // accessToken에서 role 파싱
+  const role = accessToken ? (parseAccessToken(accessToken).role ?? null) : null;
+
   const value: AuthContextType = {
     isLoggedIn: !!accessToken,
     accessToken,
+    role,
     login,
     logout,
   };

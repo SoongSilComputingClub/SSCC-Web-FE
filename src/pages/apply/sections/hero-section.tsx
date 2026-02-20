@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import { useAuth } from '@/shared/auth/use-auth';
+import { ROLES } from '@/shared/auth/jwt';
 import { APPLICATION_GUARD_COPY } from '@/shared/config/recruitment';
 import { getApplicationPhase } from '@/shared/lib/recruitment';
 
@@ -70,8 +71,12 @@ function getCtaDetails(
 }
 
 export default function HeroSection({ hasApplication }: { hasApplication: boolean | null }) {
-  const { isLoggedIn, logout } = useAuth();
-  const phase = getApplicationPhase();
+  const { isLoggedIn, logout, role } = useAuth();
+
+  // admin이면 날짜와 관계 없이 항상 open 처리 (JWT role 기반)
+  const isAdmin = role === ROLES.ADMIN;
+
+  const phase = getApplicationPhase(new Date(), isAdmin);
   const copy = APPLICATION_GUARD_COPY[phase];
   const isOpen = phase === 'open';
 
