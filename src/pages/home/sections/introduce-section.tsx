@@ -26,7 +26,7 @@ type TwoByTwoCardsSectionProps = {
   className?: string;
 };
 
-function TwoByTwoCardsSection({ items, className = '' }: TwoByTwoCardsSectionProps) {
+function TwoByTwoCardsSection({ items, className = '' }: Readonly<TwoByTwoCardsSectionProps>) {
   const data = items.slice(0, 4);
 
   return (
@@ -166,7 +166,7 @@ function AutoSlideMarquee({
   className = '',
   friction = 0.92,
   onItemClick,
-}: MarqueeProps) {
+}: Readonly<MarqueeProps>) {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
 

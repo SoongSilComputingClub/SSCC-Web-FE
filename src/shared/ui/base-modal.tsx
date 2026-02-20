@@ -7,7 +7,7 @@ type BaseModalProps = {
   children: React.ReactNode;
 };
 
-export function BaseModal({ isOpen, title, onClose, children }: BaseModalProps) {
+export function BaseModal({ isOpen, title, onClose, children }: Readonly<BaseModalProps>) {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
   // ✅ React state(isOpen) <-> dialog.showModal()/close() 동기화
@@ -18,9 +18,9 @@ export function BaseModal({ isOpen, title, onClose, children }: BaseModalProps) 
     if (isOpen) {
       // 이미 open이면 중복 showModal 방지
       if (!dialog.open) dialog.showModal();
-    } else {
+    } else if (dialog.open) {
       // 이미 닫혀있으면 close 생략
-      if (dialog.open) dialog.close();
+      dialog.close();
     }
   }, [isOpen]);
 

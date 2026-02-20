@@ -16,7 +16,7 @@ const CODING_EXP_LABEL: Record<string, string> = {
   E: 'E (전문가 수준)',
 };
 
-export function MemberDetailModal({ isOpen, row, onClose }: MemberDetailModalProps) {
+export function MemberDetailModal({ isOpen, row, onClose }: Readonly<MemberDetailModalProps>) {
   if (!isOpen || !row) return null;
 
   return (
@@ -50,11 +50,13 @@ export function MemberDetailModal({ isOpen, row, onClose }: MemberDetailModalPro
               const grouped = row.interviewTimes.reduce<Record<string, string[]>>((acc, t) => {
                 const key = t.date;
                 const time = `${t.startTime} ~ ${t.endTime}`;
-                (acc[key] ??= []).push(time);
+                const bucket = acc[key] ?? [];
+                bucket.push(time);
+                acc[key] = bucket;
                 return acc;
               }, {});
 
-              const dates = Object.keys(grouped).sort();
+              const dates = Object.keys(grouped).sort((a, b) => a.localeCompare(b));
 
               return (
                 <div className="mt-2 grid gap-3">
@@ -79,7 +81,7 @@ export function MemberDetailModal({ isOpen, row, onClose }: MemberDetailModalPro
 }
 
 /** 한 줄 항목 (label - value 가로 배치) */
-function Item({ label, value }: { label: string; value: string }) {
+function Item({ label, value }: Readonly<{ label: string; value: string }>) {
   return (
     <div className="flex items-center justify-between rounded-2xl bg-bg-white/5 px-4 py-3">
       <span className="text-text-default/60">{label}</span>
@@ -89,7 +91,7 @@ function Item({ label, value }: { label: string; value: string }) {
 }
 
 /** 장문 항목 (label 위, value 아래 세로 배치) */
-function LongItem({ label, value }: { label: string; value: string }) {
+function LongItem({ label, value }: Readonly<{ label: string; value: string }>) {
   return (
     <div className="rounded-2xl bg-bg-white/5 px-4 py-3">
       <span className="text-text-default/60">{label}</span>

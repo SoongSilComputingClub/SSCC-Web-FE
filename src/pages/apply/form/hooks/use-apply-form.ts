@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 
 import { validateField } from '../utils/validation';
 
-export type Gender = 'male' | 'female' | '';
+export type Gender = 'MALE' | 'FEMALE' | '';
 export type CodingExp = 'A' | 'B' | 'C' | 'D' | 'E' | '';
 
 export type FormState = {

@@ -11,78 +11,111 @@ type Member = {
 
 type CardSize = 'lg' | 'md' | 'sm';
 
-function MemberCard({ member, size }: { member: Member; size: CardSize }) {
-  const isLg = size === 'lg';
-  const isMd = size === 'md';
+type MemberCardProps = Readonly<{
+  member: Member;
+  size: CardSize;
+}>;
 
-  const cardSizeClass = isLg ? 'h-[250px]' : isMd ? 'h-[200px]' : 'h-[140px]';
+const MEMBER_CARD_STYLE: Record<
+  CardSize,
+  {
+    cardWidthClass: string;
+    cardSizeClass: string;
+    avatarSizeClass: string;
+    roleTextClass: string;
+    nameTextClass: string;
+    metaTextClass: string;
+    quoteClass: string;
+  }
+> = {
+  lg: {
+    cardWidthClass: 'max-w-none',
+    cardSizeClass: 'h-[250px] sm:h-[350px]',
+    avatarSizeClass: 'h-[105px] w-[105px] sm:h-[170px] sm:w-[170px]',
+    roleTextClass: 'text-sm sm:text-md',
+    nameTextClass: 'text-lg sm:text-2xl',
+    metaTextClass: 'text-xs sm:text-sm',
+    quoteClass: 'mt-2 mb-3 rounded-xl py-2 text-xs sm:text-sm',
+  },
+  md: {
+    cardWidthClass: 'max-w-[130px] sm:max-w-[170px]',
+    cardSizeClass: 'h-[200px] sm:h-[250px]',
+    avatarSizeClass: 'h-[66px] w-[66px] sm:h-[110px] sm:w-[110px]',
+    roleTextClass: 'text-2xs sm:text-sm',
+    nameTextClass: 'text-sm sm:text-lg',
+    metaTextClass: 'text-2xs sm:text-xs',
+    quoteClass: 'mt-2 mb-3 rounded-[10px] py-2 text-2xs sm:text-xs',
+  },
+  sm: {
+    cardWidthClass: 'max-w-[120px]',
+    cardSizeClass: 'h-[150px] sm:h-[200px]',
+    avatarSizeClass: 'h-[45px] w-[45px] sm:h-[75px] sm:w-[75px]',
+    roleTextClass: 'text-[6px] sm:text-xs',
+    nameTextClass: 'text-[12px] sm:text-sm',
+    metaTextClass: 'text-[6px] sm:text-xs',
+    quoteClass: 'mt-1 mb-1 rounded-lg py-1 text-[6px] sm:text-xs',
+  },
+};
 
-  const avatarSizeClass = isLg
-    ? 'h-[105px] w-[105px]'
-    : isMd
-      ? 'h-[66px] w-[66px]'
-      : 'h-[45px] w-[45px]';
+function MemberCard({ member, size }: Readonly<MemberCardProps>) {
+  const styles = MEMBER_CARD_STYLE[size];
 
-  const roleTextClass = isLg ? 'text-sm' : isMd ? 'text-2xs' : 'text-[6px]';
-  const nameTextClass = isLg ? 'text-lg' : isMd ? 'text-sm' : 'text-[12px]';
-  const metaTextClass = isLg ? 'text-xs' : isMd ? 'text-2xs' : 'text-[6px]';
+  const containerClassName = [
+    'relative w-full overflow-hidden rounded-[5px]',
+    styles.cardSizeClass,
+    styles.cardWidthClass,
+    'mx-auto',
+  ].join(' ');
 
-  const quoteClass = isLg
-    ? 'mt-2 mb-3 rounded-xl py-2 text-xs'
-    : isMd
-      ? 'mt-2 mb-3 rounded-[10px] py-2 text-2xs'
-      : 'mt-1 mb-1 rounded-lg py-1 text-[6px]';
+  const avatarWrapperClassName = [
+    'overflow-hidden rounded-full bg-bg-white/40',
+    'shadow-[0_8px_18px_rgba(0,0,0,0.25)]',
+    styles.avatarSizeClass,
+  ].join(' ');
+
+  const roleClassName = ['font-semibold text-text-default', styles.roleTextClass].join(' ');
+  const nameClassName = ['font-bold text-text-default', styles.nameTextClass].join(' ');
+  const metaClassName = ['mt-2 text-text-default/40', styles.metaTextClass].join(' ');
+
+  const quoteClassName = [
+    'mt-1.5 w-full',
+    'bg-bg-white/15 text-center text-text-default/75',
+    'shadow-[0_10px_18px_rgba(0,0,0,0.35)]',
+    styles.quoteClass,
+  ].join(' ');
 
   return (
-    <div className={['relative w-full overflow-hidden rounded-[5px]', cardSizeClass].join(' ')}>
+    <div className={containerClassName}>
       {/* 아치형 상단 느낌(배경) */}
       <div className="absolute inset-0 rounded-t-[999px] bg-bg-muted" />
 
       {/* 내용 */}
       <div className="relative flex h-full flex-col items-center justify-start px-3 pt-7 text-text-default">
         {/* 프로필 원 */}
-        <div
-          className={[
-            'overflow-hidden rounded-full bg-bg-white/40',
-            'shadow-[0_8px_18px_rgba(0,0,0,0.25)]',
-            avatarSizeClass,
-          ].join(' ')}
-        >
+        <div className={avatarWrapperClassName}>
           {member.avatarSrc ? (
             <img
               src={member.avatarSrc}
               alt={`${member.name} 프로필 사진`}
-              className="h-full w-full object-cover object-center" // ✅ 꽉 채우고 비율 유지
+              className="h-full w-full object-cover object-center"
               loading="lazy"
             />
           ) : (
             <div className="h-full w-full" />
           )}
         </div>
+
         {/* 텍스트 */}
-        <div className="mt-4 text-center leading-none">
-          <div className={['font-semibold text-text-default', roleTextClass].join(' ')}>
-            {member.role}{' '}
-            <span className={['font-bold text-text-default', nameTextClass].join(' ')}>
-              {member.name}
-            </span>
+        <div className="mt-2 whitespace-nowrap text-center leading-none">
+          <div className={roleClassName}>
+            {member.role} <span className={nameClassName}>{member.name}</span>
           </div>
-          <div className={['mt-2 text-text-default/40', metaTextClass].join(' ')}>
-            {member.meta}
-          </div>
+
+          <div className={metaClassName}>{member.meta}</div>
         </div>
 
         {/* 하단 말풍선 */}
-        <div
-          className={[
-            'mt-1.5 w-full',
-            'bg-bg-white/15 text-center text-text-default/75',
-            'shadow-[0_10px_18px_rgba(0,0,0,0.35)]',
-            quoteClass,
-          ].join(' ')}
-        >
-          {member.quote}
-        </div>
+        <div className={quoteClassName}>{member.quote}</div>
       </div>
     </div>
   );
@@ -172,7 +205,7 @@ export default function MemberSection() {
 
   return (
     <section className="w-full bg-bg-default px-6 py-14">
-      <div className="mx-auto w-full max-w-[420px]">
+      <div className="mx-auto w-full max-w-[420px] sm:max-w-[550px]">
         <h2 className="text-center text-xl font-bold text-text-default">44기 운영진</h2>
 
         {/* 2개 큰 카드 */}
@@ -183,14 +216,14 @@ export default function MemberSection() {
         </div>
 
         {/* 3개 중간 카드 */}
-        <div className="mt-10 grid grid-cols-3 gap-4">
+        <div className="mt-10 grid grid-cols-3 gap-2">
           {second.map((m) => (
             <MemberCard key={m.id} member={m} size="md" />
           ))}
         </div>
 
         {/* 4개 작은 카드 */}
-        <div className="mt-10 grid grid-cols-4 gap-3">
+        <div className="mt-10 grid grid-cols-4 gap-1">
           {third.map((m) => (
             <MemberCard key={m.id} member={m} size="sm" />
           ))}

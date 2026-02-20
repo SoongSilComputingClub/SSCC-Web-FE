@@ -157,9 +157,9 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
                   <input
                     type="radio"
                     name="gender"
-                    value="male"
-                    checked={form.gender === 'male'}
-                    onChange={() => setFieldAndTouch('gender', 'male')}
+                    value="MALE"
+                    checked={form.gender === 'MALE'}
+                    onChange={() => setFieldAndTouch('gender', 'MALE')}
                     className="size-5 accent-point"
                   />
                   남자
@@ -168,9 +168,9 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
                   <input
                     type="radio"
                     name="gender"
-                    value="female"
-                    checked={form.gender === 'female'}
-                    onChange={() => setFieldAndTouch('gender', 'female')}
+                    value="FEMALE"
+                    checked={form.gender === 'FEMALE'}
+                    onChange={() => setFieldAndTouch('gender', 'FEMALE')}
                     className="size-5 accent-point"
                   />
                   여자

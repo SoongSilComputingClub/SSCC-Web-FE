@@ -21,11 +21,11 @@ function SlideIndicator({
   activeIndex,
   total,
   progress,
-}: {
+}: Readonly<{
   activeIndex: number;
   total: number;
   progress: number; // 0~1
-}) {
+}>) {
   const current = activeIndex + 1;
 
   return (
@@ -76,7 +76,9 @@ export default function ScrollSnapSlides() {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [vw, setVw] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 0));
+  const [vw, setVw] = useState(() =>
+    globalThis.window === undefined ? 0 : globalThis.window.innerWidth,
+  );
 
   useEffect(() => {
     const el = wrapRef.current;

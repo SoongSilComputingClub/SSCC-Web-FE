@@ -51,9 +51,7 @@ export default function IndexPage() {
         const result = await readApplyForms();
 
         //result.data가 배열
-        const items: ApplyFormItem[] = Array.isArray(result?.data)
-          ? (result.data as ApplyFormItem[])
-          : [];
+        const items: ApplyFormItem[] = Array.isArray(result?.data) ? result.data : [];
 
         const mapped: Row[] = items.map((it, idx) => ({
           order: idx + 1,
@@ -143,12 +141,15 @@ export default function IndexPage() {
       const grouped = times.reduce<Record<string, string[]>>((acc, t) => {
         const date = t.date;
         const time = `${t.startTime} ~ ${t.endTime}`;
-        (acc[date] ??= []).push(time);
+        const bucket = acc[date] ?? [];
+        bucket.push(time);
+        acc[date] = bucket;
         return acc;
       }, {});
 
       // 날짜 오름차순
-      const dates = Object.keys(grouped).sort();
+      const dates = Object.keys(grouped).sort((a, b) => a.localeCompare(b));
+
       return dates.map((date) => [date, ...grouped[date]].join('\n')).join('\n\n'); // 날짜 블록 사이 한 줄 띄움
     };
 

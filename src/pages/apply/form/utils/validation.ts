@@ -15,7 +15,7 @@ export const validateField = (key: keyof FormState, value: unknown): string => {
         ? ''
         : '전화번호를 정확히 입력해주세요.';
     case 'gender':
-      return typeof v === 'string' && (v === 'female' || v === 'male')
+      return typeof v === 'string' && (v === 'FEMALE' || v === 'MALE')
         ? ''
         : '성별을 선택해주세요.';
     case 'codingExp':

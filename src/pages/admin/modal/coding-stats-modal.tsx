@@ -18,7 +18,7 @@ const CODING_COLORS: Record<CodingExp, string> = {
   E: '#ffd400',
 };
 
-export function CodingStatsModal({ isOpen, onClose }: CodingStatsModalProps) {
+export function CodingStatsModal({ isOpen, onClose }: Readonly<CodingStatsModalProps>) {
   const [data, setData] = useState<CodingExpDistributionData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

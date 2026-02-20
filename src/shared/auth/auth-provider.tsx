@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 
 import { AuthContext } from './auth-context';
+import { STORAGE_KEYS } from './jwt';
 
 import type { AuthContextType } from './auth-context';
-import { STORAGE_KEYS } from './jwt';
 
 type Props = {
   children: ReactNode;

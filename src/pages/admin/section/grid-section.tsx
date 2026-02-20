@@ -14,7 +14,7 @@ export function GridSection({
   onSortMajor,
   onSortGrade,
   onSortStudentId,
-}: GridSectionProps) {
+}: Readonly<GridSectionProps>) {
   return (
     <section className="flex w-full items-center justify-center">
       <div className="w-[90%] whitespace-nowrap rounded-2xl p-2 text-center text-sm font-bold text-text-default/70">

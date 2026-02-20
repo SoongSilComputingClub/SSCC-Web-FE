@@ -11,6 +11,8 @@ import picScroll8 from '@/assets/images/home/pic-scroll8.jpg';
 
 type ColIndex = 0 | 1 | 2 | 3;
 
+const COL_KEYS = ['col-0', 'col-1', 'col-2', 'col-3'] as const;
+
 export type ParallaxColumnItem = {
   id: string;
   imageSrc: string;
@@ -57,7 +59,7 @@ function easeOutCubic(t: number) {
 }
 
 /** col 지정된 아이템은 고정 배치, col 미지정 아이템은 남는 슬롯에 라운드로빈 분배 */
-function arrangeColumns(items: ParallaxColumnItem[]) {
+function arrangeColumns(items: Readonly<ParallaxColumnItem[]>) {
   const cols: ParallaxColumnItem[][] = [[], [], [], []];
 
   const fixed = items.filter((it) => it.col !== undefined) as Array<
@@ -105,7 +107,7 @@ function Parallax4Split({
   textOffsetYPx = -24,
   smoothFactor = 0.08,
   enableIntersectionGate = true,
-}: Parallax4SplitProps) {
+}: Readonly<Parallax4SplitProps>) {
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
   // [col][idx]
@@ -129,28 +131,22 @@ function Parallax4Split({
 
   const presets: Preset[] = useMemo(
     () => [
-      { baseStartY: 72, baseSpeed: 1.0 },
-      { baseStartY: 10, baseSpeed: 1.0 },
-      { baseStartY: 58, baseSpeed: 1.0 },
-      { baseStartY: 52, baseSpeed: 1.0 },
+      { baseStartY: 72, baseSpeed: 1 },
+      { baseStartY: 10, baseSpeed: 1 },
+      { baseStartY: 58, baseSpeed: 1 },
+      { baseStartY: 52, baseSpeed: 1 },
     ],
     [],
   );
 
-  // cols 바뀌면 refs/caches 초기화(인덱스 꼬임 방지)
-  // useEffect(() => {
-  //   imgRefs.current = [[], [], [], []];
-  //   measureCache.current = [[], [], [], []];
-  // }, [cols]);
-
   const scheduleTick = () => {
     if (rafIdRef.current) return;
-    rafIdRef.current = window.requestAnimationFrame(tick);
+    rafIdRef.current = globalThis.requestAnimationFrame(tick);
   };
 
   const scheduleMeasure = () => {
     if (measureRafRef.current) return;
-    measureRafRef.current = window.requestAnimationFrame(() => {
+    measureRafRef.current = globalThis.requestAnimationFrame(() => {
       measureRafRef.current = 0;
       measureAll();
       scheduleTick();
@@ -184,6 +180,53 @@ function Parallax4Split({
     }
   };
 
+  const applyNodeStyle = (node: HTMLElement, y: number) => {
+    node.style.transform = `translate3d(0, ${y}px, 0)`;
+    node.style.opacity = '1';
+  };
+
+  const checkP2GoneOnce = (itId: string | undefined, node: HTMLElement) => {
+    if (itId !== 'p2') return;
+    if (p2GoneLogged.current) return;
+
+    const r = node.getBoundingClientRect();
+    if (r.bottom >= 0) return;
+
+    p2GoneLogged.current = true;
+  };
+
+  const getItemMotion = (
+    colI: number,
+    itemI: number,
+    preset: { baseSpeed: number },
+    it: { speed?: number; id?: string } | undefined,
+    s: number,
+  ) => {
+    const speed = Math.max(0, it?.speed ?? preset.baseSpeed);
+    const travel = measureCache.current[colI]?.[itemI]?.travel ?? 0;
+    const y = -s * travel * speed;
+    return { y, speed };
+  };
+
+  const processColumn = (colI: number, s: number) => {
+    const preset = presets[colI] ?? presets[0];
+    const colItems = cols[colI] ?? [];
+
+    for (let itemI = 0; itemI < colItems.length; itemI++) {
+      const node = imgRefs.current[colI]?.[itemI];
+      if (!node) continue;
+
+      const it = colItems[itemI];
+      const { y } = getItemMotion(colI, itemI, preset, it, s);
+
+      applyNodeStyle(node, y);
+      checkP2GoneOnce(it.id, node);
+    }
+  };
+
+  const shouldContinue = (easedTarget: number) =>
+    Math.abs(easedTarget - smoothedRef.current) > 0.0008;
+
   const tick = () => {
     rafIdRef.current = 0;
 
@@ -196,43 +239,14 @@ function Parallax4Split({
 
     const k = clamp(smoothFactor, 0.01, 0.35);
     smoothedRef.current += (easedTarget - smoothedRef.current) * k;
+
     const s = smoothedRef.current;
 
     for (let colI = 0; colI < 4; colI++) {
-      const preset = presets[colI] ?? presets[0];
-      const colItems = cols[colI] ?? [];
-
-      for (let itemI = 0; itemI < colItems.length; itemI++) {
-        const node = imgRefs.current[colI]?.[itemI];
-        if (!node) continue;
-
-        const it = colItems[itemI];
-        const speed = Math.max(0, it.speed ?? preset.baseSpeed);
-
-        const cached = measureCache.current[colI]?.[itemI];
-        const travel = cached?.travel ?? 0;
-
-        const y = -s * travel * speed;
-
-        node.style.transform = `translate3d(0, ${y}px, 0)`;
-        node.style.opacity = '1';
-
-        if (it.id === 'p2' && !p2GoneLogged.current) {
-          const r = node.getBoundingClientRect();
-          const isGone = r.bottom < 0; // 완전히 위로 나감
-
-          if (isGone) {
-            p2GoneLogged.current = true;
-            // console.log('[p2 gone] s =', s, 'target =', target, 'eased =', easedTarget);
-          }
-        }
-      }
+      processColumn(colI, s);
     }
 
-    // 아직 차이가 남아있으면 다음 프레임도 계속(=스크럽 계속 따라가기)
-    if (Math.abs(easedTarget - smoothedRef.current) > 0.0008) {
-      scheduleTick();
-    }
+    if (shouldContinue(easedTarget)) scheduleTick();
   };
 
   // 스크롤/리사이즈는 raf 예약만
@@ -314,13 +328,13 @@ function Parallax4Split({
               {/* ✅ Dividers overlay (양끝 포함) */}
               {showDividers ? (
                 <div className="pointer-events-none absolute inset-0 z-20">
-                  {Array.from({ length: 5 }).map((_, i) => (
+                  {[0, 25, 50, 75, 100].map((left) => (
                     <div
-                      key={`divider-${i}`}
+                      key={`divider-${left}`}
                       className="absolute top-0 h-full w-[3px]"
                       style={{
-                        left: `${(i * 100) / 4}%`, // 0%, 25%, 50%, 75%, 100%
-                        transform: i === 4 ? 'translateX(-1px)' : undefined, // 100% 라인이 밖으로 밀리는 것 방지(선 두께 보정)
+                        left: `${left}%`,
+                        transform: left === 100 ? 'translateX(-1px)' : undefined,
                         background:
                           'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.18) 20%, rgba(255,255,255,0.18) 80%, rgba(255,255,255,0) 100%)',
                       }}
@@ -334,12 +348,14 @@ function Parallax4Split({
                   const preset = presets[colI] ?? presets[0];
 
                   return (
-                    <div key={`col-${colI}`} className="relative h-full overflow-hidden">
+                    <div
+                      key={COL_KEYS[colI] ?? `col-${colI}`}
+                      className="relative h-full overflow-hidden"
+                    >
                       {colItems.map((it, itemI) => {
                         const startY =
                           it.startYPercent ?? preset.baseStartY + itemI * itemGapPercent;
                         const size = it.sizeClassName ?? 'w-full max-w-[150px] md:max-w-[220px]';
-
                         const scale = it.imageScale ?? 1.12;
 
                         return (
@@ -447,7 +463,7 @@ export default function ParallaxSection() {
             id: 'p8',
             col: 3,
             startYPercent: 400,
-            speed: 1.0,
+            speed: 1,
             imageSrc: picScroll8,
           },
         ]}

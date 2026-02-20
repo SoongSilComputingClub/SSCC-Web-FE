@@ -29,6 +29,15 @@ export default function ValueSection() {
   const headerRef = useRef<HTMLDivElement | null>(null);
   const [armed, setArmed] = useState(false);
 
+  const revealIndex = (idx: number) => {
+    setVisible((prev) => {
+      if (prev[idx]) return prev;
+      const next = [...prev];
+      next[idx] = true;
+      return next;
+    });
+  };
+
   useEffect(() => {
     const onFirstScroll = () => setArmed(true);
     window.addEventListener('scroll', onFirstScroll, { once: true, passive: true });
@@ -36,7 +45,7 @@ export default function ValueSection() {
   }, []);
 
   useEffect(() => {
-    if (!armed) return; // ✅ 스크롤 전엔 observer 아예 설치 안 함
+    if (!armed) return;
 
     const io = new IntersectionObserver(
       (entries) => {
@@ -45,12 +54,7 @@ export default function ValueSection() {
           if (Number.isNaN(idx)) return;
 
           if (entry.isIntersecting) {
-            setVisible((prev) => {
-              if (prev[idx]) return prev;
-              const next = [...prev];
-              next[idx] = true;
-              return next;
-            });
+            revealIndex(idx);
           }
         });
       },
@@ -113,9 +117,8 @@ export default function ValueSection() {
                   itemRefs.current[idx] = el;
                 }}
                 data-index={idx}
-                className={it.pos} // ✅ 네가 잡은 최종 위치 유지
+                className={it.pos}
               >
-                {/* ✅ 오른쪽에서 등장 */}
                 <div
                   className={[
                     'transition-all duration-1000 ease-out will-change-transform',

@@ -5,7 +5,7 @@ type TableSectionProps = {
   onRowClick: (row: Row) => void;
 };
 
-export function TableSection({ rows, onRowClick }: TableSectionProps) {
+export function TableSection({ rows, onRowClick }: Readonly<TableSectionProps>) {
   return (
     <section className="flex w-full items-center justify-center bg-bg-default py-10">
       <div className="w-[92%]">
