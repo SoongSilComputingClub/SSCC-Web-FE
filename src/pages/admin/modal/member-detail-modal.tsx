@@ -50,7 +50,9 @@ export function MemberDetailModal({ isOpen, row, onClose }: Readonly<MemberDetai
               const grouped = row.interviewTimes.reduce<Record<string, string[]>>((acc, t) => {
                 const key = t.date;
                 const time = `${t.startTime} ~ ${t.endTime}`;
-                (acc[key] ??= []).push(time);
+                const bucket = acc[key] ?? [];
+                bucket.push(time);
+                acc[key] = bucket;
                 return acc;
               }, {});
 
