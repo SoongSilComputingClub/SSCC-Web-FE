@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { validateField } from './validation';
 
@@ -27,8 +27,8 @@ describe('지원서 validation 테스트', () => {
   });
 
   it('성별이 올바른지 검사한다.', () => {
-    expect(validateField('gender', 'male')).toBe('');
-    expect(validateField('gender', 'female')).toBe('');
+    expect(validateField('gender', 'MALE')).toBe('');
+    expect(validateField('gender', 'FEMALE')).toBe('');
     expect(validateField('gender', 'other')).not.toBe('');
     expect(validateField('gender', '')).not.toBe('');
   });
