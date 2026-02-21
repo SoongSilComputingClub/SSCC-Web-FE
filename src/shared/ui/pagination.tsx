@@ -6,24 +6,18 @@ const DESKTOP_WINDOW_SIZE = 10;
 function useResponsiveWindowSize() {
   const [isDesktop, setIsDesktop] = useState(() => {
     // SSR/테스트 환경 안전 처리
-    if (typeof window === 'undefined') return false;
-    return window.matchMedia('(min-width: 1024px)').matches;
+    if (typeof globalThis.window === 'undefined') return false;
+    return globalThis.window.matchMedia('(min-width: 1024px)').matches;
   });
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof globalThis.window === 'undefined') return;
 
-    const mql = window.matchMedia('(min-width: 1024px)');
+    const mql = globalThis.window.matchMedia('(min-width: 1024px)');
     const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
 
-    // 브라우저 호환 (addEventListener 지원 여부)
-    if (typeof mql.addEventListener === 'function') {
-      mql.addEventListener('change', onChange);
-      return () => mql.removeEventListener('change', onChange);
-    }
-
-    mql.addListener(onChange);
-    return () => mql.removeListener(onChange);
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
   }, []);
 
   return isDesktop ? DESKTOP_WINDOW_SIZE : MOBILE_WINDOW_SIZE;
