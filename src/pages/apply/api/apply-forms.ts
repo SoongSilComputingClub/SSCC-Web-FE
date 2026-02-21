@@ -10,7 +10,12 @@ function toQueryString(params?: unknown): string {
     if (v === null || v === undefined) return '';
     if (v instanceof Date) return v.toISOString();
 
-    if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean' || typeof v === 'bigint') {
+    if (
+      typeof v === 'string' ||
+      typeof v === 'number' ||
+      typeof v === 'boolean' ||
+      typeof v === 'bigint'
+    ) {
       return String(v);
     }
 
