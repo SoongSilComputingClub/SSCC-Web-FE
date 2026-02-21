@@ -6,12 +6,12 @@ const DESKTOP_WINDOW_SIZE = 10;
 function useResponsiveWindowSize() {
   const [isDesktop, setIsDesktop] = useState(() => {
     // SSR/테스트 환경 안전 처리
-    if (typeof globalThis.window === 'undefined') return false;
+    if (globalThis.window === undefined) return false;
     return globalThis.window.matchMedia('(min-width: 1024px)').matches;
   });
 
   useEffect(() => {
-    if (typeof globalThis.window === 'undefined') return;
+    if (globalThis.window === undefined) return;
 
     const mql = globalThis.window.matchMedia('(min-width: 1024px)');
     const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
