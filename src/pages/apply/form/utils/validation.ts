@@ -32,7 +32,7 @@ const validators: Partial<Record<keyof FormState, Validator>> = {
   applicantName: requiredText('이름을 입력해주세요.'),
   department: requiredText('학과를 입력해주세요.'),
   studentNo: match(/^\d{8}$/, '학번은 숫자 8자리여야 합니다.'),
-  phone: match(/^01[0-9]-\d{4}-\d{4}$/, '전화번호를 정확히 입력해주세요.'),
+  phone: match(/^01\d-\d{4}-\d{4}$/, '전화번호를 정확히 입력해주세요.'),
   gender: oneOf(['FEMALE', 'MALE'] as const, '성별을 선택해주세요.'),
   codingExp: match(/^[A-E]$/, '코딩 경험을 선택해주세요.'),
   introduce: minLen(30, '자기소개는 30자 이상 작성해주세요.'),
