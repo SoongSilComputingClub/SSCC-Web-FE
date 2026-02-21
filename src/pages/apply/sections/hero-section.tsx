@@ -125,9 +125,9 @@ export default function HeroSection({
   return (
     <section className="relative flex min-h-[520px] w-full items-center justify-center bg-bg-default px-6 text-text-default">
       {phase === 'closed' ? (
-      <h1 className="whitespace-pre-line text-center text-xl font-bold leading-snug text-point md:whitespace-normal">
-        {copy.title}
-      </h1>
+        <h1 className="whitespace-pre-line text-center text-xl font-bold leading-snug text-point md:whitespace-normal">
+          {copy.title}
+        </h1>
       ) : (
         <div className="flex flex-col items-center text-center">
           <h1 className="text-xl font-bold leading-snug">{renderCopyWithHighlight(titleText)}</h1>
