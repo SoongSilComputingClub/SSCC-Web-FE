@@ -12,6 +12,17 @@ export default function SubmitSection({
 }: SubmitSectionProps) {
   const isOpen = isApplicationOpen();
   const isDisabled = disabled || !isOpen;
+
+  let disabledMessage = '';
+
+  if (!isOpen) {
+    disabledMessage = '현재는 지원 기간이 아니에요.';
+  } else if (disabledReason === 'CONSENT') {
+    disabledMessage = '개인정보 수집 및 이용에 동의해야 제출할 수 있어요.';
+  } else if (disabledReason === 'SUBMITTING') {
+    disabledMessage = '제출 중입니다. 잠시만 기다려주세요.';
+  }
+
   return (
     <section className="mt-3 pb-10">
       <div className="mx-auto w-full max-w-[560px] px-4 md:max-w-[760px] md:px-0">
@@ -31,13 +42,7 @@ export default function SubmitSection({
 
         {isDisabled && (
           <p className="mt-4 text-center text-sm font-semibold text-text-default/70">
-            {!isOpen
-              ? '현재는 지원 기간이 아니에요.'
-              : disabledReason === 'CONSENT'
-                ? '개인정보 수집 및 이용에 동의해야 제출할 수 있어요.'
-                : disabledReason === 'SUBMITTING'
-                  ? '제출 중입니다. 잠시만 기다려주세요.'
-                  : ''}
+            {disabledMessage}
           </p>
         )}
       </div>
