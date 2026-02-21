@@ -71,7 +71,8 @@ function buildFinalUrl(url: string): string {
   }
 
   // BASE_URL 끝의 슬래시 제거 + path 시작 슬래시 보장
-  const base = String(BASE_URL ?? '').replace(/\/+$/, '');
+  let base = String(BASE_URL ?? '');
+  while (base.endsWith('/')) base = base.slice(0, -1);
   if (!base) {
     throw new Error('VITE_BACKEND_API_BASE_URL이 설정되지 않았습니다.');
   }

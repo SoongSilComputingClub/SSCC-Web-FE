@@ -6,7 +6,9 @@ function openExternalInKakao(url: string) {
 }
 
 function buildGoogleOauthUrl(baseUrl?: string) {
-  const base = String(baseUrl ?? '').replace(/\/+$/, '');
+  let base = String(baseUrl ?? '');
+  // 문자열 끝의 슬래시를 정규식 대신 수동으로 제거
+  while (base.endsWith('/')) base = base.slice(0, -1);
   return base ? `${base}/oauth2/authorization/google` : '';
 }
 
