@@ -41,7 +41,7 @@ const CONSENT_SECTIONS = [
 export default function ConsentSection({
   onConsentChange,
 }: {
-  onConsentChange?: (agreed: boolean) => void;
+  readonly onConsentChange?: (agreed: boolean) => void;
 }) {
   const [agreed, setAgreed] = useState(false);
 

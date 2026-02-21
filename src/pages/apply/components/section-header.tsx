@@ -1,6 +1,6 @@
 type SectionHeaderProps = {
-  label: string;
-  title: string;
+  readonly label: string;
+  readonly title: string;
 };
 
 export default function SectionHeader({ label, title }: SectionHeaderProps) {

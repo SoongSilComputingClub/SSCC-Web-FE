@@ -5,7 +5,7 @@ import { Navigate } from 'react-router-dom';
 import { parseAccessToken, ROLES, STORAGE_KEYS } from './jwt';
 
 interface RequireAdminProps {
-  children: ReactNode;
+  readonly children: ReactNode;
 }
 
 export default function RequireAdmin({ children }: RequireAdminProps) {

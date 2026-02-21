@@ -1,9 +1,9 @@
 type InterviewDayCardProps = {
-  dayId: string;
-  label: string;
-  slots: string[];
-  selectedKeys: string[];
-  onToggle: (key: string) => void;
+  readonly dayId: string;
+  readonly label: string;
+  readonly slots: string[];
+  readonly selectedKeys: string[];
+  readonly onToggle: (key: string) => void;
 };
 
 export default function InterviewDayCard({

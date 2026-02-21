@@ -2,11 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 
 function openExternalInKakao(url: string) {
   const externalUrl = `kakaotalk://web/openExternal?url=${encodeURIComponent(url)}`;
-  window.location.href = externalUrl;
+  globalThis.location.href = externalUrl;
 }
 
 function buildGoogleOauthUrl(baseUrl?: string) {
-  const base = String(baseUrl ?? '').replace(/\/+$/, '');
+  let base = String(baseUrl ?? '');
+  // 문자열 끝의 슬래시를 정규식 대신 수동으로 제거
+  while (base.endsWith('/')) base = base.slice(0, -1);
   return base ? `${base}/oauth2/authorization/google` : '';
 }
 
@@ -34,7 +36,7 @@ export default function LoginPage() {
       return;
     }
 
-    window.location.assign(oauthUrl);
+    globalThis.location.assign(oauthUrl);
   }, [oauthUrl, isKakaoInApp]);
 
   useEffect(() => {
@@ -44,8 +46,8 @@ export default function LoginPage() {
 
     startLogin();
     if (isIOS) {
-      const t = window.setTimeout(() => setShowFallback(true), 800);
-      return () => window.clearTimeout(t);
+      const t = globalThis.setTimeout(() => setShowFallback(true), 800);
+      return () => globalThis.clearTimeout(t);
     }
   }, [oauthUrl, isInApp, isIOS, startLogin]);
 
@@ -68,11 +70,15 @@ export default function LoginPage() {
       </button>
 
       <div className="text-center text-sm text-text-placeholder">
-        {isKakaoInApp
-          ? '위의 "Google로 계속하기" 버튼을 눌러 외부 브라우저에서 로그인을 진행해주세요.'
-          : showFallback
-            ? '로그인 화면이 자동으로 열리지 않으면 위 버튼을 눌러주세요.'
-            : '로그인 화면으로 이동 중...'}
+        {(() => {
+          if (isKakaoInApp) {
+            return '위의 "Google로 계속하기" 버튼을 눌러 외부 브라우저에서 로그인을 진행해주세요.';
+          }
+          if (showFallback) {
+            return '로그인 화면이 자동으로 열리지 않으면 위 버튼을 눌러주세요.';
+          }
+          return '로그인 화면으로 이동 중...';
+        })()}
       </div>
     </div>
   );

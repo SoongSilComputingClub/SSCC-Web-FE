@@ -7,7 +7,21 @@ import { ActivityGallery, type ActivityGallerySlide } from './activity-gallery';
 import type { Activity } from '../lib/types';
 
 type ActivityDetailProps = {
-  activity: Activity;
+  readonly activity: Activity;
+};
+
+const scheduleDoubleRaf = (cb: () => void) => {
+  let raf1 = 0;
+  let raf2 = 0;
+
+  raf1 = requestAnimationFrame(() => {
+    raf2 = requestAnimationFrame(cb);
+  });
+
+  return () => {
+    if (raf1) cancelAnimationFrame(raf1);
+    if (raf2) cancelAnimationFrame(raf2);
+  };
 };
 
 /**
@@ -38,12 +52,18 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
 
   const [slide, setSlide] = useState<ActivityGallerySlide>(null);
 
+  const setSlideAnimateOn = () => {
+    setSlide((prev) => (prev ? { ...prev, animate: true } : prev));
+  };
+
+
   useLayoutEffect(() => {
     // 같은 이미지면 애니메이션 불필요
     if (prevSrcRef.current === currentSrc) {
       prevIndexRef.current = currentIndex;
       return;
     }
+
     const prevIndex = prevIndexRef.current;
     const dir = currentIndex > prevIndex ? 'next' : 'prev';
 
@@ -55,23 +75,12 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
       animate: false,
     });
 
-    // 2) 다음 페인트 이후에 "이동 상태"로 전환 (더블 rAF로 안정화)
-    let raf1 = 0;
-    let raf2 = 0;
-    raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(() => {
-        setSlide((s) => (s ? { ...s, animate: true } : s));
-      });
-    });
-
     // 다음 change를 위해 이전 값 갱신
     prevIndexRef.current = currentIndex;
     prevSrcRef.current = currentSrc;
 
-    return () => {
-      if (raf1) cancelAnimationFrame(raf1);
-      if (raf2) cancelAnimationFrame(raf2);
-    };
+    // 2) 다음 페인트 이후에 "이동 상태"로 전환 (더블 rAF로 안정화)
+    return scheduleDoubleRaf(setSlideAnimateOn);
   }, [currentIndex, currentSrc]);
 
   const [coverAspect, setCoverAspect] = useState<number | null>(null);
@@ -133,15 +142,21 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
       <ul ref={thumbsListRef} className="mt-5 flex w-full max-w-[640px] gap-3 overflow-x-auto pb-2">
         {images.map((src, idx) => (
           <li key={`${activity.id}-thumb-${idx}`} className="shrink-0" data-thumb-index={idx}>
-            <img
-              src={src}
-              alt=""
+            <button
+              type="button"
               onClick={() => setIndex(idx)}
-              className={`h-[84px] w-[110px] cursor-pointer rounded-sm border-2 object-cover ${
+              aria-label={`${idx + 1}번째 이미지 보기`}
+              className={`h-[84px] w-[110px] rounded-sm border-2 ${
                 idx === currentIndex ? 'border-point' : 'border-border-default'
-              }`}
-              loading="lazy"
-            />
+              } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-point`}
+            >
+              <img
+                src={src}
+                alt=""
+                className="h-full w-full rounded-[2px] object-cover"
+                loading="lazy"
+              />
+            </button>
           </li>
         ))}
       </ul>

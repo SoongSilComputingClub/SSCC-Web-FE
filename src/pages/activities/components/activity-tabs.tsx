@@ -1,7 +1,7 @@
 import type { ActivityCategory } from '../lib/types';
 
 type ActivityTabsProps = {
-  category: ActivityCategory;
+  readonly category: ActivityCategory;
 
   /* 탭을 클릭했을 때 선택 카테고리를 바꾸기 위한 콜백 */
   onChange: (next: ActivityCategory) => void;

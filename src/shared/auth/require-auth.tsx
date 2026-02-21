@@ -4,7 +4,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 
 import { useAuth } from './use-auth';
 
-export function RequireAuth({ children }: { children: ReactNode }) {
+export function RequireAuth({ children }: { readonly children: ReactNode }) {
   const { isLoggedIn } = useAuth();
   const location = useLocation();
 

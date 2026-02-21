@@ -5,13 +5,13 @@ import ErrorText from '../components/error-text';
 import FormSectionHeader from '../components/form-section-header';
 import InterviewDayCard from '../components/interview-day-card';
 import { CODING_EXP_OPTIONS } from '../constants/coding-exp-options';
-import { filterDigitsOnly, filterKoreanOnly, formatPhoneNumber } from '../utils/input-filters';
+import { filterDigitsOnly, formatPhoneNumber } from '../utils/input-filters';
 import { INTERVIEW_OPTIONS } from '../utils/interview-options';
 
 import type { UseApplyFormReturn } from '../hooks/use-apply-form';
 
 type BasicInfoProps = {
-  applyForm: UseApplyFormReturn;
+  readonly applyForm: UseApplyFormReturn;
 };
 
 export default function BasicInfo({ applyForm }: BasicInfoProps) {
@@ -33,7 +33,6 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
   const [openCodingExp, setOpenCodingExp] = useState<
     (typeof CODING_EXP_OPTIONS)[number]['value'] | null
   >(null);
-  const [isNameComposing, setIsNameComposing] = useState(false);
 
   const toggleSlot = (key: string) => {
     const nextSelected = form.selectedInterviewKeys.includes(key)
@@ -52,25 +51,16 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
 
           <div className="mt-6 space-y-6">
             <div ref={applicantNameRef}>
-              <label className="block text-sm font-semibold text-text-default">
+              <label
+                htmlFor="applicantName"
+                className="block text-sm font-semibold text-text-default"
+              >
                 이름<span className="ml-1 text-point">*</span>
               </label>
               <input
+                id="applicantName"
                 value={form.applicantName}
-                onChange={(e) => {
-                  const next = e.target.value;
-                  if (isNameComposing) {
-                    setField('applicantName', next);
-                    return;
-                  }
-                  setField('applicantName', filterKoreanOnly(next));
-                }}
-                onCompositionStart={() => setIsNameComposing(true)}
-                onCompositionEnd={(e) => {
-                  setIsNameComposing(false);
-                  // When composition ends, normalize the final value.
-                  setField('applicantName', filterKoreanOnly((e.target as HTMLInputElement).value));
-                }}
+                onChange={(e) => setField('applicantName', e.target.value)}
                 onBlur={() => touchField('applicantName')}
                 className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
                 placeholder="이름을 기입하세요."
@@ -79,10 +69,11 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
             </div>
 
             <div ref={departmentRef}>
-              <label className="block text-sm font-semibold text-text-default">
+              <label htmlFor="department" className="block text-sm font-semibold text-text-default">
                 학과<span className="ml-1 text-point">*</span>
               </label>
               <input
+                id="department"
                 value={form.department}
                 onChange={(e) => setField('department', e.target.value)}
                 onBlur={() => touchField('department')}
@@ -93,10 +84,11 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
             </div>
 
             <div ref={studentNoRef}>
-              <label className="block text-sm font-semibold text-text-default">
+              <label htmlFor="studentNo" className="block text-sm font-semibold text-text-default">
                 학번<span className="ml-1 text-point">*</span>
               </label>
               <input
+                id="studentNo"
                 value={form.studentNo}
                 onChange={(e) => setField('studentNo', filterDigitsOnly(e.target.value, 8))}
                 onBlur={() => touchField('studentNo')}
@@ -108,11 +100,12 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
             </div>
 
             <div ref={gradeRef}>
-              <label className="block text-sm font-semibold text-text-default">
+              <label htmlFor="grade" className="block text-sm font-semibold text-text-default">
                 학년<span className="ml-1 text-point">*</span>
               </label>
               <div className="relative mt-3">
                 <select
+                  id="grade"
                   value={String(form.grade)}
                   onChange={(e) => setField('grade', Number(e.target.value))}
                   className="w-full appearance-none rounded-[20px] border border-border-emphasis bg-bg-section p-4 pr-12 text-text-default focus:outline-none focus:ring-2 focus:ring-point/40"
@@ -145,10 +138,11 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
             </div>
 
             <div ref={phoneRef}>
-              <label className="block text-sm font-semibold text-text-default">
+              <label htmlFor="phone" className="block text-sm font-semibold text-text-default">
                 전화번호<span className="ml-1 text-point">*</span>
               </label>
               <input
+                id="phone"
                 value={form.phone}
                 onChange={(e) => setField('phone', formatPhoneNumber(e.target.value))}
                 onBlur={() => touchField('phone')}
@@ -282,10 +276,11 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
 
           <div className="mt-6 space-y-6">
             <div ref={introduceRef}>
-              <label className="block text-sm font-semibold text-text-default">
+              <label htmlFor="introduce" className="block text-sm font-semibold text-text-default">
                 자기 소개 및 지원 동기<span className="ml-1 text-point">*</span>
               </label>
               <textarea
+                id="introduce"
                 value={form.introduce}
                 onChange={(e) => setField('introduce', e.target.value)}
                 onBlur={() => touchField('introduce')}
@@ -299,10 +294,14 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
 
           <div className="mt-6 space-y-6">
             <div ref={wantedValueRef}>
-              <label className="block text-sm font-semibold text-text-default">
+              <label
+                htmlFor="wantedValue"
+                className="block text-sm font-semibold text-text-default"
+              >
                 SSCC를 통해 얻고 싶은 가치<span className="ml-1 text-point">*</span>
               </label>
               <textarea
+                id="wantedValue"
                 value={form.wantedValue}
                 onChange={(e) => setField('wantedValue', e.target.value)}
                 onBlur={() => touchField('wantedValue')}
@@ -316,10 +315,11 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
 
           <div className="mt-6 space-y-6">
             <div ref={aspirationRef}>
-              <label className="block text-sm font-semibold text-text-default">
+              <label htmlFor="aspiration" className="block text-sm font-semibold text-text-default">
                 포부<span className="ml-1 text-point">*</span>
               </label>
               <textarea
+                id="aspiration"
                 value={form.aspiration}
                 onChange={(e) => setField('aspiration', e.target.value)}
                 onBlur={() => touchField('aspiration')}

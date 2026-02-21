@@ -16,7 +16,8 @@ export function parseInterviewKeys(keys: string[]): InterviewTime[] {
         return { date, startTime, endTime };
       }
 
-      const m = key.match(/(\d{4}-\d{2}-\d{2}).*?(\d{2}:\d{2}).*?(\d{2}:\d{2})/);
+      const regex = /(\d{4}-\d{2}-\d{2}).*?(\d{2}:\d{2}).*?(\d{2}:\d{2})/;
+      const m = regex.exec(key);
       if (!m) return null;
       return { date: m[1], startTime: m[2], endTime: m[3] };
     })

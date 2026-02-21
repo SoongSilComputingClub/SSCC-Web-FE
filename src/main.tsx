@@ -18,5 +18,3 @@ createRoot(document.getElementById('root')!).render(
     </QueryClientProvider>
   </StrictMode>,
 );
-
-//registerSW({ immediate: true });

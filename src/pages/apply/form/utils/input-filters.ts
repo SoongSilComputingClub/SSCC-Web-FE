@@ -6,7 +6,7 @@
 
 /** 한글만 허용 (이름 입력 등) */
 export const filterKoreanOnly = (raw: string): string => {
-  return raw.replace(/[^가-힣]/g, '');
+  return raw.replaceAll(/[^가-힣]/g, '');
 };
 
 /** 숫자만 허용 (학번, 전화번호 등)
@@ -14,7 +14,7 @@ export const filterKoreanOnly = (raw: string): string => {
  * @param maxLen 최대 길이 제한 (옵션)
  */
 export const filterDigitsOnly = (raw: string, maxLen?: number): string => {
-  const digits = raw.replace(/[^0-9]/g, '');
+  const digits = raw.replaceAll(/\D/g, '');
   return typeof maxLen === 'number' ? digits.slice(0, maxLen) : digits;
 };
 
@@ -31,7 +31,5 @@ export const formatPhoneNumber = (raw: string): string => {
     return `${digits.slice(0, 3)}-${digits.slice(3)}`;
   }
 
-  return `${digits.slice(0, 3)}-${digits.slice(3, digits.length - 4)}-${digits.slice(
-    digits.length - 4,
-  )}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, -4)}-${digits.slice(-4)}`;
 };

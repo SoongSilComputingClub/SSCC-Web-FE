@@ -6,24 +6,18 @@ const DESKTOP_WINDOW_SIZE = 10;
 function useResponsiveWindowSize() {
   const [isDesktop, setIsDesktop] = useState(() => {
     // SSR/테스트 환경 안전 처리
-    if (typeof window === 'undefined') return false;
-    return window.matchMedia('(min-width: 1024px)').matches;
+    if (typeof globalThis.window === 'undefined') return false;
+    return globalThis.window.matchMedia('(min-width: 1024px)').matches;
   });
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof globalThis.window === 'undefined') return;
 
-    const mql = window.matchMedia('(min-width: 1024px)');
+    const mql = globalThis.window.matchMedia('(min-width: 1024px)');
     const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
 
-    // 브라우저 호환 (addEventListener 지원 여부)
-    if (typeof mql.addEventListener === 'function') {
-      mql.addEventListener('change', onChange);
-      return () => mql.removeEventListener('change', onChange);
-    }
-
-    mql.addListener(onChange);
-    return () => mql.removeListener(onChange);
+    mql.addEventListener('change', onChange);
+    return () => mql.removeEventListener('change', onChange);
   }, []);
 
   return isDesktop ? DESKTOP_WINDOW_SIZE : MOBILE_WINDOW_SIZE;
@@ -47,23 +41,23 @@ const PAGE_BTN_INACTIVE =
 
 type PaginationProps = {
   /** 현재 페이지(1부터 시작) */
-  page: number;
+  readonly page: number;
 
   /** 전체 페이지 수(1 이상) */
-  totalPages: number;
+  readonly totalPages: number;
 
   /** 페이지 변경 요청 콜백 */
-  onChange: (nextPage: number) => void;
+  readonly onChange: (nextPage: number) => void;
 
   /** (선택) aria-label 커스터마이즈 */
-  ariaLabel?: string;
+  readonly ariaLabel?: string;
 
   /** (선택) 추가 className */
-  className?: string;
+  readonly className?: string;
 
   /** (선택) 이전/다음 버튼 라벨 */
-  prevLabel?: ReactNode;
-  nextLabel?: ReactNode;
+  readonly prevLabel?: ReactNode;
+  readonly nextLabel?: ReactNode;
 };
 
 export function Pagination({

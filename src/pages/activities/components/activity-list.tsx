@@ -7,7 +7,7 @@ import { ACTIVITIES } from '../lib/data';
 import type { ActivityCategory } from '../lib/types';
 
 type ActivityListProps = {
-  category: ActivityCategory;
+  readonly category: ActivityCategory;
 };
 
 export function ActivityList({ category }: ActivityListProps) {

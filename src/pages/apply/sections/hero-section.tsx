@@ -16,27 +16,59 @@ const HIGHLIGHT_TOKEN = 'SSCC';
 function renderCopyWithHighlight(text: string) {
   const lines = text.split('\n');
 
-  return lines.map((line, lineIdx) => {
-    const parts = line.split(HIGHLIGHT_TOKEN);
+  // 배열 index 대신, 문자열의 문자 위치(offset)를 기반으로 한 안정적인 key 사용
+  let globalOffset = 0;
+
+  return lines.map((line) => {
+    const lineStart = globalOffset;
+    // +1 accounts for the removed newline character between lines
+    globalOffset += line.length + 1;
+
+    const parts: Array<{ key: string; node: React.ReactNode }> = [];
+
+    let cursor = 0;
+    while (true) {
+      const hit = line.indexOf(HIGHLIGHT_TOKEN, cursor);
+      if (hit === -1) {
+        const tail = line.slice(cursor);
+        parts.push({
+          key: `t-${lineStart + cursor}`,
+          node: <span>{tail}</span>,
+        });
+        break;
+      }
+
+      const before = line.slice(cursor, hit);
+      if (before) {
+        parts.push({
+          key: `t-${lineStart + cursor}`,
+          node: <span>{before}</span>,
+        });
+      }
+
+      parts.push({
+        key: `h-${lineStart + hit}`,
+        node: <span className="text-point">{HIGHLIGHT_TOKEN}</span>,
+      });
+
+      cursor = hit + HIGHLIGHT_TOKEN.length;
+    }
 
     return (
-      <span key={`line-${lineIdx}`}>
-        {parts.map((chunk, idx) => (
-          <span key={`chunk-${lineIdx}-${idx}`}>
-            {chunk}
-            {idx < parts.length - 1 && <span className="text-point">{HIGHLIGHT_TOKEN}</span>}
-          </span>
+      <span key={`line-${lineStart}`}>
+        {parts.map(({ key, node }) => (
+          <span key={key}>{node}</span>
         ))}
-        {lineIdx < lines.length - 1 && <br />}
+        {globalOffset > lineStart + line.length + 1 ? <br /> : null}
       </span>
     );
   });
 }
 
 type CtaButtonProps = {
-  to: string;
-  label: string;
-  onClick?: () => void;
+  readonly to: string;
+  readonly label: string;
+  readonly onClick?: () => void;
 };
 
 function CtaButton({ to, label, onClick }: CtaButtonProps) {
@@ -70,7 +102,11 @@ function getCtaDetails(
     : (copy.cta.auth.new as CtaDetails);
 }
 
-export default function HeroSection({ hasApplication }: { hasApplication: boolean | null }) {
+export default function HeroSection({
+  hasApplication,
+}: {
+  readonly hasApplication: boolean | null;
+}) {
   const { isLoggedIn, logout, role } = useAuth();
 
   // admin이면 날짜와 관계 없이 항상 open 처리 (JWT role 기반)
@@ -100,11 +136,11 @@ export default function HeroSection({ hasApplication }: { hasApplication: boolea
 
           {copy.cta &&
             (() => {
-              const to = !isLoggedIn
-                ? '/login'
-                : hasApplication === true
-                  ? '/apply/form?mode=edit'
-                  : '/apply/form?mode=new';
+              let to = '/login';
+              if (isLoggedIn) {
+                if (hasApplication === true) to = '/apply/form?mode=edit';
+                else to = '/apply/form?mode=new';
+              }
               // 로딩 중(hasApplication === null)에는 CTA를 숨기지 말고 비활성 상태로 보여준다
               if (!ctaDetails) {
                 return (
@@ -122,9 +158,8 @@ export default function HeroSection({ hasApplication }: { hasApplication: boolea
                   to={to}
                   label={ctaDetails.label}
                   onClick={() => {
-                    if (!isLoggedIn) {
-                      sessionStorage.setItem('postLoginRedirect', '/apply');
-                    }
+                    if (isLoggedIn) return;
+                    sessionStorage.setItem('postLoginRedirect', '/apply');
                   }}
                 />
               ) : (

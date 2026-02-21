@@ -9,12 +9,39 @@ function toQueryString(params?: unknown): string {
   Object.entries(params as Record<string, unknown>).forEach(([key, value]) => {
     if (value === undefined || value === null) return;
 
+    const convertValue = (v: unknown) => {
+      if (v === null || v === undefined) return '';
+      if (v instanceof Date) return v.toISOString();
+
+      const t = typeof v;
+      if (t === 'string' || t === 'number' || t === 'boolean' || t === 'bigint') return String(v);
+      if (
+        typeof v === 'string' ||
+        typeof v === 'number' ||
+        typeof v === 'boolean' ||
+        typeof v === 'bigint'
+      ) {
+        return String(v);
+      }
+
+      if (typeof v === 'symbol') {
+        return v.description ?? v.toString();
+      }
+
+      if (typeof v === 'function') {
+        return v.name || '[function]';
+      }
+
+      // object / array 등은 JSON으로 직렬화 (URLSearchParams에 안전하게 넣기 위함)
+      return JSON.stringify(v);
+    };
+
     if (Array.isArray(value)) {
-      value.forEach((v) => usp.append(key, String(v)));
+      value.forEach((v) => usp.append(key, convertValue(v)));
       return;
     }
 
-    usp.set(key, String(value));
+    usp.set(key, convertValue(value));
   });
 
   const qs = usp.toString();
@@ -38,12 +65,14 @@ async function parseJson<T>(res: Response): Promise<T | null> {
   }
 }
 
+const DEFAULT_NO_CONTENT = {
+  code: 'NO_CONTENT',
+  message: '응답 본문이 비어있습니다.',
+} as const;
+
 async function parseApiResponse<T>(
   res: Response,
-  noContent: { code: string; message: string } = {
-    code: 'NO_CONTENT',
-    message: '응답 본문이 비어있습니다.',
-  },
+  noContent: { code: string; message: string } = DEFAULT_NO_CONTENT,
 ): Promise<ApiResponse<T>> {
   const json = await parseJson<ApiResponse<T>>(res);
 

@@ -14,7 +14,7 @@ function toHeaders(init: RequestInit['headers']): Headers {
 function redirectToLoginAndClearTokens() {
   sessionStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
   sessionStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-  window.location.href = '/login';
+  globalThis.location.href = '/login';
 }
 
 // AccessToken 재발급
@@ -39,7 +39,7 @@ async function refreshAccessToken(): Promise<string> {
 
   sessionStorage.setItem('accessToken', data.data.accessToken);
   sessionStorage.setItem('refreshToken', data.data.refreshToken);
-  window.dispatchEvent(new Event('auth-changed'));
+  globalThis.dispatchEvent(new Event('auth-changed'));
 
   return data.data.accessToken;
 }
@@ -71,7 +71,8 @@ function buildFinalUrl(url: string): string {
   }
 
   // BASE_URL 끝의 슬래시 제거 + path 시작 슬래시 보장
-  const base = String(BASE_URL ?? '').replace(/\/+$/, '');
+  let base = String(BASE_URL ?? '');
+  while (base.endsWith('/')) base = base.slice(0, -1);
   if (!base) {
     throw new Error('VITE_BACKEND_API_BASE_URL이 설정되지 않았습니다.');
   }

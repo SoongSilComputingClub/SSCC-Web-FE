@@ -24,7 +24,7 @@ export interface JwtPayload {
 
 /* Base64URL 디코딩 함수 */
 function base64UrlDecode(str: string): string {
-  const base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+  const base64 = str.replaceAll('-', '+').replaceAll('_', '/');
   const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), '=');
   return decodeURIComponent(
     atob(padded)
