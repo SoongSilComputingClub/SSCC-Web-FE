@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import type { Activity } from '../lib/types';
 
 type Props = {
-  activity: Activity;
+  readonly activity: Activity;
 };
 
 export function ActivityCard({ activity }: Props) {
