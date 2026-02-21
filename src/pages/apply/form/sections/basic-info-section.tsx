@@ -159,8 +159,9 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
               </span>
 
               <div className="flex flex-nowrap items-center gap-6">
-                <label className="flex items-center gap-3 text-base font-semibold text-text-default">
+                <div className="flex items-center gap-3">
                   <input
+                    id="gender-male"
                     type="radio"
                     name="gender"
                     value="MALE"
@@ -168,10 +169,17 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
                     onChange={() => setFieldAndTouch('gender', 'MALE')}
                     className="size-5 accent-point"
                   />
-                  남자
-                </label>
-                <label className="flex items-center gap-3 text-base font-semibold text-text-default">
+                  <label
+                    htmlFor="gender-male"
+                    className="text-base font-semibold text-text-default"
+                  >
+                    남자
+                  </label>
+                </div>
+
+                <div className="flex items-center gap-3">
                   <input
+                    id="gender-female"
                     type="radio"
                     name="gender"
                     value="FEMALE"
@@ -179,8 +187,13 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
                     onChange={() => setFieldAndTouch('gender', 'FEMALE')}
                     className="size-5 accent-point"
                   />
-                  여자
-                </label>
+                  <label
+                    htmlFor="gender-female"
+                    className="text-base font-semibold text-text-default"
+                  >
+                    여자
+                  </label>
+                </div>
               </div>
               <ErrorText show={touched.gender} message={errors.gender} />
             </div>

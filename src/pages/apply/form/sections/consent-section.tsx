@@ -80,16 +80,19 @@ export default function ConsentSection({
         </div>
 
         {/* 체크박스 */}
-        <label className="mt-4 flex items-center gap-2 text-sm text-text-default/80">
+        <div className="mt-4 flex items-center gap-2 text-sm text-text-default/80">
           <input
+            id="consent-agreed"
             type="checkbox"
             checked={agreed}
             required
             onChange={(e) => handleChange(e.target.checked)}
             className="size-4 cursor-pointer accent-point"
           />
-          개인정보 수집 및 이용에 동의합니다. (필수)
-        </label>
+          <label htmlFor="consent-agreed" className="cursor-pointer">
+            개인정보 수집 및 이용에 동의합니다. (필수)
+          </label>
+        </div>
       </div>
     </div>
   );
