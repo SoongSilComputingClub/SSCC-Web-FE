@@ -9,12 +9,18 @@ function toQueryString(params?: unknown): string {
   Object.entries(params as Record<string, unknown>).forEach(([key, value]) => {
     if (value === undefined || value === null) return;
 
+    const convertValue = (v: unknown) => {
+      if (v instanceof Date) return v.toISOString();
+      if (typeof v === 'object') return JSON.stringify(v);
+      return String(v);
+    };
+
     if (Array.isArray(value)) {
-      value.forEach((v) => usp.append(key, String(v)));
+      value.forEach((v) => usp.append(key, convertValue(v)));
       return;
     }
 
-    usp.set(key, String(value));
+    usp.set(key, convertValue(value));
   });
 
   const qs = usp.toString();
@@ -38,12 +44,14 @@ async function parseJson<T>(res: Response): Promise<T | null> {
   }
 }
 
+const DEFAULT_NO_CONTENT = {
+  code: 'NO_CONTENT',
+  message: '응답 본문이 비어있습니다.',
+} as const;
+
 async function parseApiResponse<T>(
   res: Response,
-  noContent: { code: string; message: string } = {
-    code: 'NO_CONTENT',
-    message: '응답 본문이 비어있습니다.',
-  },
+  noContent: { code: string; message: string } = DEFAULT_NO_CONTENT,
 ): Promise<ApiResponse<T>> {
   const json = await parseJson<ApiResponse<T>>(res);
 
