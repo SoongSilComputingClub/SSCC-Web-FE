@@ -108,6 +108,16 @@ export default function ApplyPage() {
     }
   };
 
+  let disabledReason: 'CONSENT' | 'SUBMITTING' | 'LOADING' | undefined;
+
+  if (!consented) {
+    disabledReason = 'CONSENT';
+  } else if (isSubmitting) {
+    disabledReason = 'SUBMITTING';
+  } else if (isEdit && isReading) {
+    disabledReason = 'LOADING';
+  }
+
   return (
     <div className="mx-auto flex w-full max-w-[560px] flex-col gap-6 bg-bg-default">
       <FormHeaderSection />
@@ -117,15 +127,7 @@ export default function ApplyPage() {
       <BasicInfo applyForm={applyForm} />
       <SubmitSection
         disabled={!consented || isSubmitting || (isEdit && isReading)}
-        disabledReason={
-          !consented
-            ? 'CONSENT'
-            : isSubmitting
-              ? 'SUBMITTING'
-              : isEdit && isReading
-                ? 'LOADING'
-                : undefined
-        }
+        disabledReason={disabledReason}
         onSubmit={handleSubmit}
       />
     </div>
