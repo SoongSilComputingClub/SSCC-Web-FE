@@ -29,7 +29,10 @@ function base64UrlDecode(str: string): string {
   return decodeURIComponent(
     atob(padded)
       .split('')
-      .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+      .map((c) => {
+        const code = c.codePointAt(0) ?? 0;
+        return '%' + ('00' + code.toString(16)).slice(-2);
+      })
       .join(''),
   );
 }
