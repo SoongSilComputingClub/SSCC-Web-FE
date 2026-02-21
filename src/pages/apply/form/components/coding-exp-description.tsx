@@ -26,8 +26,8 @@ const CodingExpDescription: React.FC<CodingExpDescriptionProps> = ({ description
         <p>{firstLine}</p>
       )}
 
-      {rest.map((line, idx) => (
-        <p key={idx}>{line}</p>
+      {rest.map((line) => (
+        <p key={line}>{line}</p>
       ))}
     </div>
   );
