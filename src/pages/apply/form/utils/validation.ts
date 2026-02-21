@@ -4,29 +4,39 @@ type Validator = (value: unknown) => string;
 
 const asTrimmedString = (value: unknown) => (typeof value === 'string' ? value.trim() : value);
 
-const requiredText = (message: string): Validator => (value) => {
-  const v = asTrimmedString(value);
-  return typeof v === 'string' && v.length > 0 ? '' : message;
-};
+const requiredText =
+  (message: string): Validator =>
+  (value) => {
+    const v = asTrimmedString(value);
+    return typeof v === 'string' && v.length > 0 ? '' : message;
+  };
 
-const match = (re: RegExp, message: string): Validator => (value) => {
-  const v = asTrimmedString(value);
-  return typeof v === 'string' && re.test(v) ? '' : message;
-};
+const match =
+  (re: RegExp, message: string): Validator =>
+  (value) => {
+    const v = asTrimmedString(value);
+    return typeof v === 'string' && re.test(v) ? '' : message;
+  };
 
-const minLen = (min: number, message: string): Validator => (value) => {
-  const v = asTrimmedString(value);
-  return typeof v === 'string' && v.length >= min ? '' : message;
-};
+const minLen =
+  (min: number, message: string): Validator =>
+  (value) => {
+    const v = asTrimmedString(value);
+    return typeof v === 'string' && v.length >= min ? '' : message;
+  };
 
-const oneOf = <T extends string>(allowed: readonly T[], message: string): Validator => (value) => {
-  const v = asTrimmedString(value);
-  return typeof v === 'string' && (allowed as readonly string[]).includes(v) ? '' : message;
-};
+const oneOf =
+  <T extends string>(allowed: readonly T[], message: string): Validator =>
+  (value) => {
+    const v = asTrimmedString(value);
+    return typeof v === 'string' && (allowed as readonly string[]).includes(v) ? '' : message;
+  };
 
-const nonEmptyArray = (message: string): Validator => (value) => {
-  return Array.isArray(value) && value.length > 0 ? '' : message;
-};
+const nonEmptyArray =
+  (message: string): Validator =>
+  (value) => {
+    return Array.isArray(value) && value.length > 0 ? '' : message;
+  };
 
 const validators: Partial<Record<keyof FormState, Validator>> = {
   applicantName: requiredText('이름을 입력해주세요.'),

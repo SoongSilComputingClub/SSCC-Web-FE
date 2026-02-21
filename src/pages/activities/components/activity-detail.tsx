@@ -10,6 +10,20 @@ type ActivityDetailProps = {
   readonly activity: Activity;
 };
 
+const scheduleDoubleRaf = (cb: () => void) => {
+  let raf1 = 0;
+  let raf2 = 0;
+
+  raf1 = requestAnimationFrame(() => {
+    raf2 = requestAnimationFrame(cb);
+  });
+
+  return () => {
+    if (raf1) cancelAnimationFrame(raf1);
+    if (raf2) cancelAnimationFrame(raf2);
+  };
+};
+
 /**
  * 프로젝트 상세 화면
  * - 메인: 큰 대표 이미지
@@ -42,19 +56,6 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
     setSlide((prev) => (prev ? { ...prev, animate: true } : prev));
   };
 
-  const scheduleDoubleRaf = (cb: () => void) => {
-    let raf1 = 0;
-    let raf2 = 0;
-
-    raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(cb);
-    });
-
-    return () => {
-      if (raf1) cancelAnimationFrame(raf1);
-      if (raf2) cancelAnimationFrame(raf2);
-    };
-  };
 
   useLayoutEffect(() => {
     // 같은 이미지면 애니메이션 불필요

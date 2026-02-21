@@ -15,7 +15,12 @@ function toQueryString(params?: unknown): string {
 
       const t = typeof v;
       if (t === 'string' || t === 'number' || t === 'boolean' || t === 'bigint') return String(v);
-      if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean' || typeof v === 'bigint') {
+      if (
+        typeof v === 'string' ||
+        typeof v === 'number' ||
+        typeof v === 'boolean' ||
+        typeof v === 'bigint'
+      ) {
         return String(v);
       }
 

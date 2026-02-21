@@ -51,7 +51,10 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
 
           <div className="mt-6 space-y-6">
             <div ref={applicantNameRef}>
-              <label htmlFor="applicantName" className="block text-sm font-semibold text-text-default">
+              <label
+                htmlFor="applicantName"
+                className="block text-sm font-semibold text-text-default"
+              >
                 이름<span className="ml-1 text-point">*</span>
               </label>
               <input
@@ -291,7 +294,10 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
 
           <div className="mt-6 space-y-6">
             <div ref={wantedValueRef}>
-              <label htmlFor="wantedValue" className="block text-sm font-semibold text-text-default">
+              <label
+                htmlFor="wantedValue"
+                className="block text-sm font-semibold text-text-default"
+              >
                 SSCC를 통해 얻고 싶은 가치<span className="ml-1 text-point">*</span>
               </label>
               <textarea

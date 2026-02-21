@@ -102,7 +102,11 @@ function getCtaDetails(
     : (copy.cta.auth.new as CtaDetails);
 }
 
-export default function HeroSection({ hasApplication }: { readonly hasApplication: boolean | null }) {
+export default function HeroSection({
+  hasApplication,
+}: {
+  readonly hasApplication: boolean | null;
+}) {
   const { isLoggedIn, logout, role } = useAuth();
 
   // admin이면 날짜와 관계 없이 항상 open 처리 (JWT role 기반)
