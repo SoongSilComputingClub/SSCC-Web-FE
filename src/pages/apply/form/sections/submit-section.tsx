@@ -28,12 +28,16 @@ export default function SubmitSection({
       <div className="mx-auto w-full max-w-[560px] px-4 md:max-w-[760px] md:px-0">
         <button
           type="button"
+          disabled={isDisabled}
           aria-disabled={isDisabled}
-          onClick={onSubmit}
+          onClick={() => {
+            if (isDisabled) return;
+            onSubmit?.();
+          }}
           className={[
             'w-full rounded-[20px] py-5 text-center text-xl font-extrabold transition-all',
             isDisabled
-              ? 'bg-gray-500/40 text-gray-300'
+              ? 'cursor-not-allowed bg-gray-500/40 text-gray-300'
               : 'bg-point text-black shadow-[0_8px_24px_rgba(0,0,0,0.25)] hover:brightness-95',
           ].join(' ')}
         >

@@ -4,7 +4,7 @@ type ActivityTabsProps = {
   readonly category: ActivityCategory;
 
   /* 탭을 클릭했을 때 선택 카테고리를 바꾸기 위한 콜백 */
-  onChange: (next: ActivityCategory) => void;
+  readonly onChange: (next: ActivityCategory) => void;
 };
 
 export function ActivityTabs({ category, onChange }: ActivityTabsProps) {

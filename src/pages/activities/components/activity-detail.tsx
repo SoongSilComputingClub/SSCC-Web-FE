@@ -56,7 +56,6 @@ export function ActivityDetail({ activity }: ActivityDetailProps) {
     setSlide((prev) => (prev ? { ...prev, animate: true } : prev));
   };
 
-
   useLayoutEffect(() => {
     // 같은 이미지면 애니메이션 불필요
     if (prevSrcRef.current === currentSrc) {
