@@ -10,9 +10,25 @@ function toQueryString(params?: unknown): string {
     if (value === undefined || value === null) return;
 
     const convertValue = (v: unknown) => {
+      if (v === null || v === undefined) return '';
       if (v instanceof Date) return v.toISOString();
-      if (typeof v === 'object') return JSON.stringify(v);
-      return String(v);
+
+      const t = typeof v;
+      if (t === 'string' || t === 'number' || t === 'boolean' || t === 'bigint') return String(v);
+      if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean' || typeof v === 'bigint') {
+        return String(v);
+      }
+
+      if (typeof v === 'symbol') {
+        return v.description ?? v.toString();
+      }
+
+      if (typeof v === 'function') {
+        return v.name || '[function]';
+      }
+
+      // object / array 등은 JSON으로 직렬화 (URLSearchParams에 안전하게 넣기 위함)
+      return JSON.stringify(v);
     };
 
     if (Array.isArray(value)) {
