@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { AuthContext } from './auth-context';
 import { STORAGE_KEYS, parseAccessToken } from './jwt';
@@ -28,54 +28,63 @@ export function AuthProvider({ children }: Props) {
       setAccessToken(storedToken);
     };
 
-    window.addEventListener('auth-changed', syncAuth);
+    globalThis.addEventListener('auth-changed', syncAuth);
     return () => {
-      window.removeEventListener('auth-changed', syncAuth);
+      globalThis.removeEventListener('auth-changed', syncAuth);
     };
   }, []);
 
   // 로그인 처리
-  const login = (newAccessToken: string, newRefreshToken: string) => {
+  const login = useCallback((newAccessToken: string, newRefreshToken: string) => {
     sessionStorage.setItem('accessToken', newAccessToken);
     sessionStorage.setItem('refreshToken', newRefreshToken);
     setAccessToken(newAccessToken);
-    window.dispatchEvent(new Event('auth-changed'));
-  };
+    globalThis.dispatchEvent(new Event('auth-changed'));
+  }, []);
 
   // 로그아웃 처리
-  const logout = async () => {
+  const logout = useCallback((): void => {
     const refreshToken = sessionStorage.getItem('refreshToken');
 
-    try {
-      if (refreshToken) {
-        await fetch(`${import.meta.env.VITE_BACKEND_API_BASE_URL}/logout`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ refreshToken }),
-        });
+    const doLogout = async () => {
+      try {
+        if (refreshToken) {
+          await fetch(`${import.meta.env.VITE_BACKEND_API_BASE_URL}/logout`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refreshToken }),
+          });
+        }
+      } catch (err) {
+        console.error('로그아웃 요청 실패:', err);
+      } finally {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('refreshToken');
+        setAccessToken(null);
+        globalThis.dispatchEvent(new Event('auth-changed'));
+        // 로그아웃 후에는 현재 페이지를 유지 (필요하면 각 페이지에서 별도 처리)
+        // globalThis.location.href = '/login';
       }
-    } catch (err) {
-      console.error('로그아웃 요청 실패:', err);
-    } finally {
-      sessionStorage.removeItem('accessToken');
-      sessionStorage.removeItem('refreshToken');
-      setAccessToken(null);
-      window.dispatchEvent(new Event('auth-changed'));
-      // 로그아웃 후에는 현재 페이지를 유지 (필요하면 각 페이지에서 별도 처리)
-      // window.location.href = "/login";
-    }
-  };
+    };
+
+    void doLogout();
+  }, []);
 
   // accessToken에서 role 파싱
-  const role = accessToken ? (parseAccessToken(accessToken).role ?? null) : null;
+  const role = useMemo(() => {
+    return accessToken ? (parseAccessToken(accessToken).role ?? null) : null;
+  }, [accessToken]);
 
-  const value: AuthContextType = {
-    isLoggedIn: !!accessToken,
-    accessToken,
-    role,
-    login,
-    logout,
-  };
+  const value = useMemo<AuthContextType>(
+    () => ({
+      isLoggedIn: !!accessToken,
+      accessToken,
+      role,
+      login,
+      logout,
+    }),
+    [accessToken, role, login, logout],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
