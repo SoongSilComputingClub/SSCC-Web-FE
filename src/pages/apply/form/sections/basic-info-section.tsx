@@ -5,7 +5,7 @@ import ErrorText from '../components/error-text';
 import FormSectionHeader from '../components/form-section-header';
 import InterviewDayCard from '../components/interview-day-card';
 import { CODING_EXP_OPTIONS } from '../constants/coding-exp-options';
-import { filterDigitsOnly, filterKoreanOnly, formatPhoneNumber } from '../utils/input-filters';
+import { filterDigitsOnly, formatPhoneNumber } from '../utils/input-filters';
 import { INTERVIEW_OPTIONS } from '../utils/interview-options';
 
 import type { UseApplyFormReturn } from '../hooks/use-apply-form';
@@ -33,7 +33,6 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
   const [openCodingExp, setOpenCodingExp] = useState<
     (typeof CODING_EXP_OPTIONS)[number]['value'] | null
   >(null);
-  const [isNameComposing, setIsNameComposing] = useState(false);
 
   const toggleSlot = (key: string) => {
     const nextSelected = form.selectedInterviewKeys.includes(key)
@@ -58,20 +57,7 @@ export default function BasicInfo({ applyForm }: BasicInfoProps) {
               <input
                 id="applicantName"
                 value={form.applicantName}
-                onChange={(e) => {
-                  const next = e.target.value;
-                  if (isNameComposing) {
-                    setField('applicantName', next);
-                    return;
-                  }
-                  setField('applicantName', filterKoreanOnly(next));
-                }}
-                onCompositionStart={() => setIsNameComposing(true)}
-                onCompositionEnd={(e) => {
-                  setIsNameComposing(false);
-                  // When composition ends, normalize the final value.
-                  setField('applicantName', filterKoreanOnly((e.target as HTMLInputElement).value));
-                }}
+                onChange={(e) => setField('applicantName', e.target.value)}
                 onBlur={() => touchField('applicantName')}
                 className="mt-3 w-full rounded-[20px] border border-border-emphasis bg-bg-section p-4 text-text-default placeholder:text-text-default/40 focus:outline-none focus:ring-2 focus:ring-point/40"
                 placeholder="이름을 기입하세요."
