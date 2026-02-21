@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ROLES } from '@/shared/auth/jwt';
 import { useAuth } from '@/shared/auth/use-auth';
 import { APPLICATION_GUARD_COPY } from '@/shared/config/recruitment';
-import { getApplicationPhase } from '@/shared/lib/recruitment';
+import { getApplicationPhase, getApplicationPhaseForAdmin } from '@/shared/lib/recruitment';
 
 const CTA_BUTTON_CLASS =
   'mt-4 inline-flex items-center justify-center rounded-xl bg-point px-8 py-4 text-lg font-semibold text-black shadow-md transition hover:opacity-90';
@@ -112,7 +112,7 @@ export default function HeroSection({
   // admin이면 날짜와 관계 없이 항상 open 처리 (JWT role 기반)
   const isAdmin = role === ROLES.ADMIN;
 
-  const phase = getApplicationPhase(new Date(), isAdmin);
+  const phase = isAdmin ? getApplicationPhaseForAdmin() : getApplicationPhase(new Date());
   const copy = APPLICATION_GUARD_COPY[phase];
   const isOpen = phase === 'open';
 
