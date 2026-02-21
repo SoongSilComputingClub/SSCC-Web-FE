@@ -4,14 +4,18 @@ import {
   type ApplicationPhase,
 } from '@/shared/config/recruitment';
 
-export function isApplicationOpen(now: Date = new Date(), isAdmin: boolean = false): boolean {
-  if (isAdmin) return true;
+export function isApplicationOpen(now: Date = new Date()): boolean {
   return now >= APPLICATION_OPEN_AT && now <= APPLICATION_CLOSE_AT;
 }
 
-export function getApplicationPhase(
-  now: Date = new Date(),
-  isAdmin: boolean = false,
-): ApplicationPhase {
-  return isApplicationOpen(now, isAdmin) ? 'open' : 'closed';
+export function isApplicationOpenForAdmin(): boolean {
+  return true;
+}
+
+export function getApplicationPhase(now: Date = new Date()): ApplicationPhase {
+  return isApplicationOpen(now) ? 'open' : 'closed';
+}
+
+export function getApplicationPhaseForAdmin(): ApplicationPhase {
+  return 'open';
 }
