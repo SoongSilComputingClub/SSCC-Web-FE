@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 
 type FormSectionHeaderProps = {
-  title: string;
-  description?: ReactNode;
-  className?: string;
+  readonly title: string;
+  readonly description?: ReactNode;
+  readonly className?: string;
 };
 
 export default function FormSectionHeader({

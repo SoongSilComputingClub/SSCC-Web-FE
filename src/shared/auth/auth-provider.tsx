@@ -7,7 +7,7 @@ import { STORAGE_KEYS, parseAccessToken } from './jwt';
 import type { AuthContextType } from './auth-context';
 
 type Props = {
-  children: ReactNode;
+  readonly children: ReactNode;
 };
 
 export function AuthProvider({ children }: Props) {

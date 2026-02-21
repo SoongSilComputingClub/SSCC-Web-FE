@@ -11,7 +11,7 @@ import { INTERVIEW_OPTIONS } from '../utils/interview-options';
 import type { UseApplyFormReturn } from '../hooks/use-apply-form';
 
 type BasicInfoProps = {
-  applyForm: UseApplyFormReturn;
+  readonly applyForm: UseApplyFormReturn;
 };
 
 export default function BasicInfo({ applyForm }: BasicInfoProps) {

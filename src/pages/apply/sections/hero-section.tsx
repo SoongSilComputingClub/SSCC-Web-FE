@@ -34,9 +34,9 @@ function renderCopyWithHighlight(text: string) {
 }
 
 type CtaButtonProps = {
-  to: string;
-  label: string;
-  onClick?: () => void;
+  readonly to: string;
+  readonly label: string;
+  readonly onClick?: () => void;
 };
 
 function CtaButton({ to, label, onClick }: CtaButtonProps) {
@@ -70,7 +70,7 @@ function getCtaDetails(
     : (copy.cta.auth.new as CtaDetails);
 }
 
-export default function HeroSection({ hasApplication }: { hasApplication: boolean | null }) {
+export default function HeroSection({ hasApplication }: { readonly hasApplication: boolean | null }) {
   const { isLoggedIn, logout, role } = useAuth();
 
   // admin이면 날짜와 관계 없이 항상 open 처리 (JWT role 기반)

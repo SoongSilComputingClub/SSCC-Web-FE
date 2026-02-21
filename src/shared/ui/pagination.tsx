@@ -47,23 +47,23 @@ const PAGE_BTN_INACTIVE =
 
 type PaginationProps = {
   /** 현재 페이지(1부터 시작) */
-  page: number;
+  readonly page: number;
 
   /** 전체 페이지 수(1 이상) */
-  totalPages: number;
+  readonly totalPages: number;
 
   /** 페이지 변경 요청 콜백 */
-  onChange: (nextPage: number) => void;
+  readonly onChange: (nextPage: number) => void;
 
   /** (선택) aria-label 커스터마이즈 */
-  ariaLabel?: string;
+  readonly ariaLabel?: string;
 
   /** (선택) 추가 className */
-  className?: string;
+  readonly className?: string;
 
   /** (선택) 이전/다음 버튼 라벨 */
-  prevLabel?: ReactNode;
-  nextLabel?: ReactNode;
+  readonly prevLabel?: ReactNode;
+  readonly nextLabel?: ReactNode;
 };
 
 export function Pagination({

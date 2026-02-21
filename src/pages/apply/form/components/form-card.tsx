@@ -1,6 +1,6 @@
 type FormCardProps = {
-  children: React.ReactNode;
-  className?: string;
+  readonly children: React.ReactNode;
+  readonly className?: string;
 };
 
 export default function FormCard({ children, className }: FormCardProps) {
