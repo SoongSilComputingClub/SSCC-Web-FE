@@ -53,6 +53,16 @@ export const ActivityGallery = memo(function ActivityGallery({
   aspectRatio,
   maxHeight,
 }: ActivityGalleryProps) {
+  let slideTransform: string | undefined;
+
+  if (slide) {
+    if (slide.dir === 'next') {
+      slideTransform = slide.animate ? 'translateX(-50%)' : 'translateX(0%)';
+    } else {
+      slideTransform = slide.animate ? 'translateX(0%)' : 'translateX(-50%)';
+    }
+  }
+
   return (
     <div
       className="relative w-full overflow-hidden overscroll-x-contain bg-bg-default"
@@ -63,25 +73,11 @@ export const ActivityGallery = memo(function ActivityGallery({
     >
       {/* 메인 이미지 영역 */}
       <div className="relative h-full w-full">
-        {!slide ? (
-          <img
-            src={currentSrc}
-            alt={title}
-            className="absolute inset-0 h-full w-full object-contain"
-            draggable={false}
-          />
-        ) : (
+        {slide ? (
           <div
             className="absolute inset-0 flex h-full w-[200%] transition-transform duration-300 ease-out"
             style={{
-              transform:
-                slide.dir === 'next'
-                  ? slide.animate
-                    ? 'translateX(-50%)'
-                    : 'translateX(0%)'
-                  : slide.animate
-                    ? 'translateX(0%)'
-                    : 'translateX(-50%)',
+              transform: slideTransform,
             }}
             onTransitionEnd={(e) => {
               if (e.propertyName !== 'transform') return;
@@ -121,6 +117,13 @@ export const ActivityGallery = memo(function ActivityGallery({
               </>
             )}
           </div>
+        ) : (
+          <img
+            src={currentSrc}
+            alt={title}
+            className="absolute inset-0 h-full w-full object-contain"
+            draggable={false}
+          />
         )}
 
         {/* 우상단 인덱스 배지 */}
