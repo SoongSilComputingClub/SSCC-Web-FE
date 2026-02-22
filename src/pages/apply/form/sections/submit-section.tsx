@@ -17,8 +17,16 @@ export default function SubmitSection({
 
   const isOpen = isApplicationOpen();
 
-  const computedDisabledReason: SubmitSectionProps['disabledReason'] | 'CLOSED' | undefined =
-    isAdmin ? undefined : !isOpen ? 'CLOSED' : disabled ? (disabledReason ?? 'LOADING') : undefined;
+  let computedDisabledReason: SubmitSectionProps['disabledReason'] | 'CLOSED' | undefined;
+  if (isAdmin) {
+    computedDisabledReason = undefined;
+  } else if (isOpen === false) {
+    computedDisabledReason = 'CLOSED';
+  } else if (disabled === true) {
+    computedDisabledReason = disabledReason ?? 'LOADING';
+  } else {
+    computedDisabledReason = undefined;
+  }
 
   const isDisabled = Boolean(computedDisabledReason);
 
