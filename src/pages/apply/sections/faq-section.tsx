@@ -29,7 +29,20 @@ const FAQS = [
   },
   {
     q: '기타 문의사항이 있을 경우 어디로 연락하면 되나요?',
-    a: 'SSCC 카카오톡 채널로 문의해주세요! https://open.kakao.com/o/spMLQKai',
+    a: (
+      <>
+        SSCC 카카오톡 채널로 문의해주세요!
+        <br />
+        <a
+          href="https://open.kakao.com/o/spMLQKai"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-1 inline-block text-point font-medium transition-colors underline hover:text-point/80"
+        >
+          SSCC 오픈채팅 이동하기
+        </a>
+      </>
+    ),
   },
 ] as const;
 
