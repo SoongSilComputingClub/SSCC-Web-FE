@@ -165,8 +165,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # ==========================================================================
-  # Deploy Job - Coolify 환경변수 업데이트 및 배포 트리거
+# ==========================================================================
+  # Deploy Job - Coolify Webhook으로 배포 트리거
   # ==========================================================================
   deploy:
     name: Deploy
@@ -174,14 +174,14 @@ jobs:
     needs: [prepare, build-image]
 
     steps:
-      - name: Trigger Coolify deployment
+      - name: Deploy to Coolify via webhook
         run: |
           HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            -X POST "${{ secrets.COOLIFY_URL }}/api/v1/services/${{ secrets.COOLIFY_SERVICE_ID }}/deploy" \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}")
+            --request GET "${{ secrets.COOLIFY_WEBHOOK }}" \
+            --header "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}")
 
           if [ "$HTTP_STATUS" -lt 200 ] || [ "$HTTP_STATUS" -ge 300 ]; then
-            echo "::error::Coolify deploy trigger failed with HTTP $HTTP_STATUS"
+            echo "::error::Coolify deployment failed with HTTP $HTTP_STATUS"
             exit 1
           fi
           echo "Coolify deployment triggered successfully (HTTP $HTTP_STATUS)"
@@ -192,5 +192,5 @@ jobs:
           echo "- **Image**: \`${{ env.IMAGE_NAME }}:${{ needs.prepare.outputs.head_sha }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Source Run ID**: ${{ needs.prepare.outputs.run_id }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Registry**: GHCR (ghcr.io)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Deploy Target**: Coolify" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deploy Target**: Coolify Application" >> $GITHUB_STEP_SUMMARY
           echo "- **Triggered by**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
