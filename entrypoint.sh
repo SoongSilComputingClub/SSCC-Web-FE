@@ -1,3 +1,5 @@
+#!/bin/sh
+
 find /usr/share/nginx/html -type f \( -name '*.js' -o -name '*.html' \) -exec sh -c '
   escape_for_sed() {
     echo "$1" | sed -e "s/[&\\/|]/\\\\&/g"
