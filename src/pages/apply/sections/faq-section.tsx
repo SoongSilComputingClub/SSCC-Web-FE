@@ -96,7 +96,11 @@ export default function FAQSection() {
                     open ? 'mt-4 grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
                   }`}
                 >
-                  <div className="overflow-hidden">
+                  <div
+                    className={`overflow-hidden ${
+                      open ? 'border-t border-border-default pt-4' : ''
+                    }`}
+                  >
                     <p className="text-sm leading-relaxed text-text-default">{item.a}</p>
                   </div>
                 </div>
