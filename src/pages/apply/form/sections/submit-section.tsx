@@ -1,3 +1,4 @@
+import { useAuth } from '@/shared/auth/use-auth';
 import { isApplicationOpen } from '@/shared/lib/recruitment';
 type SubmitSectionProps = {
   readonly disabled?: boolean;
@@ -10,12 +11,15 @@ export default function SubmitSection({
   disabledReason,
   onSubmit,
 }: SubmitSectionProps) {
+  const { role } = useAuth();
+  const isAdmin = role === 'ADMIN';
+
   const isOpen = isApplicationOpen();
-  const isDisabled = disabled || !isOpen;
+  const isDisabled = disabled || (!isOpen && !isAdmin);
 
   let disabledMessage = '';
 
-  if (!isOpen) {
+  if (!isOpen && !isAdmin) {
     disabledMessage = '현재는 지원 기간이 아니에요.';
   } else if (disabledReason === 'CONSENT') {
     disabledMessage = '개인정보 수집 및 이용에 동의해야 제출할 수 있어요.';

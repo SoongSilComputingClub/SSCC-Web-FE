@@ -29,7 +29,20 @@ const FAQS = [
   },
   {
     q: '기타 문의사항이 있을 경우 어디로 연락하면 되나요?',
-    a: 'SSCC 카카오톡 채널로 문의해주세요! https://open.kakao.com/o/spMLQKai',
+    a: (
+      <>
+        SSCC 카카오톡 채널로 문의해주세요!
+        <br />
+        <a
+          href="https://open.kakao.com/o/spMLQKai"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-1 inline-block font-medium text-point underline transition-colors hover:text-point/80"
+        >
+          SSCC 오픈채팅 이동하기
+        </a>
+      </>
+    ),
   },
 ] as const;
 
@@ -83,7 +96,11 @@ export default function FAQSection() {
                     open ? 'mt-4 grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
                   }`}
                 >
-                  <div className="overflow-hidden">
+                  <div
+                    className={`overflow-hidden ${
+                      open ? 'border-t border-border-default pt-4' : ''
+                    }`}
+                  >
                     <p className="text-sm leading-relaxed text-text-default">{item.a}</p>
                   </div>
                 </div>
