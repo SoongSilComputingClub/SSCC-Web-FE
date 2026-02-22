@@ -1,0 +1,29 @@
+#!/bin/sh
+
+BRANCH_NAME=$(git branch --show-current)
+
+# hotfix/* 브랜치는 예외 허용
+if echo "$BRANCH_NAME" | grep -q "^hotfix/"; then
+  exit 0
+fi
+
+# main/master 브랜치 커밋 차단
+if [ "$BRANCH_NAME" = "main" ] || [ "$BRANCH_NAME" = "master" ]; then
+  echo "❌ $BRANCH_NAME 브랜치에서는 커밋할 수 없습니다."
+  echo "👉 개인 브랜치에서 작업하세요."
+  exit 1
+fi
+
+# 브랜치명에서 GitHub Issue 번호 추출 (예: feat/#10-login-api → 10)
+ISSUE_NUMBER=$(echo "$BRANCH_NAME" | grep -oE '/#[0-9]+' | head -1 | tr -d '/#')
+
+COMMIT_MSG_FILE=$1
+
+# 이슈 번호가 있고, 이미 포함 안 돼 있을 때만 첫 번째 줄 끝에 (#번호) 추가
+if [ -n "$ISSUE_NUMBER" ] && ! grep -q "(#${ISSUE_NUMBER})" "$COMMIT_MSG_FILE"; then
+  # 첫 번째 줄 끝에 (#번호) 추가, 나머지 줄은 유지
+  TEMP_FILE=$(mktemp)
+  head -1 "$COMMIT_MSG_FILE" | sed "s/$/ (#${ISSUE_NUMBER})/" > "$TEMP_FILE"
+  tail -n +2 "$COMMIT_MSG_FILE" >> "$TEMP_FILE"
+  mv "$TEMP_FILE" "$COMMIT_MSG_FILE"
+fi
