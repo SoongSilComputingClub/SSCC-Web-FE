@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
+import fs from 'fs';
+
 export default defineConfig({
   plugins: [
     react(),
@@ -31,6 +33,10 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    https: {
+      key: fs.readFileSync('./localhost-key.pem'),
+      cert: fs.readFileSync('./localhost.pem'),
+    },
   },
   build: {
     outDir: 'dist',

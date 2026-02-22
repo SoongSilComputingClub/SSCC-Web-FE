@@ -19,7 +19,7 @@ export default function SubmitSection({
 
   let disabledMessage = '';
 
-  if (!isOpen) {
+  if (!isOpen && !isAdmin) {
     disabledMessage = '현재는 지원 기간이 아니에요.';
   } else if (disabledReason === 'CONSENT') {
     disabledMessage = '개인정보 수집 및 이용에 동의해야 제출할 수 있어요.';
