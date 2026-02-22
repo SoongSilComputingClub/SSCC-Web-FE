@@ -1,4 +1,5 @@
 import { isApplicationOpen } from '@/shared/lib/recruitment';
+import { useAuth } from '@/shared/auth/use-auth';
 type SubmitSectionProps = {
   readonly disabled?: boolean;
   readonly disabledReason?: 'CONSENT' | 'SUBMITTING' | 'LOADING';
@@ -10,8 +11,11 @@ export default function SubmitSection({
   disabledReason,
   onSubmit,
 }: SubmitSectionProps) {
+  const { role } = useAuth();
+  const isAdmin = role === 'ADMIN';
+
   const isOpen = isApplicationOpen();
-  const isDisabled = disabled || !isOpen;
+  const isDisabled = disabled || (!isOpen && !isAdmin);
 
   let disabledMessage = '';
 
