@@ -12,20 +12,36 @@ export default function SubmitSection({
   onSubmit,
 }: SubmitSectionProps) {
   const { role } = useAuth();
+
   const isAdmin = role === 'ADMIN';
 
   const isOpen = isApplicationOpen();
-  const isDisabled = isAdmin ? false : disabled || !isOpen;
 
-  let disabledMessage = '';
+  const computedDisabledReason: SubmitSectionProps['disabledReason'] | 'CLOSED' | undefined =
+    isAdmin
+      ? undefined
+      : !isOpen
+        ? 'CLOSED'
+        : disabled
+          ? disabledReason ?? 'LOADING'
+          : undefined;
 
-  if (!isAdmin && !isOpen) {
-    disabledMessage = '현재는 지원 기간이 아니에요.';
-  } else if (disabledReason === 'CONSENT') {
-    disabledMessage = '개인정보 수집 및 이용에 동의해야 제출할 수 있어요.';
-  } else if (disabledReason === 'SUBMITTING') {
-    disabledMessage = '제출 중입니다. 잠시만 기다려주세요.';
-  }
+  const isDisabled = Boolean(computedDisabledReason);
+
+  const disabledMessage = (() => {
+    switch (computedDisabledReason) {
+      case 'CLOSED':
+        return '현재는 지원 기간이 아니에요.';
+      case 'CONSENT':
+        return '개인정보 수집 및 이용에 동의해야 제출할 수 있어요.';
+      case 'SUBMITTING':
+        return '제출 중입니다. 잠시만 기다려주세요.';
+      case 'LOADING':
+        return '로딩 중입니다. 잠시만 기다려주세요.';
+      default:
+        return '';
+    }
+  })();
 
   return (
     <section className="mt-3 pb-10">
