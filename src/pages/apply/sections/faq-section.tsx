@@ -37,7 +37,7 @@ const FAQS = [
           href="https://open.kakao.com/o/spMLQKai"
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-1 inline-block text-point font-medium transition-colors underline hover:text-point/80"
+          className="mt-1 inline-block font-medium text-point underline transition-colors hover:text-point/80"
         >
           SSCC 오픈채팅 이동하기
         </a>

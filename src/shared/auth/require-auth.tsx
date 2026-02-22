@@ -2,10 +2,10 @@ import type { ReactNode } from 'react';
 
 import { Navigate, useLocation } from 'react-router-dom';
 
-import { useAuth } from './use-auth';
-
 import { ROLES } from '@/shared/auth/jwt';
 import { isApplicationOpen } from '@/shared/lib/recruitment';
+
+import { useAuth } from './use-auth';
 
 export function RequireAuth({ children }: { readonly children: ReactNode }) {
   const { isLoggedIn, role } = useAuth();

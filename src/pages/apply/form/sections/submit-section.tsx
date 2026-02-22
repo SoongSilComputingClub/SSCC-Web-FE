@@ -1,5 +1,5 @@
-import { isApplicationOpen } from '@/shared/lib/recruitment';
 import { useAuth } from '@/shared/auth/use-auth';
+import { isApplicationOpen } from '@/shared/lib/recruitment';
 type SubmitSectionProps = {
   readonly disabled?: boolean;
   readonly disabledReason?: 'CONSENT' | 'SUBMITTING' | 'LOADING';
