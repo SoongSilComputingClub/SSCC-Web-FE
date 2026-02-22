@@ -84,7 +84,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
@@ -209,9 +209,9 @@ jobs:
       - name: Build
         env:
           # 🚨 깃허브 변수 대신 치환용 임시 문자열을 고정값으로 삽입합니다.
-          VITE_BACKEND_API_BASE_URL: "__VITE_BACKEND_API_BASE_URL__"
-          VITE_APPLICATION_OPEN_AT_ISO: "__VITE_APPLICATION_OPEN_AT_ISO__"
-          VITE_APPLICATION_CLOSE_AT_ISO: "__VITE_APPLICATION_CLOSE_AT_ISO__"
+          VITE_BACKEND_API_BASE_URL: '__VITE_BACKEND_API_BASE_URL__'
+          VITE_APPLICATION_OPEN_AT_ISO: '__VITE_APPLICATION_OPEN_AT_ISO__'
+          VITE_APPLICATION_CLOSE_AT_ISO: '__VITE_APPLICATION_CLOSE_AT_ISO__'
         run: npm run build
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
