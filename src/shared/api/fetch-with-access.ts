@@ -1,7 +1,5 @@
 import { STORAGE_KEYS } from '../auth/jwt';
 
-const BASE_URL = import.meta.env.VITE_BACKEND_API_BASE_URL;
-
 // 동시에 여러 요청이 401을 맞아도 refresh는 1번만 실행되도록 잠금(락) 역할
 let refreshPromise: Promise<string> | null = null;
 
@@ -25,7 +23,7 @@ async function refreshAccessToken(): Promise<string> {
     throw new Error('RefreshToken 없음');
   }
 
-  const response = await fetch(`${BASE_URL}/jwt/refresh`, {
+  const response = await fetch(`/api/jwt/refresh`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ refreshToken }),
@@ -70,15 +68,12 @@ function buildFinalUrl(url: string): string {
     throw new Error('fetchWithAccess는 상대 경로만 허용합니다.');
   }
 
-  // BASE_URL 끝의 슬래시 제거 + path 시작 슬래시 보장
-  let base = String(BASE_URL ?? '');
-  while (base.endsWith('/')) base = base.slice(0, -1);
-  if (!base) {
-    throw new Error('VITE_BACKEND_API_BASE_URL이 설정되지 않았습니다.');
-  }
-
   const path = raw.startsWith('/') ? raw : `/${raw}`;
-  return `${base}${path}`;
+
+  // e.g. "/jwt/refresh" -> "/api/jwt/refresh"
+  if (path.startsWith('/api/')) return path;
+  if (path === '/api') return '/api';
+  return `/api${path}`;
 }
 
 // 인증 포함 fetch
