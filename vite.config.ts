@@ -34,6 +34,7 @@ export default defineConfig(({ mode }) => {
               handler: 'NetworkOnly',
             },
           ],
+          navigateFallbackDenylist: [/^\/api/],
         },
       }),
     ],
