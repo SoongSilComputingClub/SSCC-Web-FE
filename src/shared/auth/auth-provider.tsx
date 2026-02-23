@@ -49,7 +49,7 @@ export function AuthProvider({ children }: Props) {
     const doLogout = async () => {
       try {
         if (refreshToken) {
-          await fetch(`${import.meta.env.VITE_BACKEND_API_BASE_URL}/logout`, {
+          await fetch(`/api/logout`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ refreshToken }),

@@ -5,15 +5,16 @@ function openExternalInKakao(url: string) {
   globalThis.location.href = externalUrl;
 }
 
-function buildGoogleOauthUrl(baseUrl?: string) {
-  let base = String(baseUrl ?? '');
-  // 문자열 끝의 슬래시를 정규식 대신 수동으로 제거
-  while (base.endsWith('/')) base = base.slice(0, -1);
-  return base ? `${base}/oauth2/authorization/google` : '';
+function buildGoogleOauthUrl() {
+  const oauthPath = '/api/oauth2/authorization/google';
+  try {
+    return new URL(oauthPath, globalThis.location.origin).toString();
+  } catch {
+    return '';
+  }
 }
 
 export default function LoginPage() {
-  const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_API_BASE_URL as string | undefined;
 
   // User Agent 플래그 확인
   const ua = navigator.userAgent || '';
@@ -25,7 +26,7 @@ export default function LoginPage() {
   // 인앱 브라우저의 경우 버튼 클릭 유도
   const [showFallback, setShowFallback] = useState<boolean>(() => isInApp);
 
-  const oauthUrl = buildGoogleOauthUrl(BACKEND_API_BASE_URL);
+  const oauthUrl = buildGoogleOauthUrl();
 
   const startLogin = useCallback(() => {
     if (!oauthUrl) return;
