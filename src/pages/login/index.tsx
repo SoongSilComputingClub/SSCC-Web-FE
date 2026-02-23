@@ -6,7 +6,7 @@ function openExternalInKakao(url: string) {
 }
 
 function buildGoogleOauthUrl() {
-  const oauthPath = '/api/oauth2/authorization/google';
+  const oauthPath = '/oauth2/authorization/google';
   try {
     return new URL(oauthPath, globalThis.location.origin).toString();
   } catch {
