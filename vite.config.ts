@@ -26,6 +26,15 @@ export default defineConfig(({ mode }) => {
             { src: '/pwa-512.png', sizes: '512x512', type: 'image/png' },
           ],
         },
+        workbox: {
+          // 서비스 워커가 /api/* 요청 가로채지 않도록 변경
+          runtimeCaching: [
+            {
+              urlPattern: ({ url }) => url.pathname.startsWith('/api/'),
+              handler: 'NetworkOnly',
+            },
+          ],
+        },
       }),
     ],
     resolve: {
@@ -39,6 +48,7 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: env.VITE_API_BASE_URL || 'http://localhost:8080',
           changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
         },
       },
     },
