@@ -15,7 +15,6 @@ function buildGoogleOauthUrl() {
 }
 
 export default function LoginPage() {
-
   // User Agent 플래그 확인
   const ua = navigator.userAgent || '';
   const isIOS = /iPhone|iPad|iPod/i.test(ua);
