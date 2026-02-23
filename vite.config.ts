@@ -27,14 +27,19 @@ export default defineConfig(({ mode }) => {
           ],
         },
         workbox: {
-          // 서비스 워커가 /api/* 요청 가로채지 않도록 변경
+          // 서비스 워커가 인증/백엔드 경로(/api, /oauth2, /jwt, /logout)를
+          // 네비게이션 fallback(index.html)로 처리하거나 캐시하지 않도록 차단
           runtimeCaching: [
             {
-              urlPattern: ({ url }) => url.pathname.startsWith('/api/'),
+              urlPattern: ({ url }) =>
+                url.pathname.startsWith('/api/') ||
+                url.pathname.startsWith('/oauth2/') ||
+                url.pathname.startsWith('/jwt/') ||
+                url.pathname === '/logout',
               handler: 'NetworkOnly',
             },
           ],
-          navigateFallbackDenylist: [/^\/api/],
+          navigateFallbackDenylist: [/^\/api\//, /^\/oauth2\//, /^\/jwt\//, /^\/logout$/],
         },
       }),
     ],
