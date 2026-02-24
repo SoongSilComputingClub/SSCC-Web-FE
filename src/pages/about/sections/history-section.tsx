@@ -166,9 +166,7 @@ export default function HistorySection() {
               <WaveSeparator top={separatorTop} />
             </div>
           ) : null}
-          {TIMELINE_ITEMS.map((item, idx) => {
-            const showLine = idx !== TIMELINE_ITEMS.length - 1;
-
+          {TIMELINE_ITEMS.map((item) => {
             return (
               <div
                 key={item.id}
