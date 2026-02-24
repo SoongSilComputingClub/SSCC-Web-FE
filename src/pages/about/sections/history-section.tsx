@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 type TimelineItem = {
   id: string;
@@ -25,7 +25,6 @@ const TIMELINE_ITEMS: TimelineItem[] = [
 
 function TimelineRow({
   item,
-  showLine,
   allVisible,
 }: Readonly<{
   item: TimelineItem;
@@ -33,36 +32,62 @@ function TimelineRow({
   allVisible: boolean;
 }>) {
   return (
-    <div className="relative pl-2">
-      {/* dot */}
-      <div className="absolute -left-3 top-2.5 z-10 size-4 rounded-full border-2 border-point bg-bg-white" />
+    <div
+      className={[
+        'transition-all duration-700 ease-out will-change-transform',
+        allVisible ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
+      ].join(' ')}
+    >
+      <p className="pt-3 text-sm font-semibold leading-none text-text-default sm:text-md">
+        {item.yearTitle}
+      </p>
+      <p className="mt-1 whitespace-pre-line text-xs text-text-default/40 sm:text-base">
+        {item.desc}
+      </p>
+    </div>
+  );
+}
 
-      {/* line */}
-      {showLine ? (
-        <div className="absolute -left-1 top-3 h-[calc(100%+1.25rem)] w-px bg-point" />
-      ) : null}
-
-      {/* ✅ 텍스트만 한 번에 등장 */}
-      <div
-        className={[
-          'transition-all duration-700 ease-out will-change-transform',
-          allVisible ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
-        ].join(' ')}
-      >
-        <p className="pt-3 text-sm font-semibold leading-none text-text-default sm:text-md">
-          {item.yearTitle}
-        </p>
-        <p className="mt-2 whitespace-pre-line text-xs text-text-default/30 sm:text-md">
-          {item.desc}
-        </p>
-      </div>
+function WaveSeparator({ top }: { top: number }) {
+  return (
+    <div
+      className="pointer-events-none absolute translate-y-5 sm:translate-y-7"
+      style={{ top, left: -8 }}
+      aria-hidden="true"
+    >
+      <svg className="block" width="10" height="8" viewBox="0 0 20 12" preserveAspectRatio="none">
+        <path
+          d="M0 6 Q5 2 10 6 T20 6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          opacity="0.9"
+        />
+        <path
+          d="M0 9 Q5 5 10 9 T20 9"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          opacity="0.9"
+        />
+      </svg>
     </div>
   );
 }
 
 export default function HistorySection() {
   const [allVisible, setAllVisible] = useState(false);
+  const [lineInsets, setLineInsets] = useState<{ top: number; bottom: number }>({
+    top: 0,
+    bottom: 0,
+  });
+  const [separatorTop, setSeparatorTop] = useState<number | null>(null);
+
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const timelineRef = useRef<HTMLDivElement | null>(null);
+  const dotRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -79,21 +104,90 @@ export default function HistorySection() {
     return () => io.disconnect();
   }, []);
 
+  useLayoutEffect(() => {
+    const el = timelineRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      const first = dotRefs.current[TIMELINE_ITEMS[0]?.id ?? ''];
+      const last = dotRefs.current[TIMELINE_ITEMS[TIMELINE_ITEMS.length - 1]?.id ?? ''];
+      if (!first || !last) return;
+
+      const parentRect = el.getBoundingClientRect();
+      const firstRect = first.getBoundingClientRect();
+      const lastRect = last.getBoundingClientRect();
+
+      const firstCenterY = firstRect.top + firstRect.height / 2;
+      const lastCenterY = lastRect.top + lastRect.height / 2;
+
+      const topInset = Math.max(0, firstCenterY - parentRect.top);
+      const bottomInset = Math.max(0, parentRect.bottom - lastCenterY);
+
+      setLineInsets({ top: topInset, bottom: bottomInset });
+
+      const t5 = dotRefs.current['t5'];
+      const t6 = dotRefs.current['t6'];
+      if (t5 && t6) {
+        const t5r = t5.getBoundingClientRect();
+        const t6r = t6.getBoundingClientRect();
+        const t5CenterY = t5r.top + t5r.height / 2;
+        const t6CenterY = t6r.top + t6r.height / 2;
+        const midY = (t5CenterY + t6CenterY) / 2;
+        setSeparatorTop(Math.max(0, midY - parentRect.top));
+      } else {
+        setSeparatorTop(null);
+      }
+    };
+
+    measure();
+    window.addEventListener('resize', measure);
+
+    return () => window.removeEventListener('resize', measure);
+  }, []);
+
   return (
     <section className="bg-bg-default px-8 pb-16 pt-8">
-      {/* ✅ 이 박스를 관찰 */}
-      <div ref={sectionRef} className="relative rounded-2xl bg-bg-muted px-6 pb-10">
-        <div className="mb-8 pt-6 text-center text-xl font-bold text-text-default">동아리 연혁</div>
+      <div
+        ref={sectionRef}
+        className="relative mx-auto w-full max-w-3xl rounded-2xl bg-bg-muted px-6 pb-10"
+      >
+        <div className="mb-4 pt-6 text-center text-xl font-bold text-text-default sm:mb-8">
+          동아리 연혁
+        </div>
 
-        <div className="relative flex flex-col gap-5">
-          {TIMELINE_ITEMS.map((item, idx) => (
-            <TimelineRow
-              key={item.id}
-              item={item}
-              showLine={idx !== TIMELINE_ITEMS.length - 1}
-              allVisible={allVisible}
-            />
-          ))}
+        <div ref={timelineRef} className="relative flex flex-col gap-5">
+          {/* continuous vertical line for the whole timeline */}
+          <div
+            className="pointer-events-none absolute left-[-4px] w-px bg-point"
+            style={{ top: lineInsets.top + 12, bottom: lineInsets.bottom + 2 }}
+          />
+          {separatorTop !== null ? (
+            <div className="text-text-default/60">
+              <WaveSeparator top={separatorTop} />
+            </div>
+          ) : null}
+          {TIMELINE_ITEMS.map((item, idx) => {
+            const showLine = idx !== TIMELINE_ITEMS.length - 1;
+
+            return (
+              <div
+                key={item.id}
+                className={['relative pl-2', item.id === 't6' ? 'mt-2' : ''].join(' ')}
+              >
+                {/* dot */}
+                <div
+                  ref={(node) => {
+                    dotRefs.current[item.id] = node;
+                  }}
+                  className="absolute -left-3 top-2.5 z-10 size-4 rounded-full border-2 border-point bg-bg-white"
+                />
+
+                <div className="flex flex-col">
+                  <TimelineRow item={item} showLine={showLine} allVisible={allVisible} />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
