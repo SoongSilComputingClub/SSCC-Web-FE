@@ -28,7 +28,6 @@ function TimelineRow({
   allVisible,
 }: Readonly<{
   item: TimelineItem;
-  showLine: boolean;
   allVisible: boolean;
 }>) {
   return (
@@ -48,7 +47,7 @@ function TimelineRow({
   );
 }
 
-function WaveSeparator({ top }: { top: number }) {
+function WaveSeparator({ top }: Readonly<{ top: number }>) {
   return (
     <div
       className="pointer-events-none absolute translate-y-5 sm:translate-y-7"
@@ -91,7 +90,7 @@ export default function HistorySection() {
 
   useEffect(() => {
     const el = sectionRef.current;
-    if (!el) return;
+    if (el === null) return;
 
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -106,12 +105,13 @@ export default function HistorySection() {
 
   useLayoutEffect(() => {
     const el = timelineRef.current;
-    if (!el) return;
+    if (el === null) return;
 
     const measure = () => {
       const first = dotRefs.current[TIMELINE_ITEMS[0]?.id ?? ''];
-      const last = dotRefs.current[TIMELINE_ITEMS[TIMELINE_ITEMS.length - 1]?.id ?? ''];
-      if (!first || !last) return;
+      const lastItem = TIMELINE_ITEMS.at(-1);
+      const last = dotRefs.current[lastItem?.id ?? ''];
+      if (first === null || last === null) return;
 
       const parentRect = el.getBoundingClientRect();
       const firstRect = first.getBoundingClientRect();
@@ -127,7 +127,7 @@ export default function HistorySection() {
 
       const t5 = dotRefs.current['t5'];
       const t6 = dotRefs.current['t6'];
-      if (t5 && t6) {
+      if (t5 !== null && t6 !== null) {
         const t5r = t5.getBoundingClientRect();
         const t6r = t6.getBoundingClientRect();
         const t5CenterY = t5r.top + t5r.height / 2;
@@ -183,7 +183,7 @@ export default function HistorySection() {
                 />
 
                 <div className="flex flex-col">
-                  <TimelineRow item={item} showLine={showLine} allVisible={allVisible} />
+                  <TimelineRow item={item} allVisible={allVisible} />
                 </div>
               </div>
             );
