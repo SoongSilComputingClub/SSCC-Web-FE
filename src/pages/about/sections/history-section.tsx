@@ -161,11 +161,11 @@ export default function HistorySection() {
             className="pointer-events-none absolute left-[-4px] w-px bg-point"
             style={{ top: lineInsets.top + 12, bottom: lineInsets.bottom + 2 }}
           />
-          {separatorTop !== null ? (
+          {typeof separatorTop === 'number' && (
             <div className="text-text-default/60">
               <WaveSeparator top={separatorTop} />
             </div>
-          ) : null}
+          )}
           {TIMELINE_ITEMS.map((item) => {
             return (
               <div
