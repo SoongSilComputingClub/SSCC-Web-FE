@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import picSide1 from '@/assets/images/home/pic-side1.jpg';
 import picSide2 from '@/assets/images/home/pic-side2.jpg';
-import picSide3 from '@/assets/images/home/pic-side3.jpg';
+
+const picSide1 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/news/large-scale-server-seminar-2025-06-25/gallery-1.jpg';
+const picSide3 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/events/1st-semester-lightning-meetup-2025/cover.jpg';
 
 type Slide = {
   id: string;
