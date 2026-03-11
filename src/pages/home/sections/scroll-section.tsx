@@ -1,13 +1,21 @@
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 
-import picScroll1 from '@/assets/images/home/pic-scroll1.jpg';
-import picScroll2 from '@/assets/images/home/pic-scroll2.jpg';
-import picScroll3 from '@/assets/images/home/pic-scroll3.jpg';
-import picScroll4 from '@/assets/images/home/pic-scroll4.jpg';
-import picScroll5 from '@/assets/images/home/pic-scroll5.jpg';
-import picScroll6 from '@/assets/images/home/pic-scroll6.jpg';
-import picScroll7 from '@/assets/images/home/pic-scroll7.jpg';
-import picScroll8 from '@/assets/images/home/pic-scroll8.jpg';
+const picScroll1 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/news/future-concert-2025-05-17/gallery-4.png';
+const picScroll2 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/news/large-scale-server-seminar-2025-06-25/gallery-2.jpg';
+const picScroll3 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/academics/embedded-sw-contest-23-2025/gallery-5.png';
+const picScroll4 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/news/embedded-sw-award-2025-12-05/gallery-4.jpg';
+const picScroll5 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/news/future-concert-2025-05-17/gallery-1.jpg';
+const picScroll6 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/events/1st-semester-opening-general-meeting-2025/cover.jpg';
+const picScroll7 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/academics/android-introduction-2025/cover.png';
+const picScroll8 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/academics/robot-is-the-future-study-2025/cover.png';
 
 type ColIndex = 0 | 1 | 2 | 3;
 

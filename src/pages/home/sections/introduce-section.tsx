@@ -3,15 +3,25 @@ import { useEffect, useMemo, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import logoGradi from '@/assets/images/home/logo-gradi.png';
-import picIntro1 from '@/assets/images/home/pic-intro1.jpg';
-import picIntro2 from '@/assets/images/home/pic-intro2.jpg';
-import picIntro3 from '@/assets/images/home/pic-intro3.jpeg';
-import picIntro4 from '@/assets/images/home/pic-intro4.jpg';
-import picScroll1 from '@/assets/images/home/pic-scroll1.jpg';
-import picScroll2 from '@/assets/images/home/pic-scroll2.jpg';
-import picScroll3 from '@/assets/images/home/pic-scroll3.jpg';
-import picScroll4 from '@/assets/images/home/pic-scroll4.jpg';
-import picScroll5 from '@/assets/images/home/pic-scroll5.jpg';
+
+const picIntro1 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/news/large-scale-server-seminar-2025-06-25/gallery-1.jpg';
+const picIntro2 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/news/unithon-award-2025-08-13/gallery-2.jpg';
+const picIntro3 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/academics/spring-introduction-2025/cover.png';
+const picIntro4 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/events/unicosa-seminar-afterparty-2025/gallery-1.jpg';
+const picScroll1 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/news/future-concert-2025-05-17/gallery-4.png';
+const picScroll2 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/news/large-scale-server-seminar-2025-06-25/gallery-2.jpg';
+const picScroll3 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/academics/embedded-sw-contest-23-2025/gallery-5.png';
+const picScroll4 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/news/embedded-sw-award-2025-12-05/gallery-4.jpg';
+const picScroll5 =
+  'https://sscc-public-images-bucket.s3.ap-northeast-2.amazonaws.com/public/images/2025/activities/news/future-concert-2025-05-17/gallery-1.jpg';
 
 type CardItem = {
   id: string;
