@@ -128,7 +128,7 @@ export default function MemberSection() {
       role: '회장',
       name: '이민우',
       meta: 'SSCC 40기',
-      quote: 'AI융합학부 22학번',
+      quote: 'AI소프트웨어학부',
       avatarSrc: imgSrc,
     },
     {
@@ -136,7 +136,7 @@ export default function MemberSection() {
       role: '부회장',
       name: '최나영',
       meta: 'SSCC 43기',
-      quote: '정보보호학과 24학번',
+      quote: '정보보호학과',
       avatarSrc: imgSrc,
     },
   ];
@@ -147,7 +147,7 @@ export default function MemberSection() {
       role: '행정국장',
       name: '원영진',
       meta: 'SSCC 40기',
-      quote: 'AI융합학부 22학번',
+      quote: 'AI소프트웨어학부',
       avatarSrc: imgSrc,
     },
     {
@@ -155,7 +155,7 @@ export default function MemberSection() {
       role: '학술국장',
       name: '최지우',
       meta: 'SSCC 43기',
-      quote: 'AI융합학부 24학번',
+      quote: 'AI소프트웨어학부',
       avatarSrc: imgSrc,
     },
     {
@@ -163,7 +163,7 @@ export default function MemberSection() {
       role: '홍보국장',
       name: '임채은',
       meta: 'SSCC 43기',
-      quote: 'AI융합학부 24학번',
+      quote: 'AI소프트웨어학부',
       avatarSrc: imgSrc,
     },
   ];
@@ -174,7 +174,7 @@ export default function MemberSection() {
       role: '행정국원',
       name: '최재웅',
       meta: 'SSCC 44기',
-      quote: '정보보호학과 24학번',
+      quote: '정보보호학과',
       avatarSrc: imgSrc,
     },
     {
@@ -182,7 +182,7 @@ export default function MemberSection() {
       role: '행정국원',
       name: '김예현',
       meta: 'SSCC 43기',
-      quote: '컴퓨터학부 24학번',
+      quote: '컴퓨터학부',
       avatarSrc: imgSrc,
     },
     {
@@ -190,7 +190,7 @@ export default function MemberSection() {
       role: '학술국원',
       name: '정현민',
       meta: 'SSCC 43기',
-      quote: '컴퓨터학부 22학번',
+      quote: '컴퓨터학부',
       avatarSrc: imgSrc,
     },
     {
@@ -198,7 +198,7 @@ export default function MemberSection() {
       role: '홍보국원',
       name: '권나현',
       meta: 'SSCC 41기',
-      quote: 'AI융합학부 23학번',
+      quote: 'AI소프트웨어학부',
       avatarSrc: imgSrc,
     },
   ];
