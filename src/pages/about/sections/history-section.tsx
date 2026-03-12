@@ -10,15 +10,15 @@ const TIMELINE_ITEMS: TimelineItem[] = [
   {
     id: 't1',
     yearTitle: '1983년 11월: S.J.C.C 창단',
-    desc: '27명의 인원과 함께 "숭전 컴퓨터 클럽" 출발',
+    desc: '27명이 창립회원과 함께 "숭전 컴퓨터 클럽"로 출발',
   },
   { id: 't2', yearTitle: '1984년 3월', desc: '제 1회 세미나 진행' },
   { id: 't3', yearTitle: '1985년 4월', desc: '서클 공식 인가' },
-  { id: 't4', yearTitle: '1985년 5월', desc: 'UNICOSA 가입' },
+  { id: 't4', yearTitle: '1985년 5월', desc: '유니코사(UNICOSA) -전국대학컴퓨터써클연합회- 가입' },
   {
     id: 't5',
-    yearTitle: '1987년 3월: 개칭',
-    desc: '교명 환원으로 개칭 숭실 컴퓨터 서클 (S.S.C.C)',
+    yearTitle: '1987년 3월: S.S.C.C 개칭',
+    desc: '교명 환원에 따라 "숭실 컴퓨터 서클 (S.S.C.C)"로 개칭',
   },
   { id: 't6', yearTitle: '2026년 2월', desc: 'SSCC 44기 모집 시작' },
 ];
