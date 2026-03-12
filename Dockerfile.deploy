@@ -1,0 +1,11 @@
+# ============================================================================
+# Deploy-only Dockerfile (빌드 스킵 - CI에서 생성된 dist 사용)
+# ============================================================================
+FROM nginx:alpine
+
+COPY dist/ /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/templates/default.conf.template
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
