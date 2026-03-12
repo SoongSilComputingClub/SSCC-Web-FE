@@ -103,7 +103,7 @@ export const APPLICATION_GUARD_COPY = {
   /** 접수 마감 */
   closed: {
     title: '지금은 SSCC 신청 기간이\n아닙니다.',
-    body: '',
+    body: '다음 학기에 지원해주세요!',
     cta: null,
   },
 } as const;
