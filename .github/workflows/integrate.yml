@@ -307,8 +307,6 @@ jobs:
         run: npm ci
 
       - name: Build
-        env:
-          VITE_BACKEND_API_BASE_URL: ${{ vars.VITE_BACKEND_API_BASE_URL }}
         run: npm run build
 
       - name: Upload Build Artifact

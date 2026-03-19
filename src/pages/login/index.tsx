@@ -6,14 +6,13 @@ function openExternalInKakao(url: string) {
 }
 
 function buildGoogleOauthUrl(baseUrl?: string) {
-  let base = String(baseUrl ?? '');
-  // 문자열 끝의 슬래시를 정규식 대신 수동으로 제거
+  let base = String(baseUrl ?? '').trim();
   while (base.endsWith('/')) base = base.slice(0, -1);
-  return base ? `${base}/oauth2/authorization/google` : '';
+  return `${base}/oauth2/authorization/google`;
 }
 
 export default function LoginPage() {
-  const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_API_BASE_URL as string | undefined;
+  const BACKEND_API_BASE_URL = '';
 
   // User Agent 플래그 확인
   const ua = navigator.userAgent || '';
