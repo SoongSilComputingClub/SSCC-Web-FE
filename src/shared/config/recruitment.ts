@@ -10,7 +10,7 @@
 // ※ 매 기수마다 반드시 수정해야 하는 값
 // TO DO : 실제 날짜로 변경하기
 export const APPLICATION_OPEN_AT_ISO = '2026-02-22T00:00:00+09:00'; // 접수 시작 시각
-export const APPLICATION_CLOSE_AT_ISO = '2026-03-02T23:59:59+09:00'; // 접수 마감 시각
+export const APPLICATION_CLOSE_AT_ISO = '2026-03-22T23:59:59+09:00'; // 접수 마감 시각
 
 export const APPLICATION_OPEN_AT = new Date(APPLICATION_OPEN_AT_ISO);
 export const APPLICATION_CLOSE_AT = new Date(APPLICATION_CLOSE_AT_ISO);
