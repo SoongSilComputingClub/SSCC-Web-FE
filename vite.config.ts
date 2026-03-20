@@ -36,41 +36,9 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       proxy: {
-        '/jwt': {
+        '/api': {
           target: env.VITE_API_BASE_URL || 'http://localhost:8080',
           changeOrigin: true,
-          cookieDomainRewrite: 'localhost',
-          xfwd: true,
-        },
-        '/admin': {
-          target: env.VITE_API_BASE_URL || 'http://localhost:8080',
-          changeOrigin: true,
-          cookieDomainRewrite: 'localhost',
-          xfwd: true,
-        },
-        '/logout': {
-          target: env.VITE_API_BASE_URL || 'http://localhost:8080',
-          changeOrigin: true,
-          cookieDomainRewrite: 'localhost',
-          xfwd: true,
-        },
-        '/oauth2': {
-          target: env.VITE_API_BASE_URL || 'http://localhost:8080',
-          changeOrigin: true,
-          cookieDomainRewrite: 'localhost',
-          xfwd: true,
-        },
-        '/login/oauth2': {
-          target: env.VITE_API_BASE_URL || 'http://localhost:8080',
-          changeOrigin: true,
-          cookieDomainRewrite: 'localhost',
-          xfwd: true,
-        },
-        '/apply-forms': {
-          target: env.VITE_API_BASE_URL || 'http://localhost:8080',
-          changeOrigin: true,
-          cookieDomainRewrite: 'localhost',
-          xfwd: true,
         },
       },
     },

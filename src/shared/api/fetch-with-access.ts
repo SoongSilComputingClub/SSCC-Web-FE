@@ -1,12 +1,12 @@
 import { STORAGE_KEYS } from '../auth/jwt';
 
-const BASE_URL = '';
+const BASE_URL = import.meta.env.VITE_BACKEND_API_BASE_URL;
 
 // 동시에 여러 요청이 401을 맞아도 refresh는 1번만 실행되도록 잠금(락) 역할
 let refreshPromise: Promise<string> | null = null;
 
 function toHeaders(init: RequestInit['headers']): Headers {
-  // RequestInit.headers는 Headers | [][] | Record<string, string>
+  // RequestInit.headers는 Headers | [][ ] | Record<string, string>
   if (init instanceof Headers) return init;
   return new Headers(init ?? undefined);
 }
@@ -71,8 +71,11 @@ function buildFinalUrl(url: string): string {
   }
 
   // BASE_URL 끝의 슬래시 제거 + path 시작 슬래시 보장
-  let base = String(BASE_URL);
+  let base = String(BASE_URL ?? '');
   while (base.endsWith('/')) base = base.slice(0, -1);
+  if (!base) {
+    throw new Error('VITE_BACKEND_API_BASE_URL이 설정되지 않았습니다.');
+  }
 
   const path = raw.startsWith('/') ? raw : `/${raw}`;
   return `${base}${path}`;

@@ -40,7 +40,7 @@ export default function CookiePage() {
 
     const exchangeToken = async () => {
       try {
-        const response = await fetch(`${''}/jwt/exchange`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_API_BASE_URL}/jwt/exchange`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: '{}',
